@@ -5,10 +5,12 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "lint": "eslint ./pages --ext .js,.ts,.tsx,.jsx --report-unused-disable-directives",
+        "lint": "eslint ./src --ext .js,.ts,.tsx,.jsx --report-unused-disable-directives",
         "start": "next start"
     },
     "dependencies": {
+        "@material-ui/core": "^4.9.5",
+        "@material-ui/icons": "^4.9.1",
         "next": "9.2.2",
         "react": "16.13.0",
         "react-dom": "16.13.0"
@@ -18,15 +20,13 @@
         "@types/react": "^16.9.23",
         "@typescript-eslint/eslint-plugin": "^2.22.0",
         "@typescript-eslint/parser": "^2.22.0",
+        "babel-eslint": "^10.1.0",
         "eslint": "^6.8.0",
-        "eslint-config-airbnb": "^18.0.1",
         "eslint-config-airbnb-typescript-prettier": "^1.4.2",
-        "eslint-config-prettier": "^6.10.0",
-        "eslint-plugin-import": "^2.20.1",
-        "eslint-plugin-jsx-a11y": "^6.2.3",
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-react": "^7.18.3",
         "eslint-plugin-react-hooks": "^1.7.0",
+        "prettier": "^1.19.1",
         "typescript": "^3.8.3"
     }
 }
