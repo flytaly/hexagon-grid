@@ -1,18 +1,25 @@
 import React from 'react'
-import { Container } from '@material-ui/core'
 import Meta from './meta'
 
-type Props = {
+type PageProps = {
     children: React.ReactNode
 }
 
-const Page = ({ children }: Props) => {
+const PageLayout = ({ children }: PageProps) => {
     return (
         <>
             <Meta />
-            <Container maxWidth={false}>{children}</Container>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100vh',
+                }}
+            >
+                {children}
+            </div>
         </>
     )
 }
 
-export default Page
+export default PageLayout

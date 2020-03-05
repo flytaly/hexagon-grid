@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Fab } from '@material-ui/core'
+import React, { useState, useReducer } from 'react'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Fab, useMediaQuery } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer'
-import IndexContent from '../components/index-content'
+import CanvasPage from '../components/canvas-page'
+import { reducer, initialState } from '../canvas-state'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         settingsBtn: {
             position: 'fixed',
@@ -15,20 +16,37 @@ const useStyles = makeStyles(() =>
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
         },
+        pageWrapper: {
+            height: '100%',
+            marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
+            paddingTop: theme.spacing(3),
+        },
     }),
 )
 
-type Props = {
-    children: React.ReactNode
-}
-
 const Home: NextPage = () => {
-    const classes = useStyles()
+    const [state, dispatch] = useReducer(reducer, initialState)
+    const [isInitValue, setIsInitValue] = useState(true)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const handleDrawerToggle = () => setIsDrawerOpen((state) => !state)
+    const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
+
+    const isBigScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
+
+    const classes = useStyles({
+        pageMarginR: isBigScreen && isDrawerOpen ? 360 : 0,
+    })
+
+    if (isInitValue && isBigScreen) {
+        // open settings panel on big screen but only once
+        setIsInitValue(false)
+        setIsDrawerOpen(true)
+    }
 
     return (
         <>
+            <div className={classes.pageWrapper}>
+                <CanvasPage state={state} />
+            </div>
             <Fab
                 className={classes.settingsBtn}
                 variant="round"
@@ -38,8 +56,12 @@ const Home: NextPage = () => {
             >
                 <Settings />
             </Fab>
-            <SettingsPanel isOpen={isDrawerOpen} handleToggle={handleDrawerToggle} />
-            <IndexContent />
+            <SettingsPanel
+                state={state}
+                dispatch={dispatch}
+                isOpen={isDrawerOpen}
+                handleToggle={handleDrawerToggle}
+            />
         </>
     )
 }
