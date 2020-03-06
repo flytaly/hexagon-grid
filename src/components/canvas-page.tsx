@@ -32,7 +32,7 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
     const classes = useStyles()
 
     return (
-        <Container className={classes.canvasBox} maxWidth="sm">
+        <Container className={classes.canvasBox} maxWidth={false}>
             <Paper className={classes.paper} elevation={3}>
                 <Typography
                     className={classes.sizeCaption}

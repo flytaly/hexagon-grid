@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
 
-    const isBigScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
+    const isBigScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'))
 
     const classes = useStyles({
         pageMarginR: isBigScreen && isDrawerOpen ? 360 : 0,
