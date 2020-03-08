@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { IconButton, Drawer, Toolbar, Divider, TextField } from '@material-ui/core'
+import {
+    IconButton,
+    Drawer,
+    Toolbar,
+    Divider,
+    TextField,
+    Typography,
+    Slider,
+} from '@material-ui/core'
 import { ChevronRight } from '@material-ui/icons'
-import { CanvasState, CanvasStateAction, ActionTypes } from '../canvas-state'
+import throttle from 'lodash.throttle'
+import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../canvas-state'
 
 const drawerWidth = 360
 
@@ -26,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => {
             borderBottomRightRadius: 0,
         },
         form: {
-            padding: theme.spacing(1),
+            padding: theme.spacing(2),
         },
         inputRow: {
             display: 'flex',
@@ -51,9 +60,17 @@ type ErrorMessages = {
 const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelProps) => {
     const classes = useStyles()
 
-    const [width, setWidth] = useState(state.size.width)
-    const [height, setHeight] = useState(state.size.height)
+    const [width, setWidth] = useState(state.canvasSize.width)
+    const [height, setHeight] = useState(state.canvasSize.height)
+    const [hexSize, setHexSize] = useState(state.hex.size)
     const [errors, setErrors] = useState<ErrorMessages>({})
+
+    const setHexOptsThrottled = useCallback(
+        throttle((payload: Partial<HexSettings>) => {
+            dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
+        }, 33), // 30 fps
+        [],
+    )
 
     useEffect(() => {
         const size = {
@@ -70,7 +87,7 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
         if (errors.width || errors.height) return
         dispatch({ type: ActionTypes.SET_SIZE, payload: { width, height } })
     }
-    const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCanvasSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id } = e.target
         const value = +e.target.value
         if (id === 'width') setWidth(value)
@@ -108,7 +125,7 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                 >
                     <div className={classes.inputRow}>
                         <TextField
-                            onChange={handleSizeChange}
+                            onChange={handleCanvasSizeChange}
                             style={{ width: '40%' }}
                             id="width"
                             label="Width"
@@ -120,7 +137,7 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                             required
                         />
                         <TextField
-                            onChange={handleSizeChange}
+                            onChange={handleCanvasSizeChange}
                             style={{ width: '40%' }}
                             id="height"
                             label="Height"
@@ -135,6 +152,26 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                     <input type="submit" style={{ display: 'none' }} />
                 </form>
                 <Divider />
+                <form className={classes.form}>
+                    <Typography id="hexagons_size" gutterBottom>
+                        Hexagons size
+                    </Typography>
+                    <Slider
+                        value={hexSize}
+                        aria-labelledby="hexagons_size"
+                        getAriaValueText={(value) => `${value}%`}
+                        step={0.5}
+                        marks
+                        min={1}
+                        max={20}
+                        valueLabelDisplay="auto"
+                        onChange={(e, size) => {
+                            if (Array.isArray(size)) return
+                            setHexSize(size)
+                            setHexOptsThrottled({ size })
+                        }}
+                    />
+                </form>
             </Drawer>
         </>
     )
