@@ -9,7 +9,7 @@ import {
     Typography,
     Slider,
 } from '@material-ui/core'
-import { ChevronRight } from '@material-ui/icons'
+import { ChevronRight, Rotate90DegreesCcw } from '@material-ui/icons'
 import throttle from 'lodash.throttle'
 import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../canvas-state'
 
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 type SettingsPanelProps = {
     isOpen: boolean
+    isBigScreen: boolean
     handleToggle: () => void
     state: CanvasState
     dispatch: React.Dispatch<CanvasStateAction>
@@ -57,7 +58,13 @@ type ErrorMessages = {
     height?: 'string'
 }
 
-const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelProps) => {
+const SettingsPanel = ({
+    isOpen,
+    handleToggle,
+    isBigScreen,
+    state,
+    dispatch,
+}: SettingsPanelProps) => {
     const classes = useStyles()
 
     const [width, setWidth] = useState(state.canvasSize.width)
@@ -68,7 +75,7 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
     const setHexOptsThrottled = useCallback(
         throttle((payload: Partial<HexSettings>) => {
             dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
-        }, 33), // 30 fps
+        }, 50),
         [],
     )
 
@@ -83,9 +90,10 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
         dispatch({ type: ActionTypes.SET_SIZE, payload: size })
     }, [dispatch])
 
-    const setCanvasSize = () => {
+    const setCanvasSize = (w: number, h: number) => {
         if (errors.width || errors.height) return
-        dispatch({ type: ActionTypes.SET_SIZE, payload: { width, height } })
+        if (state.canvasSize.width !== w || state.canvasSize.height !== h)
+            dispatch({ type: ActionTypes.SET_SIZE, payload: { width: w, height: h } })
     }
     const handleCanvasSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id } = e.target
@@ -119,14 +127,14 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                     className={classes.form}
                     onSubmit={(e) => {
                         e.preventDefault()
-                        setCanvasSize()
+                        setCanvasSize(width, height)
                     }}
-                    onBlur={() => setCanvasSize()}
+                    onBlur={() => setCanvasSize(width, height)}
                 >
                     <div className={classes.inputRow}>
                         <TextField
                             onChange={handleCanvasSizeChange}
-                            style={{ width: '40%' }}
+                            style={{ width: '30%' }}
                             id="width"
                             label="Width"
                             type="number"
@@ -138,7 +146,7 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                         />
                         <TextField
                             onChange={handleCanvasSizeChange}
-                            style={{ width: '40%' }}
+                            style={{ width: '30%' }}
                             id="height"
                             label="Height"
                             type="number"
@@ -148,6 +156,16 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                             helperText={errors.height}
                             required
                         />
+                        <IconButton
+                            title="Swap width and height"
+                            onClick={() => {
+                                setCanvasSize(height, width)
+                                setWidth(height)
+                                setHeight(width)
+                            }}
+                        >
+                            <Rotate90DegreesCcw />
+                        </IconButton>
                     </div>
                     <input type="submit" style={{ display: 'none' }} />
                 </form>
@@ -168,7 +186,10 @@ const SettingsPanel = ({ isOpen, handleToggle, state, dispatch }: SettingsPanelP
                         onChange={(e, size) => {
                             if (Array.isArray(size)) return
                             setHexSize(size)
-                            setHexOptsThrottled({ size })
+                            if (isBigScreen) setHexOptsThrottled({ size })
+                        }}
+                        onChangeCommitted={(e, size) => {
+                            if (!isBigScreen && !Array.isArray(size)) setHexOptsThrottled({ size })
                         }}
                     />
                 </form>

@@ -61,6 +61,7 @@ const Home: NextPage = () => {
                 dispatch={dispatch}
                 isOpen={isDrawerOpen}
                 handleToggle={handleDrawerToggle}
+                isBigScreen={isBigScreen}
             />
         </>
     )
