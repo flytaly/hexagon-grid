@@ -13,6 +13,7 @@ export type CanvasSize = {
 
 export type HexSettings = {
     size: number
+    orientation: 'pointy' | 'flat'
 }
 
 export type CanvasState = {
@@ -34,6 +35,7 @@ export const initialState: CanvasState = {
     },
     hex: {
         size: 5,
+        orientation: 'pointy',
     },
 }
 

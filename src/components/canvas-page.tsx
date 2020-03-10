@@ -44,7 +44,7 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             aspect < 1
                 ? (state.hex.size * height * aspect) / 100
                 : (state.hex.size * width) / aspect / 100
-        const Hex = Honeycomb.extendHex({ size: hexSize })
+        const Hex = Honeycomb.extendHex({ size: hexSize, orientation: state.hex.orientation })
 
         const Grid = Honeycomb.defineGrid(Hex)
         Grid.rectangle({ width: width / hexSize, height: height / hexSize }).forEach((hex) => {

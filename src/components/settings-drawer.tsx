@@ -8,6 +8,11 @@ import {
     TextField,
     Typography,
     Slider,
+    FormLabel,
+    FormControl,
+    FormControlLabel,
+    Radio,
+    RadioGroup,
 } from '@material-ui/core'
 import { ChevronRight, Rotate90DegreesCcw } from '@material-ui/icons'
 import throttle from 'lodash.throttle'
@@ -35,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => {
             borderBottomRightRadius: 0,
         },
         form: {
-            padding: theme.spacing(2),
+            margin: theme.spacing(2),
         },
         inputRow: {
             display: 'flex',
@@ -193,6 +198,27 @@ const SettingsPanel = ({
                         }}
                     />
                 </form>
+                <Divider />
+                <FormControl component="fieldset" className={classes.form}>
+                    <FormLabel component="legend">Hexagons orientation</FormLabel>
+                    <RadioGroup
+                        aria-label="orientation"
+                        name="orientation"
+                        value={state.hex.orientation}
+                        onChange={(e, value) => {
+                            const orientation = value === 'flat' ? 'flat' : 'pointy'
+                            dispatch({
+                                type: ActionTypes.SET_HEX_OPTIONS,
+                                payload: { orientation },
+                            })
+                        }}
+                    >
+                        <span>
+                            <FormControlLabel value="pointy" control={<Radio />} label="pointy" />
+                            <FormControlLabel value="flat" control={<Radio />} label="flat" />
+                        </span>
+                    </RadioGroup>
+                </FormControl>
             </Drawer>
         </>
     )
