@@ -80,7 +80,7 @@ const SettingsPanel = ({
     const setHexOptsThrottled = useCallback(
         throttle((payload: Partial<HexSettings>) => {
             dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
-        }, 50),
+        }, 100),
         [],
     )
 
@@ -194,7 +194,10 @@ const SettingsPanel = ({
                             if (isBigScreen) setHexOptsThrottled({ size })
                         }}
                         onChangeCommitted={(e, size) => {
-                            if (!isBigScreen && !Array.isArray(size)) setHexOptsThrottled({ size })
+                            if (!isBigScreen && !Array.isArray(size))
+                                setHexOptsThrottled({
+                                    size,
+                                })
                         }}
                     />
                 </form>

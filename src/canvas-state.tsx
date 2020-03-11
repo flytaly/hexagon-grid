@@ -34,7 +34,7 @@ export const initialState: CanvasState = {
         wasMeasured: false,
     },
     hex: {
-        size: 5,
+        size: 3,
         orientation: 'pointy',
     },
 }
