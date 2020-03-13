@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Fab, useMediaQuery } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
-import SettingsPanel from '../components/settings-drawer'
+import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
 import { reducer, initialState } from '../canvas-state'
 

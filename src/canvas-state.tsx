@@ -1,6 +1,7 @@
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
     SET_HEX_OPTIONS = 'SET_HEX_OPTIONS',
+    SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
 }
 
 export type CanvasSize = {
@@ -16,14 +17,24 @@ export type HexSettings = {
     orientation: 'pointy' | 'flat'
 }
 
+export type NoiseSettings = {
+    zoom: number
+    seed: number | string
+    hue: number
+    saturation: number
+    lightness: number
+}
+
 export type CanvasState = {
     canvasSize: CanvasSize
     hex: HexSettings
+    noise: NoiseSettings
 }
 
 export type CanvasStateAction =
     | { type: ActionTypes.SET_SIZE; payload: Partial<CanvasSize> }
     | { type: ActionTypes.SET_HEX_OPTIONS; payload: Partial<HexSettings> }
+    | { type: ActionTypes.SET_NOISE_OPTIONS; payload: Partial<NoiseSettings> }
 
 export const initialState: CanvasState = {
     canvasSize: {
@@ -37,6 +48,13 @@ export const initialState: CanvasState = {
         size: 3,
         orientation: 'pointy',
     },
+    noise: {
+        seed: Math.random(),
+        zoom: 10,
+        hue: 2,
+        saturation: 2,
+        lightness: 4,
+    },
 }
 
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
@@ -48,6 +66,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         }
         case ActionTypes.SET_HEX_OPTIONS:
             return { ...state, hex: { ...state.hex, ...action.payload } }
+        case ActionTypes.SET_NOISE_OPTIONS:
+            return { ...state, noise: { ...state.noise, ...action.payload } }
         default:
             throw new Error()
     }

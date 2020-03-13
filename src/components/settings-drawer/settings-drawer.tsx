@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
-    IconButton,
-    Drawer,
-    Toolbar,
     Divider,
-    TextField,
-    Typography,
-    Slider,
-    FormLabel,
-    FormControl,
+    Drawer,
+    Box,
     FormControlLabel,
+    Grid,
+    IconButton,
     Radio,
     RadioGroup,
+    Slider,
+    TextField,
+    Toolbar,
+    Typography,
 } from '@material-ui/core'
 import { ChevronRight, Rotate90DegreesCcw } from '@material-ui/icons'
 import throttle from 'lodash.throttle'
-import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../canvas-state'
+import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../../canvas-state'
+import NoiseSettingsBlock from './noise-settings-block'
 
 const drawerWidth = 360
 
@@ -42,10 +43,8 @@ const useStyles = makeStyles((theme: Theme) => {
         form: {
             margin: theme.spacing(2),
         },
-        inputRow: {
-            display: 'flex',
-            justifyContent: 'space-around',
-            margin: theme.spacing(1, 0),
+        formHeader: {
+            fontWeight: 'bold',
         },
     })
 })
@@ -128,7 +127,9 @@ const SettingsPanel = ({
                     </IconButton>
                 </Toolbar>
                 <Divider />
-                <form
+                <Box
+                    component="form"
+                    m={2}
                     className={classes.form}
                     onSubmit={(e) => {
                         e.preventDefault()
@@ -136,48 +137,55 @@ const SettingsPanel = ({
                     }}
                     onBlur={() => setCanvasSize(width, height)}
                 >
-                    <div className={classes.inputRow}>
-                        <TextField
-                            onChange={handleCanvasSizeChange}
-                            style={{ width: '30%' }}
-                            id="width"
-                            label="Width"
-                            type="number"
-                            size="small"
-                            value={width || ''}
-                            error={!!errors.width}
-                            helperText={errors.width}
-                            required
-                        />
-                        <TextField
-                            onChange={handleCanvasSizeChange}
-                            style={{ width: '30%' }}
-                            id="height"
-                            label="Height"
-                            type="number"
-                            size="small"
-                            value={height || ''}
-                            error={!!errors.height}
-                            helperText={errors.height}
-                            required
-                        />
-                        <IconButton
-                            title="Swap width and height"
-                            onClick={() => {
-                                setCanvasSize(height, width)
-                                setWidth(height)
-                                setHeight(width)
-                            }}
-                        >
-                            <Rotate90DegreesCcw />
-                        </IconButton>
-                    </div>
+                    <Grid container spacing={2}>
+                        <Grid item xs>
+                            <TextField
+                                onChange={handleCanvasSizeChange}
+                                id="width"
+                                label="Width"
+                                type="number"
+                                size="small"
+                                value={width || ''}
+                                error={!!errors.width}
+                                helperText={errors.width}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs>
+                            <TextField
+                                onChange={handleCanvasSizeChange}
+                                id="height"
+                                label="Height"
+                                type="number"
+                                size="small"
+                                value={height || ''}
+                                error={!!errors.height}
+                                helperText={errors.height}
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs>
+                            <IconButton
+                                title="Swap width and height"
+                                onClick={() => {
+                                    setCanvasSize(height, width)
+                                    setWidth(height)
+                                    setHeight(width)
+                                }}
+                            >
+                                <Rotate90DegreesCcw />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                     <input type="submit" style={{ display: 'none' }} />
-                </form>
+                </Box>
                 <Divider />
-                <form className={classes.form}>
+                <Box component="form" m={2}>
+                    <Typography className={classes.formHeader} gutterBottom>
+                        Hexagons
+                    </Typography>
                     <Typography id="hexagons_size" gutterBottom>
-                        Hexagons size
+                        Size
                     </Typography>
                     <Slider
                         value={hexSize}
@@ -200,10 +208,7 @@ const SettingsPanel = ({
                                 })
                         }}
                     />
-                </form>
-                <Divider />
-                <FormControl component="fieldset" className={classes.form}>
-                    <FormLabel component="legend">Hexagons orientation</FormLabel>
+                    <Typography>Orientation</Typography>
                     <RadioGroup
                         aria-label="orientation"
                         name="orientation"
@@ -216,12 +221,22 @@ const SettingsPanel = ({
                             })
                         }}
                     >
-                        <span>
-                            <FormControlLabel value="pointy" control={<Radio />} label="pointy" />
-                            <FormControlLabel value="flat" control={<Radio />} label="flat" />
-                        </span>
+                        <Grid container>
+                            <Grid item>
+                                <FormControlLabel
+                                    value="pointy"
+                                    control={<Radio />}
+                                    label="pointy"
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel value="flat" control={<Radio />} label="flat" />
+                            </Grid>
+                        </Grid>
                     </RadioGroup>
-                </FormControl>
+                </Box>
+                <Divider />
+                <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
             </Drawer>
         </>
     )

@@ -35,12 +35,11 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
     const { width, height, aspect } = state.canvasSize
     const ref = useRef<HTMLCanvasElement>(null)
     const simplex = React.useMemo(() => {
-        return new SimplexNoise('3')
-    }, [])
+        return new SimplexNoise(String(state.noise.seed))
+    }, [state.noise.seed])
 
     useEffect(() => {
-        const canvas = ref.current
-        const context = canvas?.getContext('2d')
+        const context = ref.current?.getContext('2d')
         if (!context || !state.canvasSize.wasMeasured) return
 
         const hexSize =
@@ -67,12 +66,10 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             const corners = hex.corners().map((corner) => corner.add(point))
             const [firstCorner, ...otherCorners] = corners
 
-            const coef = 40
-            const c_H = 2
-            const c_S = 3
-            const c_L = 1
-            const noiseV = simplex.noise2D(hex.q / coef, hex.r / coef)
-            const noise2 = simplex.noise3D(hex.q / coef, hex.r / coef, (-hex.q - hex.r) / coef)
+            const { zoom, hue: H, saturation: S, lightness: L } = state.noise
+            const noiseV = Math.sin(simplex.noise2D(hex.q / zoom, hex.r / zoom))
+            // const noiseV = Math.cos(Math.random() * 2 * Math.PI)
+            // const noiseV = Math.cos(1 / simplex.noise2D(hex.q / zoom, hex.r / zoom))
 
             context.beginPath()
             context.moveTo(firstCorner.x, firstCorner.y)
@@ -83,8 +80,8 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             context.stroke()
             context.fillStyle =
                 noiseV > 0
-                    ? `hsl(${37 + c_H * noiseV},${90 + c_S * noiseV}%, ${50 + c_L * noiseV}%)`
-                    : `hsl(${214 + c_H * noiseV},${70 + c_S * noiseV}%, ${40 + c_L * noiseV}%)`
+                    ? `hsl(${37 + H * noiseV},${90 + S * noiseV}%, ${50 + L * noiseV}%)`
+                    : `hsl(${214 + H * noiseV},${70 + S * noiseV}%, ${40 + L * noiseV}%)`
 
             // hsl(37, 94%, 53%)
             // hsl(214, 69%, 39%)
