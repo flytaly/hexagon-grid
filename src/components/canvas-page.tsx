@@ -67,9 +67,19 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             const [firstCorner, ...otherCorners] = corners
 
             const { zoom, hue: H, saturation: S, lightness: L } = state.noise
-            const noiseV = Math.sin(simplex.noise2D(hex.q / zoom, hex.r / zoom))
+
+            /* const line = (x: number, y: number) => {
+                let value = 0.0
+                value += simplex.noise2D(x, 1)
+                value += simplex.noise2D(y, 1)
+                return value
+            } */
+
+            // const noiseV = Math.sin(simplex.noise2D(hex.q / zoom, hex.r / zoom))
             // const noiseV = Math.cos(Math.random() * 2 * Math.PI)
-            // const noiseV = Math.cos(1 / simplex.noise2D(hex.q / zoom, hex.r / zoom))
+            const noiseV = Math.cos(1 / simplex.noise2D(hex.q / zoom, hex.r / zoom))
+
+            // const noiseV = line(hex.q / zoom, hex.q / zoom)
 
             context.beginPath()
             context.moveTo(firstCorner.x, firstCorner.y)

@@ -5,7 +5,7 @@ import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
-import { reducer, initialState } from '../canvas-state'
+import { reducer, initialState, ActionTypes } from '../canvas-state'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,6 +41,15 @@ const Home: NextPage = () => {
         setIsInitValue(false)
         setIsDrawerOpen(true)
     }
+
+    React.useEffect(() => {
+        const size = {
+            width: Math.ceil(window.screen.width * window.devicePixelRatio),
+            height: Math.ceil(window.screen.height * window.devicePixelRatio),
+            pixelRatio: window.devicePixelRatio,
+        }
+        dispatch({ type: ActionTypes.SET_SIZE, payload: size })
+    }, [dispatch])
 
     return (
         <>

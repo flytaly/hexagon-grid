@@ -1,23 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import {
-    Divider,
-    Drawer,
-    Box,
-    FormControlLabel,
-    Grid,
-    IconButton,
-    Radio,
-    RadioGroup,
-    Slider,
-    TextField,
-    Toolbar,
-    Typography,
-} from '@material-ui/core'
-import { ChevronRight, Rotate90DegreesCcw } from '@material-ui/icons'
-import throttle from 'lodash.throttle'
-import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../../canvas-state'
-import NoiseSettingsBlock from './noise-settings-block'
+import { Box, Divider, Drawer, IconButton, Toolbar, Tabs, Tab } from '@material-ui/core'
+import { ChevronRight, Settings } from '@material-ui/icons'
+import { CanvasState, CanvasStateAction } from '../../canvas-state'
+import HexagonsSettingsBlock from './hexagons-block'
+import NoiseSettingsBlock from './noise-block'
+import CanvasSizeBlock from './canvas-size-block'
 
 const drawerWidth = 360
 
@@ -33,21 +21,27 @@ const useStyles = makeStyles((theme: Theme) => {
             padding: theme.spacing(0, 1),
             justifyContent: 'flex-start',
         },
-        settingsBtn: {
-            position: 'fixed',
-            top: '100px',
-            right: 0,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-        },
-        form: {
-            margin: theme.spacing(2),
-        },
-        formHeader: {
-            fontWeight: 'bold',
+        tab: {
+            minWidth: 90,
         },
     })
 })
+
+interface TabPanelProps {
+    children?: React.ReactNode
+    index: number
+    value: number
+}
+
+function TabPanel(props: TabPanelProps) {
+    const { children, value, index } = props
+
+    return (
+        <Box component="div" role="tabpanel" hidden={value !== index}>
+            {value === index && children}
+        </Box>
+    )
+}
 
 type SettingsPanelProps = {
     isOpen: boolean
@@ -55,11 +49,6 @@ type SettingsPanelProps = {
     handleToggle: () => void
     state: CanvasState
     dispatch: React.Dispatch<CanvasStateAction>
-}
-
-type ErrorMessages = {
-    width?: 'string'
-    height?: 'string'
 }
 
 const SettingsPanel = ({
@@ -70,47 +59,10 @@ const SettingsPanel = ({
     dispatch,
 }: SettingsPanelProps) => {
     const classes = useStyles()
+    const [tabIdx, setTabIdx] = React.useState(0)
 
-    const [width, setWidth] = useState(state.canvasSize.width)
-    const [height, setHeight] = useState(state.canvasSize.height)
-    const [hexSize, setHexSize] = useState(state.hex.size)
-    const [errors, setErrors] = useState<ErrorMessages>({})
-
-    const setHexOptsThrottled = useCallback(
-        throttle((payload: Partial<HexSettings>) => {
-            dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
-        }, 100),
-        [],
-    )
-
-    useEffect(() => {
-        const size = {
-            width: Math.ceil(window.screen.width * window.devicePixelRatio),
-            height: Math.ceil(window.screen.height * window.devicePixelRatio),
-            pixelRatio: window.devicePixelRatio,
-        }
-        setWidth(size.width)
-        setHeight(size.height)
-        dispatch({ type: ActionTypes.SET_SIZE, payload: size })
-    }, [dispatch])
-
-    const setCanvasSize = (w: number, h: number) => {
-        if (errors.width || errors.height) return
-        if (state.canvasSize.width !== w || state.canvasSize.height !== h)
-            dispatch({ type: ActionTypes.SET_SIZE, payload: { width: w, height: h } })
-    }
-    const handleCanvasSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id } = e.target
-        const value = +e.target.value
-        if (id === 'width') setWidth(value)
-        if (id === 'height') setHeight(value)
-        if (value < 100) {
-            return setErrors((er) => ({ ...er, [id]: 'Too small (<100)' }))
-        }
-        if (value > 7680) {
-            return setErrors((er) => ({ ...er, [id]: 'Too big (>7680)' }))
-        }
-        return setErrors((er) => ({ ...er, [id]: '' }))
+    const handleChange = (event: React.ChangeEvent<{}>, newIdx: number) => {
+        setTabIdx(newIdx)
     }
 
     return (
@@ -125,118 +77,29 @@ const SettingsPanel = ({
                     <IconButton onClick={handleToggle}>
                         <ChevronRight />
                     </IconButton>
+                    <Tabs value={tabIdx} onChange={handleChange} aria-label="settings-tabs">
+                        <Tab
+                            className={classes.tab}
+                            icon={<Settings />}
+                            aria-label="Settings"
+                            disableRipple
+                        />
+                    </Tabs>
                 </Toolbar>
                 <Divider />
-                <Box
-                    component="form"
-                    m={2}
-                    className={classes.form}
-                    onSubmit={(e) => {
-                        e.preventDefault()
-                        setCanvasSize(width, height)
-                    }}
-                    onBlur={() => setCanvasSize(width, height)}
-                >
-                    <Grid container spacing={2}>
-                        <Grid item xs>
-                            <TextField
-                                onChange={handleCanvasSizeChange}
-                                id="width"
-                                label="Width"
-                                type="number"
-                                size="small"
-                                value={width || ''}
-                                error={!!errors.width}
-                                helperText={errors.width}
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs>
-                            <TextField
-                                onChange={handleCanvasSizeChange}
-                                id="height"
-                                label="Height"
-                                type="number"
-                                size="small"
-                                value={height || ''}
-                                error={!!errors.height}
-                                helperText={errors.height}
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs>
-                            <IconButton
-                                title="Swap width and height"
-                                onClick={() => {
-                                    setCanvasSize(height, width)
-                                    setWidth(height)
-                                    setHeight(width)
-                                }}
-                            >
-                                <Rotate90DegreesCcw />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                    <input type="submit" style={{ display: 'none' }} />
-                </Box>
-                <Divider />
-                <Box component="form" m={2}>
-                    <Typography className={classes.formHeader} gutterBottom>
-                        Hexagons
-                    </Typography>
-                    <Typography id="hexagons_size" gutterBottom>
-                        Size
-                    </Typography>
-                    <Slider
-                        value={hexSize}
-                        aria-labelledby="hexagons_size"
-                        getAriaValueText={(value) => `${value}%`}
-                        step={0.5}
-                        marks
-                        min={1}
-                        max={20}
-                        valueLabelDisplay="auto"
-                        onChange={(e, size) => {
-                            if (Array.isArray(size)) return
-                            setHexSize(size)
-                            if (isBigScreen) setHexOptsThrottled({ size })
-                        }}
-                        onChangeCommitted={(e, size) => {
-                            if (!isBigScreen && !Array.isArray(size))
-                                setHexOptsThrottled({
-                                    size,
-                                })
-                        }}
+                <TabPanel value={tabIdx} index={0}>
+                    {state.canvasSize.wasMeasured && (
+                        <CanvasSizeBlock canvasSize={state.canvasSize} dispatch={dispatch} />
+                    )}
+                    <Divider />
+                    <HexagonsSettingsBlock
+                        dispatch={dispatch}
+                        hexState={state.hex}
+                        isBigScreen={isBigScreen}
                     />
-                    <Typography>Orientation</Typography>
-                    <RadioGroup
-                        aria-label="orientation"
-                        name="orientation"
-                        value={state.hex.orientation}
-                        onChange={(e, value) => {
-                            const orientation = value === 'flat' ? 'flat' : 'pointy'
-                            dispatch({
-                                type: ActionTypes.SET_HEX_OPTIONS,
-                                payload: { orientation },
-                            })
-                        }}
-                    >
-                        <Grid container>
-                            <Grid item>
-                                <FormControlLabel
-                                    value="pointy"
-                                    control={<Radio />}
-                                    label="pointy"
-                                />
-                            </Grid>
-                            <Grid item>
-                                <FormControlLabel value="flat" control={<Radio />} label="flat" />
-                            </Grid>
-                        </Grid>
-                    </RadioGroup>
-                </Box>
-                <Divider />
-                <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
+                    <Divider />
+                    <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
+                </TabPanel>
             </Drawer>
         </>
     )
