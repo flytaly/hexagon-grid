@@ -75,15 +75,20 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
                 return value
             } */
 
-            // const noiseV = Math.sin(simplex.noise2D(hex.q / zoom, hex.r / zoom))
-            // const noiseV = Math.cos(Math.random() * 2 * Math.PI)
-            const noiseV = Math.cos(1 / simplex.noise2D(hex.q / zoom, hex.r / zoom))
+            const [x, y] = [
+                (hex.q + state.noise.offsetX) / zoom,
+                (hex.r + state.noise.offsetY) / zoom,
+            ]
 
-            // const noiseV = line(hex.q / zoom, hex.q / zoom)
+            const noiseV = Math.sin(simplex.noise2D(x, y))
+            // const noiseV = Math.cos(Math.random() * 2 * Math.PI)
+            // const noiseV = Math.cos(1 / simplex.noise2D(x, y))
+
+            // const noiseV = line(x, y)
 
             context.beginPath()
             context.moveTo(firstCorner.x, firstCorner.y)
-            otherCorners.forEach(({ x, y }) => context.lineTo(x, y))
+            otherCorners.forEach((c) => context.lineTo(c.x, c.y))
             context.lineTo(firstCorner.x, firstCorner.y)
             if (state.hex.borderWidth) {
                 context.strokeStyle = 'white'

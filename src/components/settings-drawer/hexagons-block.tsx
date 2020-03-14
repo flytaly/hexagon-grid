@@ -27,7 +27,12 @@ const HexagonsSettingsBlock = ({ hexState, dispatch, isBigScreen }: HexProps) =>
         }, 100),
         [],
     )
-
+    React.useMemo(() => {
+        if (hexState.size !== hexSize) {
+            setHexSize(hexState.size)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hexState.size])
     const dispatchOption = (payload: Partial<HexSettings>) =>
         dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
 

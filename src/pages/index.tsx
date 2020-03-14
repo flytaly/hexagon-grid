@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Fab, useMediaQuery } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
@@ -6,6 +6,7 @@ import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
 import { reducer, initialState, ActionTypes } from '../canvas-state'
+import useKeyControls from '../hooks/use-key-controls'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,7 +43,7 @@ const Home: NextPage = () => {
         setIsDrawerOpen(true)
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         const size = {
             width: Math.ceil(window.screen.width * window.devicePixelRatio),
             height: Math.ceil(window.screen.height * window.devicePixelRatio),
@@ -50,6 +51,8 @@ const Home: NextPage = () => {
         }
         dispatch({ type: ActionTypes.SET_SIZE, payload: size })
     }, [dispatch])
+
+    useKeyControls(dispatch)
 
     return (
         <>
