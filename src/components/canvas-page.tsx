@@ -85,9 +85,11 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             context.moveTo(firstCorner.x, firstCorner.y)
             otherCorners.forEach(({ x, y }) => context.lineTo(x, y))
             context.lineTo(firstCorner.x, firstCorner.y)
-            context.strokeStyle = 'white'
-            context.lineWidth = 1
-            context.stroke()
+            if (state.hex.borderWidth) {
+                context.strokeStyle = 'white'
+                context.lineWidth = state.hex.borderWidth
+                context.stroke()
+            }
             context.fillStyle =
                 noiseV > 0
                     ? `hsl(${37 + H * noiseV},${90 + S * noiseV}%, ${50 + L * noiseV}%)`

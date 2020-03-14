@@ -7,6 +7,7 @@ import {
     RadioGroup,
     Slider,
     Typography,
+    Input,
 } from '@material-ui/core'
 import throttle from 'lodash.throttle'
 import { CanvasStateAction, ActionTypes, HexSettings } from '../../canvas-state'
@@ -19,6 +20,7 @@ type HexProps = {
 
 const HexagonsSettingsBlock = ({ hexState, dispatch, isBigScreen }: HexProps) => {
     const [hexSize, setHexSize] = useState(hexState.size)
+    const [borderWidth, setBorderWidth] = useState(hexState.borderWidth)
     const setHexOptsThrottled = useCallback(
         throttle((payload: Partial<HexSettings>) => {
             dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
@@ -26,8 +28,11 @@ const HexagonsSettingsBlock = ({ hexState, dispatch, isBigScreen }: HexProps) =>
         [],
     )
 
+    const dispatchOption = (payload: Partial<HexSettings>) =>
+        dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
+
     return (
-        <Box component="form" m={2}>
+        <Box component="form" m={2} onSubmit={(e) => e.preventDefault()}>
             <Typography component="div" gutterBottom>
                 <Box fontWeight="fontWeightBold">Hexagons</Box>
             </Typography>
@@ -55,6 +60,40 @@ const HexagonsSettingsBlock = ({ hexState, dispatch, isBigScreen }: HexProps) =>
                         })
                 }}
             />
+            <Typography id="border-width" gutterBottom>
+                Border width
+            </Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={9}>
+                    <Slider
+                        value={borderWidth}
+                        aria-labelledby="border-width"
+                        min={0}
+                        max={100}
+                        onChange={(e, val) => setBorderWidth(Number(val))}
+                        onChangeCommitted={(e, val) => dispatchOption({ borderWidth: Number(val) })}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <Input
+                        value={borderWidth}
+                        onChange={(event) => {
+                            const value = Number(event.target.value)
+                            setBorderWidth(value)
+                            dispatchOption({ borderWidth: value })
+                        }}
+                        margin="none"
+                        inputProps={{
+                            step: 1,
+                            min: 0,
+                            max: 100,
+                            type: 'number',
+                            'aria-labelledby': 'border-width',
+                        }}
+                    />
+                </Grid>
+            </Grid>
+
             <Typography>Orientation</Typography>
             <RadioGroup
                 aria-label="orientation"

@@ -15,6 +15,7 @@ export type CanvasSize = {
 export type HexSettings = {
     size: number
     orientation: 'pointy' | 'flat'
+    borderWidth: number
 }
 
 export type NoiseSettings = {
@@ -47,6 +48,7 @@ export const initialState: CanvasState = {
     hex: {
         size: 3,
         orientation: 'pointy',
+        borderWidth: 1,
     },
     noise: {
         seed: Math.random(),
