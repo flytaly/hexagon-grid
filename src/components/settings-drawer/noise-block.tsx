@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Grid, Input, Slider, Typography } from '@material-ui/core'
+import { Box, Button, Grid, Input, Slider, Typography } from '@material-ui/core'
 import { NoiseSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
 
 type NoiseProps = {
@@ -74,7 +74,7 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
             </Grid>
 
             <Typography id="hue-factor" gutterBottom>
-                Hue Varaince
+                Hue Variance
             </Typography>
             <Grid container spacing={2}>
                 <Grid item xs={9}>
@@ -104,7 +104,7 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
             </Grid>
 
             <Typography id="saturation-factor" gutterBottom>
-                Saturation Varaince
+                Saturation Variance
             </Typography>
             <Grid container spacing={2}>
                 <Grid item xs={9}>
@@ -134,7 +134,7 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
             </Grid>
 
             <Typography id="saturation-factor" gutterBottom>
-                Lightness Varaince
+                Lightness Variance
             </Typography>
             <Grid container spacing={2}>
                 <Grid item xs={9}>
@@ -162,6 +162,14 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                     />
                 </Grid>
             </Grid>
+            <Button
+                color="primary"
+                variant="outlined"
+                size="small"
+                onClick={() => dispatchOption({ seed: Math.random() })}
+            >
+                Generate noise seed
+            </Button>
         </Box>
     )
 }

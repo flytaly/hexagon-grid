@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
         },
         sizeCaption: {
             position: 'absolute',
-            top: '-1.2rem',
+            bottom: '100%',
         },
     }),
 )
@@ -70,8 +70,8 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
 
             /* const line = (x: number, y: number) => {
                 let value = 0.0
-                value += simplex.noise2D(x, 1)
-                value += simplex.noise2D(y, 1)
+                value += simplex.noise2D(x, 1) * 2
+                value += simplex.noise2D(y, 1) * 1.2
                 return value
             } */
 
@@ -80,11 +80,10 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
                 (hex.r + state.noise.offsetY) / zoom,
             ]
 
-            const noiseV = Math.sin(simplex.noise2D(x, y))
+            // const noiseV = Math.sin(simplex.noise2D(x, y))
             // const noiseV = Math.cos(Math.random() * 2 * Math.PI)
-            // const noiseV = Math.cos(1 / simplex.noise2D(x, y))
-
-            // const noiseV = line(x, y)
+            const noiseV = Math.cos(1 / simplex.noise2D(x, y))
+            // const noiseV = line(x, x) + Math.cos(simplex.noise2D(x, y) * Math.PI)
 
             context.beginPath()
             context.moveTo(firstCorner.x, firstCorner.y)

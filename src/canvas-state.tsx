@@ -57,8 +57,7 @@ export const initialState: CanvasState = {
         borderWidth: 1,
     },
     noise: {
-        // seed: Math.random(),
-        seed: 0.1,
+        seed: Math.random(),
         zoom: 10,
         hue: 2,
         saturation: 2,
