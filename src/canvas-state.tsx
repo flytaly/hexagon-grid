@@ -1,3 +1,5 @@
+import { clamp } from './helpers'
+
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
     SET_HEX_OPTIONS = 'SET_HEX_OPTIONS',
@@ -67,10 +69,6 @@ export const initialState: CanvasState = {
     },
 }
 
-function clamp(n: number, min: number, max: number) {
-    return Math.min(Math.max(n, min), max)
-}
-
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
     switch (action.type) {
         case ActionTypes.SET_SIZE: {
@@ -95,7 +93,6 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         }
         case ActionTypes.INC_HEX_SIZE: {
             const size = clamp(state.hex.size + action.payload, 1, 20)
-            console.log(size)
             return { ...state, hex: { ...state.hex, size } }
         }
         default:

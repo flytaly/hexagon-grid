@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { Container, Paper, Typography } from '@material-ui/core'
 import * as Honeycomb from 'honeycomb-grid'
-import SimplexNoise from 'simplex-noise'
 import { CanvasState } from '../canvas-state'
+import { useNoises } from '../hooks/use-noises'
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -34,9 +34,7 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
     const classes = useStyles()
     const { width, height, aspect } = state.canvasSize
     const ref = useRef<HTMLCanvasElement>(null)
-    const simplex = React.useMemo(() => {
-        return new SimplexNoise(String(state.noise.seed))
-    }, [state.noise.seed])
+    const noises = useNoises(String(state.noise.seed))
 
     useEffect(() => {
         const context = ref.current?.getContext('2d')
@@ -56,9 +54,12 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
         context.beginPath()
         const Grid = Honeycomb.defineGrid(Hex)
 
+        const widthCount = width / widthStep + 1
+        const heightCount = height / heightStep + 1
+
         Grid.rectangle({
-            width: width / widthStep + 1,
-            height: height / heightStep + 1,
+            width: widthCount,
+            height: heightCount,
             start: [-1, -1],
         }).forEach((hex) => {
             const point = hex.toPoint()
@@ -67,23 +68,14 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             const [firstCorner, ...otherCorners] = corners
 
             const { zoom, hue: H, saturation: S, lightness: L } = state.noise
-
-            /* const line = (x: number, y: number) => {
-                let value = 0.0
-                value += simplex.noise2D(x, 1) * 2
-                value += simplex.noise2D(y, 1) * 1.2
-                return value
-            } */
-
             const [x, y] = [
-                (hex.q + state.noise.offsetX) / zoom,
-                (hex.r + state.noise.offsetY) / zoom,
+                (hex.x - widthCount / 2 + state.noise.offsetX) / zoom,
+                (hex.y - heightCount / 2 + state.noise.offsetY) / zoom,
             ]
 
-            // const noiseV = Math.sin(simplex.noise2D(x, y))
-            // const noiseV = Math.cos(Math.random() * 2 * Math.PI)
-            const noiseV = Math.cos(1 / simplex.noise2D(x, y))
-            // const noiseV = line(x, x) + Math.cos(simplex.noise2D(x, y) * Math.PI)
+            // let noiseValue = noises.simplex(x, y)
+            let noiseValue = noises.cubic(x, y * aspect)
+            noiseValue += noises.rnd(0.4)
 
             context.beginPath()
             context.moveTo(firstCorner.x, firstCorner.y)
@@ -95,9 +87,10 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
                 context.stroke()
             }
             context.fillStyle =
-                noiseV > 0
-                    ? `hsl(${37 + H * noiseV},${90 + S * noiseV}%, ${50 + L * noiseV}%)`
-                    : `hsl(${214 + H * noiseV},${70 + S * noiseV}%, ${40 + L * noiseV}%)`
+                noiseValue > 0
+                    ? `hsl(${37 + H * noiseValue},${90 + S * noiseValue}%, ${50 + L * noiseValue}%)`
+                    : `hsl(${214 + H * noiseValue},${70 + S * noiseValue}%, ${40 +
+                          L * noiseValue}%)`
 
             // hsl(37, 94%, 53%)
             // hsl(214, 69%, 39%)
@@ -112,7 +105,7 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
                 <Typography
                     className={classes.sizeCaption}
                     variant="caption"
-                >{`${width}x${height}`}</Typography>
+                >{`${width}x${height}    offset: ${state.noise.offsetX}:${state.noise.offsetY}`}</Typography>
                 <canvas ref={ref} className={classes.canvas} width={width} height={height} />
             </Paper>
         </Container>
