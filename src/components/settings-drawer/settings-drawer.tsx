@@ -6,6 +6,7 @@ import { CanvasState, CanvasStateAction } from '../../canvas-state'
 import HexagonsSettingsBlock from './hexagons-block'
 import NoiseSettingsBlock from './noise-block'
 import CanvasSizeBlock from './canvas-size-block'
+import GridBlock from './grid-block'
 
 const drawerWidth = 360
 
@@ -99,6 +100,8 @@ const SettingsPanel = ({
                     />
                     <Divider />
                     <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
+                    <Divider />
+                    <GridBlock dispatch={dispatch} gridState={state.grid} />
                 </TabPanel>
             </Drawer>
         </>

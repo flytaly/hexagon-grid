@@ -4,6 +4,7 @@ export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
     SET_HEX_OPTIONS = 'SET_HEX_OPTIONS',
     SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
+    SET_GRID_OPTIONS = 'SET_GRID_OPTIONS',
     INC_NOISE_OFFSET = 'INC_NOISE_OFFSET',
     INC_HEX_SIZE = 'INC_HEX_SIZE',
 }
@@ -32,16 +33,22 @@ export type NoiseSettings = {
     offsetY: number
 }
 
+export type GridSettings = {
+    sparse: number
+}
+
 export type CanvasState = {
     canvasSize: CanvasSize
     hex: HexSettings
     noise: NoiseSettings
+    grid: GridSettings
 }
 
 export type CanvasStateAction =
     | { type: ActionTypes.SET_SIZE; payload: Partial<CanvasSize> }
     | { type: ActionTypes.SET_HEX_OPTIONS; payload: Partial<HexSettings> }
     | { type: ActionTypes.SET_NOISE_OPTIONS; payload: Partial<NoiseSettings> }
+    | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
     | { type: ActionTypes.INC_NOISE_OFFSET; payload: { dx?: number; dy?: number } }
     | { type: ActionTypes.INC_HEX_SIZE; payload: number }
 
@@ -67,6 +74,9 @@ export const initialState: CanvasState = {
         offsetX: 0,
         offsetY: 0,
     },
+    grid: {
+        sparse: 1,
+    },
 }
 
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
@@ -78,6 +88,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         }
         case ActionTypes.SET_HEX_OPTIONS:
             return { ...state, hex: { ...state.hex, ...action.payload } }
+        case ActionTypes.SET_GRID_OPTIONS:
+            return { ...state, grid: { ...state.grid, ...action.payload } }
         case ActionTypes.SET_NOISE_OPTIONS:
             return { ...state, noise: { ...state.noise, ...action.payload } }
         case ActionTypes.INC_NOISE_OFFSET: {
