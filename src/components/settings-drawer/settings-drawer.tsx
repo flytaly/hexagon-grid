@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Box, Divider, Drawer, IconButton, Toolbar, Tabs, Tab } from '@material-ui/core'
-import { ChevronRight, Settings } from '@material-ui/icons'
+import { ChevronRight, Settings, GraphicEq } from '@material-ui/icons'
 import { CanvasState, CanvasStateAction } from '../../canvas-state'
 import HexagonsSettingsBlock from './hexagons-block'
 import NoiseSettingsBlock from './noise-block'
@@ -85,6 +85,12 @@ const SettingsPanel = ({
                             aria-label="Settings"
                             disableRipple
                         />
+                        <Tab
+                            className={classes.tab}
+                            icon={<GraphicEq />}
+                            aria-label="Noise Settings"
+                            disableRipple
+                        />
                     </Tabs>
                 </Toolbar>
                 <Divider />
@@ -99,9 +105,11 @@ const SettingsPanel = ({
                         isBigScreen={isBigScreen}
                     />
                     <Divider />
+                    <GridBlock dispatch={dispatch} gridState={state.grid} />
+                </TabPanel>
+                <TabPanel value={tabIdx} index={1}>
                     <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
                     <Divider />
-                    <GridBlock dispatch={dispatch} gridState={state.grid} />
                 </TabPanel>
             </Drawer>
         </>

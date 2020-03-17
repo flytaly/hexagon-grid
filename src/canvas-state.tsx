@@ -1,4 +1,5 @@
 import { clamp } from './helpers'
+import { Noises2D, Noises2DFns } from './noises'
 
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
@@ -31,6 +32,8 @@ export type NoiseSettings = {
     lightness: number
     offsetX: number
     offsetY: number
+    baseNoise: keyof Noises2DFns
+    noise2Strength: number
 }
 
 export type GridSettings = {
@@ -73,6 +76,8 @@ export const initialState: CanvasState = {
         lightness: 4,
         offsetX: 0,
         offsetY: 0,
+        baseNoise: Noises2D.simplex.id,
+        noise2Strength: 0,
     },
     grid: {
         sparse: 1,

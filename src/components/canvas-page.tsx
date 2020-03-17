@@ -40,7 +40,7 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
     const classes = useStyles()
     const { width, height, aspect } = state.canvasSize
     const ref = useRef<HTMLCanvasElement>(null)
-    const noises = useNoises(String(state.noise.seed))
+    const [noises, random] = useNoises(String(state.noise.seed))
 
     useEffect(() => {
         const context = ref.current?.getContext('2d')
@@ -64,15 +64,16 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
         const Grid = Honeycomb.defineGrid(Hex)
 
         const genNoiseAndDraw = (hexagon: Honeycomb.Hex<{}>) => {
-            const { zoom } = state.noise
+            const { zoom, baseNoise, noise2Strength } = state.noise
             const [x, y] = [
                 (hexagon.x - widthCount / 2 + state.noise.offsetX) / zoom,
                 (hexagon.y - heightCount / 2 + state.noise.offsetY) / zoom,
             ]
 
-            // let noiseValue = noises.simplex(x, y)
-            let noiseValue = noises.cubic(x, y * aspect)
-            noiseValue += noises.rnd(0.7)
+            let noiseValue = noises[baseNoise](x, y)
+            if (noise2Strength) {
+                noiseValue += random.rnd(noise2Strength)
+            }
 
             drawHexagon({ hexagon, noiseValue, ctx: context, state })
         }
