@@ -24,6 +24,7 @@ export default function drawHexagon({ hexagon, noiseValue, ctx, state }: DrawHex
     if (state.hex.borderWidth) {
         ctx.strokeStyle = toHslStr(state.colors.hexBorder)
         ctx.lineWidth = state.hex.borderWidth
+        ctx.closePath()
         ctx.stroke()
     }
     ctx.fillStyle =
