@@ -28,6 +28,9 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const [border, setBorder] = useState<HSLColor>(colorState.hexBorder)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
+    const [bgColor, setBgColor] = useState<HSLColor | null>(colorState.background)
+    const [bgAnchorEl, setBgAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+
     return (
         <Box component="form" m={2}>
             <Typography component="div" gutterBottom>
@@ -68,6 +71,45 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         dispatch({
                             type: ActionTypes.SET_COLOR_OPTIONS,
                             payload: { hexBorder: color.hsl },
+                        })
+                    }
+                />
+            </Popover>
+            <Grid container spacing={2}>
+                <Grid item xs={9}>
+                    Background
+                </Grid>
+                <Grid item xs={3}>
+                    <ColorButton
+                        onClick={(e) => setBgAnchorEl(e.currentTarget)}
+                        aria-label="Background color"
+                        size="small"
+                        disableRipple
+                        style={{
+                            backgroundColor: bgColor ? toHslStr(bgColor) : 'transparent',
+                        }}
+                    >
+                        <div />
+                    </ColorButton>
+                </Grid>
+            </Grid>
+            <Popover
+                id="bg-color-picker"
+                open={Boolean(bgAnchorEl)}
+                anchorEl={bgAnchorEl}
+                onClose={() => {
+                    setBgAnchorEl(null)
+                }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <ChromePicker
+                    color={bgColor || { h: 0, s: 0, l: 1, a: 0 }}
+                    onChange={(color) => setBgColor(color.hsl)}
+                    onChangeComplete={(color: ColorResult) =>
+                        dispatch({
+                            type: ActionTypes.SET_COLOR_OPTIONS,
+                            payload: { background: color.hsl },
                         })
                     }
                 />

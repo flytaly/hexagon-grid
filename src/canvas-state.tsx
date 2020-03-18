@@ -44,6 +44,7 @@ export type GridSettings = {
 
 export type ColorsSettings = {
     hexBorder: HSLColor
+    background: HSLColor | null
 }
 
 export type CanvasState = {
@@ -92,6 +93,7 @@ export const initialState: CanvasState = {
     },
     colors: {
         hexBorder: { h: 0, s: 0, l: 1, a: 1 },
+        background: null,
     },
 }
 

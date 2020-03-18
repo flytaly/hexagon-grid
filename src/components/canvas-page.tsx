@@ -5,6 +5,7 @@ import * as Honeycomb from 'honeycomb-grid'
 import { CanvasState } from '../canvas-state'
 import { useNoises } from '../hooks/use-noises'
 import drawHexagon from '../draw-hexagon'
+import { toHslStr } from '../helpers'
 
 // just to suppress ts errors
 interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'> {
@@ -59,6 +60,13 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
         const heightCount = height / heightStep + 1
 
         context.clearRect(0, 0, width, height)
+        if (state.colors.background) {
+            context.save()
+            context.fillStyle = toHslStr(state.colors.background)
+            context.fillRect(0, 0, width, height)
+            context.restore()
+        }
+
         context.beginPath()
 
         const Grid = Honeycomb.defineGrid(Hex)
