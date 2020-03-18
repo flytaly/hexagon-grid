@@ -1,12 +1,13 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Box, Divider, Drawer, IconButton, Toolbar, Tabs, Tab } from '@material-ui/core'
-import { ChevronRight, Settings, GraphicEq } from '@material-ui/icons'
+import { ChevronRight, Settings, GraphicEq, ColorLens } from '@material-ui/icons'
 import { CanvasState, CanvasStateAction } from '../../canvas-state'
 import HexagonsSettingsBlock from './hexagons-block'
 import NoiseSettingsBlock from './noise-block'
 import CanvasSizeBlock from './canvas-size-block'
 import GridBlock from './grid-block'
+import ColorBlock from './color-block'
 
 const drawerWidth = 360
 
@@ -60,7 +61,7 @@ const SettingsPanel = ({
     dispatch,
 }: SettingsPanelProps) => {
     const classes = useStyles()
-    const [tabIdx, setTabIdx] = React.useState(0)
+    const [tabIdx, setTabIdx] = React.useState(2)
 
     const handleChange = (event: React.ChangeEvent<{}>, newIdx: number) => {
         setTabIdx(newIdx)
@@ -79,18 +80,13 @@ const SettingsPanel = ({
                         <ChevronRight />
                     </IconButton>
                     <Tabs value={tabIdx} onChange={handleChange} aria-label="settings-tabs">
-                        <Tab
-                            className={classes.tab}
-                            icon={<Settings />}
-                            aria-label="Settings"
-                            disableRipple
-                        />
+                        <Tab className={classes.tab} icon={<Settings />} aria-label="Settings" />
                         <Tab
                             className={classes.tab}
                             icon={<GraphicEq />}
                             aria-label="Noise Settings"
-                            disableRipple
                         />
+                        <Tab className={classes.tab} icon={<ColorLens />} aria-label="Colors" />
                     </Tabs>
                 </Toolbar>
                 <Divider />
@@ -109,6 +105,10 @@ const SettingsPanel = ({
                 </TabPanel>
                 <TabPanel value={tabIdx} index={1}>
                     <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
+                    <Divider />
+                </TabPanel>
+                <TabPanel value={tabIdx} index={2}>
+                    <ColorBlock dispatch={dispatch} colorState={state.colors} />
                     <Divider />
                 </TabPanel>
             </Drawer>

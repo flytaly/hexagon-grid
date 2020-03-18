@@ -1,3 +1,4 @@
+import { HSLColor } from 'react-color'
 import { clamp } from './helpers'
 import { Noises2D, Noises2DFns } from './noises'
 
@@ -6,6 +7,7 @@ export enum ActionTypes {
     SET_HEX_OPTIONS = 'SET_HEX_OPTIONS',
     SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
     SET_GRID_OPTIONS = 'SET_GRID_OPTIONS',
+    SET_COLOR_OPTIONS = 'SET_COLOR_OPTIONS',
     INC_NOISE_OFFSET = 'INC_NOISE_OFFSET',
     INC_HEX_SIZE = 'INC_HEX_SIZE',
 }
@@ -40,11 +42,16 @@ export type GridSettings = {
     sparse: number
 }
 
+export type ColorsSettings = {
+    hexBorder: HSLColor
+}
+
 export type CanvasState = {
     canvasSize: CanvasSize
     hex: HexSettings
     noise: NoiseSettings
     grid: GridSettings
+    colors: ColorsSettings
 }
 
 export type CanvasStateAction =
@@ -52,6 +59,7 @@ export type CanvasStateAction =
     | { type: ActionTypes.SET_HEX_OPTIONS; payload: Partial<HexSettings> }
     | { type: ActionTypes.SET_NOISE_OPTIONS; payload: Partial<NoiseSettings> }
     | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
+    | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
     | { type: ActionTypes.INC_NOISE_OFFSET; payload: { dx?: number; dy?: number } }
     | { type: ActionTypes.INC_HEX_SIZE; payload: number }
 
@@ -82,6 +90,9 @@ export const initialState: CanvasState = {
     grid: {
         sparse: 1,
     },
+    colors: {
+        hexBorder: { h: 0, s: 0, l: 1, a: 1 },
+    },
 }
 
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
@@ -97,6 +108,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             return { ...state, grid: { ...state.grid, ...action.payload } }
         case ActionTypes.SET_NOISE_OPTIONS:
             return { ...state, noise: { ...state.noise, ...action.payload } }
+        case ActionTypes.SET_COLOR_OPTIONS:
+            return { ...state, colors: { ...state.colors, ...action.payload } }
         case ActionTypes.INC_NOISE_OFFSET: {
             const { dx = 0, dy = 0 } = action.payload
             return {

@@ -1,5 +1,6 @@
 import { Hex } from 'honeycomb-grid'
 import { CanvasState } from './canvas-state'
+import { toHslStr } from './helpers'
 
 interface DrawHexagonProperties {
     hexagon: Hex<{}>
@@ -21,7 +22,7 @@ export default function drawHexagon({ hexagon, noiseValue, ctx, state }: DrawHex
     otherCorners.forEach((c) => ctx.lineTo(c.x, c.y))
     ctx.lineTo(firstCorner.x, firstCorner.y)
     if (state.hex.borderWidth) {
-        ctx.strokeStyle = 'white'
+        ctx.strokeStyle = toHslStr(state.colors.hexBorder)
         ctx.lineWidth = state.hex.borderWidth
         ctx.stroke()
     }
