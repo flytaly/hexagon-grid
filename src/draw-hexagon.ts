@@ -1,6 +1,6 @@
 import { Hex } from 'honeycomb-grid'
 import { CanvasState } from './canvas-state'
-import { toHslStr } from './helpers'
+import { toHslaStr, clamp } from './helpers'
 
 interface DrawHexagonProperties {
     hexagon: Hex<{}>
@@ -22,18 +22,18 @@ export default function drawHexagon({ hexagon, noiseValue, ctx, state }: DrawHex
     otherCorners.forEach((c) => ctx.lineTo(c.x, c.y))
     ctx.lineTo(firstCorner.x, firstCorner.y)
     if (state.hex.borderWidth) {
-        ctx.strokeStyle = toHslStr(state.colors.hexBorder)
+        ctx.strokeStyle = toHslaStr(state.colors.hexBorder)
         ctx.lineWidth = state.hex.borderWidth
         ctx.closePath()
         ctx.stroke()
     }
-    ctx.fillStyle =
-        noiseValue > 0
-            ? `hsl(${37 + H * noiseValue},${90 + S * noiseValue}%, ${50 + L * noiseValue}%)`
-            : `hsl(${214 + H * noiseValue},${70 + S * noiseValue}%, ${40 + L * noiseValue}%)`
 
-    // hsl(37, 94%, 53%)
-    // hsl(214, 69%, 39%)
-    // ctx.fillStyle = `hsl(${30},50%,${value2d > 0 ? 100 : 0}%)`
+    const palette = state.colors.palette.colors
+    const colorId = Math.floor(clamp((noiseValue + 1) / 2, 0, 0.999999) * palette.length)
+    const { h, s, l, a } = palette[colorId]
+
+    ctx.fillStyle = `hsla(${h + H * noiseValue},${s * 100 + S * noiseValue}%, ${l * 100 +
+        L * noiseValue}%, ${a})`
+
     ctx.fill()
 }

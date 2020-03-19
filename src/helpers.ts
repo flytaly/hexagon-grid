@@ -13,6 +13,6 @@ export function clamp(n: number, min: number, max: number) {
     return Math.min(Math.max(n, min), max)
 }
 
-export function toHslStr(color: HSLColor) {
+export function toHslaStr(color: HSLColor) {
     return `hsla(${color.h},${color.s * 100}%,${color.l * 100}%,${color.a})`
 }

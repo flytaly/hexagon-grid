@@ -1,6 +1,7 @@
 import { HSLColor } from 'react-color'
 import { clamp } from './helpers'
 import { Noises2D, Noises2DFns } from './noises'
+import { PaletteId, defaultPalettes } from './palettes'
 
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
@@ -45,6 +46,11 @@ export type GridSettings = {
 export type ColorsSettings = {
     hexBorder: HSLColor
     background: HSLColor | null
+    palette: {
+        isCustom: boolean
+        id: PaletteId | string
+        colors: HSLColor[]
+    }
 }
 
 export type CanvasState = {
@@ -94,6 +100,7 @@ export const initialState: CanvasState = {
     colors: {
         hexBorder: { h: 0, s: 0, l: 1, a: 1 },
         background: null,
+        palette: { isCustom: false, id: defaultPalettes[0].id, colors: defaultPalettes[0].colors },
     },
 }
 
