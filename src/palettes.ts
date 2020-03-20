@@ -8,7 +8,7 @@ export type PreDefinedPalette = {
     gradient: string
 }
 
-const ids = ['b+y', 'b+w'] as const
+const ids = ['b+y', 'grey'] as const
 export type PaletteId = typeof ids[number]
 
 export const defaultPalettes: PreDefinedPalette[] = [
@@ -22,19 +22,29 @@ export const defaultPalettes: PreDefinedPalette[] = [
         gradient: '',
     },
     {
-        id: 'b+w',
-        name: 'Black & White',
+        id: 'grey',
+        name: 'Grey',
         colors: [
-            { h: 0, s: 0, l: 1, a: 1 },
-            { h: 0, s: 0, l: 0, a: 1 },
+            { h: 0, s: 0, l: 0.8, a: 1 },
+            { h: 0, s: 0, l: 0.6, a: 1 },
+            { h: 0, s: 0, l: 0.4, a: 1 },
+            { h: 0, s: 0, l: 0.2, a: 1 },
         ],
         gradient: '',
     },
 ]
 
-// Fill gradient
+// Fill discrete gradient
 defaultPalettes.forEach((palette) => {
-    const colors = palette.colors.map((color) => toHslaStr(color))
+    const { length } = palette.colors
     // eslint-disable-next-line no-param-reassign
-    palette.gradient = colors.join(', ')
+    palette.gradient = palette.colors.reduce((acc, color, idx) => {
+        let result = acc + toHslaStr(color)
+
+        const step = 100 / length
+        if (idx > 0) result += ` ${step * idx}%` // left
+        if (idx < length - 1) result += ` ${step * (idx + 1)}%,` // right
+
+        return result
+    }, '')
 })

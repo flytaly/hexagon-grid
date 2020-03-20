@@ -81,7 +81,11 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                     labelId="base-noise-label"
                     value={noiseState.baseNoise}
                     onChange={(ev) => {
-                        dispatchOption({ baseNoise: ev.target.value as keyof Noises2DFns })
+                        dispatchOption({
+                            baseNoise: ev.target.value as keyof Noises2DFns,
+                            offsetX: 0,
+                            offsetY: 0,
+                        })
                     }}
                 >
                     {Noises2DList.map((id) => (
