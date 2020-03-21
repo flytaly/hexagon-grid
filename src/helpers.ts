@@ -16,3 +16,13 @@ export function clamp(n: number, min: number, max: number) {
 export function toHslaStr(color: HSLColor) {
     return `hsla(${color.h},${color.s * 100}%,${color.l * 100}%,${color.a})`
 }
+
+export function toHslaObj(hslStr: string, alpha = 1): HSLColor {
+    const re = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g
+    const regExpArray = re.exec(hslStr)
+
+    if (!regExpArray) throw new SyntaxError('Not an HSL color')
+
+    const [, h, s, l] = regExpArray
+    return { h: +h, s: +s / 100, l: +l / 100, a: alpha }
+}
