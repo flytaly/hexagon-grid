@@ -72,7 +72,9 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
 
         const Grid = Honeycomb.defineGrid(Hex)
 
-        const { sparse } = state.grid
+        const { zoom, baseNoise, noise2Strength } = state.noise
+        const { sparse, signX, signY } = state.grid
+
         const [rectW, rectH] = [widthCount / sparse, heightCount / sparse]
         const [normalW, normalH] = [
             aspect < 1 ? rectW / 10 : rectW / 10 / aspect,
@@ -80,12 +82,11 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
         ]
 
         const genNoiseAndDraw = (hexagon: Honeycomb.Hex<{}>) => {
-            const { zoom, baseNoise, noise2Strength } = state.noise
             const [x, y] = [
                 (hexagon.x - widthCount / 2 + state.noise.offsetX + 1) / zoom,
                 (hexagon.y - heightCount / 2 + state.noise.offsetY + 1) / zoom,
             ]
-            let noiseValue = noises[baseNoise](x, y, normalW, normalH)
+            let noiseValue = noises[baseNoise](signX * x, signY * y, normalW, normalH)
 
             if (noise2Strength) {
                 noiseValue += random.rnd(noise2Strength)

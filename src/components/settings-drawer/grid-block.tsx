@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Grid, Input, Slider, Typography } from '@material-ui/core'
+import { Box, Grid, Input, Slider, Typography, IconButton } from '@material-ui/core'
+import { SwapHoriz, SwapVert } from '@material-ui/icons'
 import { CanvasStateAction, ActionTypes, GridSettings } from '../../canvas-state'
 
 type GridSettingsProps = {
@@ -9,6 +10,7 @@ type GridSettingsProps = {
 
 const NoiseSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
     const [sparse, setSparse] = useState<number>(gridState.sparse)
+    const { signX, signY } = gridState
 
     const dispatchOption = (payload: Partial<GridSettings>) =>
         dispatch({ type: ActionTypes.SET_GRID_OPTIONS, payload })
@@ -18,6 +20,9 @@ const NoiseSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
         setSparse(value)
         dispatchOption({ sparse: value })
     }
+
+    const swapXAxis = () => dispatchOption({ signX: signX === 1 ? -1 : 1 })
+    const swapYAxis = () => dispatchOption({ signY: signY === 1 ? -1 : 1 })
 
     return (
         <Box component="form" m={2}>
@@ -53,6 +58,29 @@ const NoiseSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
                             'aria-labelledby': 'sparse-factor',
                         }}
                     />
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item>
+                    <Typography>Mirror axes</Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={signX === -1 ? 'primary' : undefined}
+                        onClick={swapXAxis}
+                        aria-label="Mirror horizontal axis"
+                    >
+                        <SwapHoriz />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={signY === -1 ? 'primary' : undefined}
+                        onClick={swapYAxis}
+                        aria-label="Mirror vertical axis"
+                    >
+                        <SwapVert />
+                    </IconButton>
                 </Grid>
             </Grid>
         </Box>

@@ -61,7 +61,7 @@ const SettingsPanel = ({
     dispatch,
 }: SettingsPanelProps) => {
     const classes = useStyles()
-    const [tabIdx, setTabIdx] = React.useState(2)
+    const [tabIdx, setTabIdx] = React.useState(0)
 
     const handleChange = (event: React.ChangeEvent<{}>, newIdx: number) => {
         setTabIdx(newIdx)

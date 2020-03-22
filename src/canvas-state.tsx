@@ -41,6 +41,8 @@ export type NoiseSettings = {
 
 export type GridSettings = {
     sparse: number
+    signX: 1 | -1
+    signY: 1 | -1
 }
 
 export type ColorsSettings = {
@@ -91,16 +93,18 @@ export const initialState: CanvasState = {
         lightness: 4,
         offsetX: 0,
         offsetY: 0,
-        baseNoise: Noises2D.simplex.id,
+        baseNoise: Noises2D.diagonal.id,
         noise2Strength: 0,
     },
     grid: {
         sparse: 1,
+        signX: 1,
+        signY: 1,
     },
     colors: {
         hexBorder: { h: 0, s: 0, l: 1, a: 1 },
         background: null,
-        palette: { isCustom: false, id: defaultPalettes[0].id, colors: defaultPalettes[0].colors },
+        palette: { isCustom: false, id: defaultPalettes[1].id, colors: defaultPalettes[1].colors },
     },
 }
 
