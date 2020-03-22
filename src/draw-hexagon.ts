@@ -26,7 +26,9 @@ export default function drawHexagon({ hexagon, noiseValue, ctx, state }: DrawHex
     const colorId = Math.floor(clamp((noiseValue + 1) / 2, 0, 0.999999) * palette.length)
     const { h, s, l, a } = palette[colorId]
 
-    noiseValue = Math.sign(noiseValue) - noiseValue
+    if (a === 0) return
+
+    // noiseValue = Math.sign(noiseValue) - noiseValue
 
     const hue = h + H * noiseValue
     const saturation = s * 100 + S * noiseValue

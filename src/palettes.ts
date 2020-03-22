@@ -5,10 +5,11 @@ export type PreDefinedPalette = {
     name?: string
     id: PaletteId
     colors: HSLColor[]
+    setBackground?: HSLColor
     gradient: string
 }
 
-const ids = ['b+y', 'grey', 'colorful'] as const
+const ids = ['b+y', 'grey', 'colorful', 'teal-green'] as const
 export type PaletteId = typeof ids[number]
 
 export const defaultPalettes: PreDefinedPalette[] = [
@@ -52,6 +53,22 @@ export const defaultPalettes: PreDefinedPalette[] = [
             toHslaObj('hsl(0, 0%, 20%)'),
         ],
         gradient: '',
+    },
+    {
+        id: 'teal-green',
+        name: 'Teal & Green',
+        colors: [
+            toHslaObj('hsl(330, 4%, 9%)', 0),
+            toHslaObj('hsl(330, 4%, 9%)', 0),
+            toHslaObj('hsl(181, 58%, 40%)'),
+            toHslaObj('hsl(181, 58%, 40%)'),
+            toHslaObj('hsl(72, 60%, 50%)'),
+            toHslaObj('hsl(72, 60%, 50%)'),
+            toHslaObj('hsl(330, 4%, 9%)', 0),
+            toHslaObj('hsl(330, 4%, 9%)', 0),
+        ],
+        gradient: '',
+        setBackground: toHslaObj('hsl(0, 0%, 0%)'),
     },
 ]
 

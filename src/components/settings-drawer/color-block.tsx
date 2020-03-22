@@ -150,8 +150,10 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                                         id: p.id,
                                         colors: p.colors,
                                     },
+                                    ...(p.setBackground && { background: p.setBackground }),
                                 },
                             })
+                            if (p.setBackground) setBgColor(p.setBackground)
                         }}
                         style={{
                             background: `linear-gradient(to right, ${p.gradient})`,
