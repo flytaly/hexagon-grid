@@ -13,9 +13,11 @@ export function useNoises(seed: string) {
         line: (x) => n1D(x),
         linesSum: (x, y) => n1D(x) + n1D(y),
         linesMul: (x, y) => n1D(x) * n1D(y),
+        diagonal: (x, y) => x + y,
 
         simplex: (x, y) => simplex.noise2D(x, y),
-        cosSimplex: (x, y) => Math.cos(1 / simplex.noise2D(x, y)),
+        cosMul: (x, y) => (x !== 0 ? Math.cos(y * x * 10) : Math.cos(y * 10)),
+        circle: (x, y, w = 1, h = 1) => Math.sqrt((x / w) ** 2 + (y / h) ** 2) - 0.5,
 
         // shapes
         cubic: (x, y) => clamp(x ** 3 + y, -1, 1),

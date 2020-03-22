@@ -52,6 +52,7 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
             aspect < 1
                 ? (state.hex.size * height * aspect) / 100
                 : (state.hex.size * width) / aspect / 100
+
         const Hex = Honeycomb.extendHex({ size: hexSize, orientation })
 
         const widthStep = orientation === 'pointy' ? hexSize * Math.sqrt(3) : hexSize * 1.5
@@ -71,28 +72,34 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
 
         const Grid = Honeycomb.defineGrid(Hex)
 
+        const { sparse } = state.grid
+        const [rectW, rectH] = [widthCount / sparse, heightCount / sparse]
+        const [normalW, normalH] = [
+            aspect < 1 ? rectW / 10 : rectW / 10 / aspect,
+            aspect < 1 ? (rectH * aspect) / 10 : rectH / 10,
+        ]
+
         const genNoiseAndDraw = (hexagon: Honeycomb.Hex<{}>) => {
             const { zoom, baseNoise, noise2Strength } = state.noise
             const [x, y] = [
-                (hexagon.x - widthCount / 2 + state.noise.offsetX) / zoom,
-                (hexagon.y - heightCount / 2 + state.noise.offsetY) / zoom,
+                (hexagon.x - widthCount / 2 + state.noise.offsetX + 1) / zoom,
+                (hexagon.y - heightCount / 2 + state.noise.offsetY + 1) / zoom,
             ]
+            let noiseValue = noises[baseNoise](x, y, normalW, normalH)
 
-            let noiseValue = noises[baseNoise](x, y)
             if (noise2Strength) {
                 noiseValue += random.rnd(noise2Strength)
             }
-
             drawHexagon({ hexagon, noiseValue, ctx: context, state })
         }
 
-        const { sparse } = state.grid
         const onCreate = (hex: HexWithCorrectSetDeclaration) => {
             hex.set({ q: hex.q * sparse, r: hex.r * sparse, s: hex.s * sparse })
         }
+
         Grid.rectangle({
-            width: widthCount / sparse,
-            height: heightCount / sparse,
+            width: rectW,
+            height: rectH,
             start: [-1, -1],
             onCreate: sparse !== 1 ? onCreate : undefined,
         }).forEach(genNoiseAndDraw)

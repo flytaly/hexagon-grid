@@ -1,15 +1,17 @@
-export type NoiseFn = (x: number, y: number) => number
+export type NoiseFn = (x: number, y: number, width?: number, height?: number) => number
 
 export type Noises2DFns = {
     line: NoiseFn
     linesSum: NoiseFn
     linesMul: NoiseFn
+    diagonal: NoiseFn
 
     simplex: NoiseFn
-    cosSimplex: NoiseFn
+    cosMul: NoiseFn
 
-    cubic: (x: number, y: number) => number
-    quadratic: (x: number, y: number) => number
+    circle: NoiseFn
+    cubic: NoiseFn
+    quadratic: NoiseFn
 }
 
 export type NoisesRnd = {
@@ -41,13 +43,21 @@ export const Noises2D: NoisesInfoObj = {
         id: 'linesMul',
         name: 'Lines multiplication',
     },
+    diagonal: {
+        id: 'diagonal',
+        name: 'Diagonal line',
+    },
     simplex: {
         id: 'simplex',
         name: 'Simplex noise',
     },
-    cosSimplex: {
-        id: 'cosSimplex',
-        name: 'Cosine noise',
+    cosMul: {
+        id: 'cosMul',
+        name: 'Сos(x*y)',
+    },
+    circle: {
+        id: 'circle',
+        name: 'Circle',
     },
     cubic: {
         id: 'cubic',
