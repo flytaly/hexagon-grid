@@ -1,26 +1,27 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Fab, useMediaQuery } from '@material-ui/core'
+import { Fab, useMediaQuery, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
 import { reducer, initialState, ActionTypes } from '../canvas-state'
 import useKeyControls from '../hooks/use-key-controls'
+import { toolbarHeight } from '../configs'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         settingsBtn: {
             position: 'fixed',
-            top: '10%',
+            top: `${toolbarHeight + theme.spacing(2)}px`,
             right: 0,
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
         },
         pageWrapper: {
             height: '100%',
+            maxHeight: `calc(100% - ${toolbarHeight}px)`,
             marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
-            paddingTop: theme.spacing(3),
         },
     }),
 )
@@ -31,7 +32,7 @@ const Home: NextPage = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
 
-    const isBigScreen = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'))
+    const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))
 
     const classes = useStyles({
         pageMarginR: isBigScreen && isDrawerOpen ? 360 : 0,
@@ -56,6 +57,11 @@ const Home: NextPage = () => {
 
     return (
         <>
+            <AppBar position="static">
+                <Toolbar variant="dense" style={{ height: toolbarHeight }}>
+                    <Typography>Hexagons</Typography>
+                </Toolbar>
+            </AppBar>
             <div className={classes.pageWrapper}>
                 <CanvasPage state={state} />
             </div>

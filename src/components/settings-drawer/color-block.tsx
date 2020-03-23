@@ -6,6 +6,7 @@ import { CheckTwoTone } from '@material-ui/icons'
 import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
 import { toHslaStr } from '../../helpers'
 import { defaultPalettes } from '../../palettes'
+import { checkered } from '../../background'
 
 const ColorButton = withStyles(({ palette }) => ({
     root: {
@@ -29,6 +30,7 @@ const PaletteButton = withStyles(({ palette, spacing }) => ({
         height: '20px',
         width: '100%',
         margin: spacing(0, 0, 1, 0),
+        position: 'relative',
         '&:hover, &:focus': { opacity: 0.6 },
         '&:focus': {
             outline: '2px solid',
@@ -66,7 +68,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             size="small"
                             disableRipple
                             style={{
-                                backgroundColor: toHslaStr(border),
+                                background: border.a ? toHslaStr(border) : checkered,
                             }}
                         >
                             <div />
@@ -105,7 +107,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             size="small"
                             disableRipple
                             style={{
-                                backgroundColor: bgColor ? toHslaStr(bgColor) : 'transparent',
+                                background: bgColor ? toHslaStr(bgColor) : checkered,
                             }}
                         />
                     </Grid>
@@ -156,7 +158,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             if (p.setBackground) setBgColor(p.setBackground)
                         }}
                         style={{
-                            background: `linear-gradient(to right, ${p.gradient})`,
+                            background: `linear-gradient(to right, ${p.gradient}), ${checkered}`,
                         }}
                     >
                         {colorState.palette.id === p.id ? <CheckTwoTone color="secondary" /> : null}

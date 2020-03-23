@@ -1,50 +1,49 @@
 import React, { useRef, useEffect } from 'react'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { Container, Paper, Typography } from '@material-ui/core'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Container, Typography } from '@material-ui/core'
 import * as Honeycomb from 'honeycomb-grid'
 import { CanvasState } from '../canvas-state'
 import { useNoises } from '../hooks/use-noises'
 import drawHexagon from '../draw-hexagon'
 import { toHslaStr } from '../helpers'
+import { checkered } from '../background'
 
 // just to suppress ts errors
 interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'> {
     set(hex: { q: number; r: number; s: number }): Honeycomb.Hex<{}>
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         canvasBox: {
+            position: 'relative',
             display: 'flex',
+            padding: theme.spacing(2, 1),
             height: '100%',
+            maxWidth: '100%',
+            maxHeight: '100%',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
         },
-        paper: {
-            position: 'relative',
-        },
         canvas: {
             display: 'block',
             maxWidth: '100%',
-            maxHeight: '90vh',
-            // background: 'red',
-        },
-        sizeCaption: {
-            position: 'absolute',
-            bottom: '100%',
+            maxHeight: '100%',
+            background: checkered,
+            boxShadow: theme.shadows[10],
         },
     }),
 )
 
 const CanvasPage = ({ state }: { state: CanvasState }) => {
-    const classes = useStyles()
     const { width, height, aspect } = state.canvasSize
-    const ref = useRef<HTMLCanvasElement>(null)
+    const refCanv = useRef<HTMLCanvasElement>(null)
     const [noises, random] = useNoises(String(state.noise.seed))
+    const classes = useStyles()
 
     useEffect(() => {
-        const context = ref.current?.getContext('2d')
+        const context = refCanv.current?.getContext('2d')
         if (!context || !state.canvasSize.wasMeasured) return
 
         const { orientation } = state.hex
@@ -108,13 +107,8 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
 
     return (
         <Container className={classes.canvasBox} maxWidth={false}>
-            <Paper className={classes.paper} elevation={3}>
-                <Typography
-                    className={classes.sizeCaption}
-                    variant="caption"
-                >{`${width}x${height}    offset: ${state.noise.offsetX}:${state.noise.offsetY}`}</Typography>
-                <canvas ref={ref} className={classes.canvas} width={width} height={height} />
-            </Paper>
+            <Typography variant="caption">{`${width}x${height}    offsets: (${state.noise.offsetX};${state.noise.offsetY})`}</Typography>
+            <canvas ref={refCanv} className={classes.canvas} width={width} height={height} />
         </Container>
     )
 }

@@ -8,6 +8,7 @@ import NoiseSettingsBlock from './noise-block'
 import CanvasSizeBlock from './canvas-size-block'
 import GridBlock from './grid-block'
 import ColorBlock from './color-block'
+import { toolbarHeight } from '../../configs'
 
 const drawerWidth = 360
 
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => {
             justifyContent: 'flex-start',
         },
         tab: {
-            minWidth: 90,
+            minWidth: 80,
         },
     })
 })
@@ -75,7 +76,11 @@ const SettingsPanel = ({
                 open={isOpen}
                 classes={{ paper: classes.drawerPaper }}
             >
-                <Toolbar className={classes.drawerHeader} variant="dense">
+                <Toolbar
+                    className={classes.drawerHeader}
+                    variant="dense"
+                    style={{ height: toolbarHeight }}
+                >
                     <IconButton onClick={handleToggle}>
                         <ChevronRight />
                     </IconButton>
