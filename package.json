@@ -20,6 +20,7 @@
         "react": "16.13.1",
         "react-color": "^2.18.0",
         "react-dom": "16.13.1",
+        "react-use-gesture": "^7.0.5",
         "simplex-noise": "^2.4.0",
         "tumult": "^3.0.14"
     },

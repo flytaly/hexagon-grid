@@ -107,7 +107,8 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             size="small"
                             disableRipple
                             style={{
-                                background: bgColor ? toHslaStr(bgColor) : checkered,
+                                background:
+                                    bgColor && bgColor.a !== 0 ? toHslaStr(bgColor) : checkered,
                             }}
                         />
                     </Grid>

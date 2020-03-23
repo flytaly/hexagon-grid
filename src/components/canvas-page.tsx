@@ -1,8 +1,10 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback, useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
 import * as Honeycomb from 'honeycomb-grid'
-import { CanvasState } from '../canvas-state'
+import { usePinch, useDrag, useGesture } from 'react-use-gesture'
+import throttle from 'lodash.throttle'
+import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../canvas-state'
 import { useNoises } from '../hooks/use-noises'
 import drawHexagon from '../draw-hexagon'
 import { toHslaStr } from '../helpers'
@@ -36,11 +38,48 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const CanvasPage = ({ state }: { state: CanvasState }) => {
+type CanvasPageProps = {
+    state: CanvasState
+    dispatch: React.Dispatch<CanvasStateAction>
+}
+
+const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     const { width, height, aspect } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
     const [noises, random] = useNoises(String(state.noise.seed))
     const classes = useStyles()
+    const incHexSizeThrottled = useCallback(
+        throttle(
+            (payload: number) => {
+                dispatch({ type: ActionTypes.INC_HEX_SIZE, payload: Math.round(payload * 4) / 2 })
+            },
+            250,
+            { leading: true },
+        ),
+        [],
+    )
+
+    const incNoiseOffsets = useCallback(
+        throttle(
+            (mx: number, my: number) => {
+                dispatch({
+                    type: ActionTypes.INC_NOISE_OFFSET,
+                    payload: {
+                        dx: Math.round(mx / 20),
+                        dy: Math.round(my / 20),
+                    },
+                })
+            },
+            250,
+            { leading: true },
+        ),
+        [],
+    )
+
+    const bind = useGesture({
+        onPinch: ({ vdva }) => incHexSizeThrottled(vdva[0]),
+        onDrag: ({ movement: [mx, my] }) => incNoiseOffsets(-mx, -my),
+    })
 
     useEffect(() => {
         const context = refCanv.current?.getContext('2d')
@@ -108,7 +147,13 @@ const CanvasPage = ({ state }: { state: CanvasState }) => {
     return (
         <Container className={classes.canvasBox} maxWidth={false}>
             <Typography variant="caption">{`${width}x${height}    offsets: (${state.noise.offsetX};${state.noise.offsetY})`}</Typography>
-            <canvas ref={refCanv} className={classes.canvas} width={width} height={height} />
+            <canvas
+                ref={refCanv}
+                className={classes.canvas}
+                width={width}
+                height={height}
+                {...bind()}
+            />
         </Container>
     )
 }

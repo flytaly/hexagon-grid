@@ -6,6 +6,7 @@ import { Noises2DFns, NoisesRnd } from '../noises'
 
 export function useNoises(seed: string) {
     const simplex = useMemo(() => new SimplexNoise(seed), [seed])
+
     const prng = Alea(seed)
     const n1D = (v: number) => simplex.noise2D(v, 0)
 
