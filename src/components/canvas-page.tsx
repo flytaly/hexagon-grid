@@ -1,19 +1,13 @@
-import React, { useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useRef, useEffect, useCallback, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
-import * as Honeycomb from 'honeycomb-grid'
-import { usePinch, useDrag, useGesture } from 'react-use-gesture'
+import { useGesture } from 'react-use-gesture'
 import throttle from 'lodash.throttle'
-import { CanvasState, CanvasStateAction, ActionTypes, HexSettings } from '../canvas-state'
-import { useNoises } from '../hooks/use-noises'
-import drawHexagon from '../draw-hexagon'
+import { CanvasState, CanvasStateAction, ActionTypes } from '../canvas-state'
 import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
-
-// just to suppress ts errors
-interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'> {
-    set(hex: { q: number; r: number; s: number }): Honeycomb.Hex<{}>
-}
+import Worker from '../generate-hex-data.worker'
+import drawHexagons from '../draw-hexagons'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,10 +37,17 @@ type CanvasPageProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
+type CanvasData = {
+    vertices: Float32Array | number[]
+    fillColors: Float32Array | number[]
+}
+
 const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     const { width, height, aspect } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
-    const [noises, random] = useNoises(String(state.noise.seed))
+    const [genHexWorker, setGenHexWorker] = useState<Worker | null>(null)
+    // const [noises, random] = useNoises(String(state.noise.seed))
+    const [canvasData, setCanvData] = useState<CanvasData>({ vertices: [], fillColors: [] })
     const classes = useStyles()
     const incHexSizeThrottled = useCallback(
         throttle(
@@ -82,67 +83,43 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     })
 
     useEffect(() => {
+        const worker = new Worker()
+
+        setGenHexWorker(worker)
+
+        worker.addEventListener('message', ({ data }) => {
+            setCanvData(data)
+        })
+        return () => {
+            worker.terminate()
+        }
+    }, [])
+
+    useEffect(() => {
         const context = refCanv.current?.getContext('2d')
         if (!context || !state.canvasSize.wasMeasured) return
+        genHexWorker?.postMessage({ state })
+    }, [aspect, height, width, state, genHexWorker])
 
-        const { orientation } = state.hex
-        const hexSize =
-            aspect < 1
-                ? (state.hex.size * height * aspect) / 100
-                : (state.hex.size * width) / aspect / 100
-
-        const Hex = Honeycomb.extendHex({ size: hexSize, orientation })
-
-        const widthStep = orientation === 'pointy' ? hexSize * Math.sqrt(3) : hexSize * 1.5
-        const heightStep = orientation === 'pointy' ? hexSize * 1.5 : hexSize * Math.sqrt(3)
-        const widthCount = width / widthStep + 1
-        const heightCount = height / heightStep + 1
-
-        context.clearRect(0, 0, width, height)
+    useEffect(() => {
+        const ctx = refCanv.current?.getContext('2d')
+        if (!ctx || !canvasData.vertices.length) return
+        ctx.clearRect(0, 0, width, height)
         if (state.colors.background) {
-            context.save()
-            context.fillStyle = toHslaStr(state.colors.background)
-            context.fillRect(0, 0, width, height)
-            context.restore()
+            ctx.save()
+            ctx.fillStyle = toHslaStr(state.colors.background)
+            ctx.fillRect(0, 0, width, height)
+            ctx.restore()
         }
 
-        context.beginPath()
-
-        const Grid = Honeycomb.defineGrid(Hex)
-
-        const { zoom, baseNoise, noise2Strength } = state.noise
-        const { sparse, signX, signY } = state.grid
-
-        const [rectW, rectH] = [widthCount / sparse, heightCount / sparse]
-        const [normalW, normalH] = [
-            aspect < 1 ? rectW / 10 : rectW / 10 / aspect,
-            aspect < 1 ? (rectH * aspect) / 10 : rectH / 10,
-        ]
-
-        const genNoiseAndDraw = (hexagon: Honeycomb.Hex<{}>) => {
-            const [x, y] = [
-                (hexagon.x - widthCount / 2 + state.noise.offsetX + 1) / zoom,
-                (hexagon.y - heightCount / 2 + state.noise.offsetY + 1) / zoom,
-            ]
-            let noiseValue = noises[baseNoise](signX * x, signY * y, normalW, normalH)
-
-            if (noise2Strength) {
-                noiseValue += random.rnd(noise2Strength)
-            }
-            drawHexagon({ hexagon, noiseValue, ctx: context, state })
-        }
-
-        const onCreate = (hex: HexWithCorrectSetDeclaration) => {
-            hex.set({ q: hex.q * sparse, r: hex.r * sparse, s: hex.s * sparse })
-        }
-
-        Grid.rectangle({
-            width: rectW,
-            height: rectH,
-            start: [-1, -1],
-            onCreate: sparse !== 1 ? onCreate : undefined,
-        }).forEach(genNoiseAndDraw)
-    })
+        drawHexagons({
+            fillColors: canvasData.fillColors,
+            vertices: canvasData.vertices,
+            borderWidth: state.hex.borderWidth,
+            borderColor: toHslaStr(state.colors.hexBorder),
+            ctx,
+        })
+    }, [canvasData, width, height, state.colors.hexBorder, state.hex.borderWidth, state])
 
     return (
         <Container className={classes.canvasBox} maxWidth={false}>

@@ -1,6 +1,6 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Fab, useMediaQuery, AppBar, Toolbar, Typography, IconButton } from '@material-ui/core'
+import { Fab, useMediaQuery, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'

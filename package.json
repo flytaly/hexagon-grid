@@ -12,7 +12,9 @@
         "@material-ui/core": "^4.9.7",
         "@material-ui/icons": "^4.9.1",
         "@types/lodash.throttle": "^4.1.6",
+        "@zeit/next-workers": "^1.0.0",
         "alea": "^1.0.0",
+        "comlink": "^4.2.0",
         "honeycomb-grid": "^3.1.4",
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",
@@ -22,7 +24,8 @@
         "react-dom": "16.13.1",
         "react-use-gesture": "^7.0.5",
         "simplex-noise": "^2.4.0",
-        "tumult": "^3.0.14"
+        "tumult": "^3.0.14",
+        "worker-loader": "^2.0.0"
     },
     "devDependencies": {
         "@types/lodash.debounce": "^4.0.6",
