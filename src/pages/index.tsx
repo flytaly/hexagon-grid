@@ -6,7 +6,6 @@ import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
 import { reducer, initialState, ActionTypes } from '../canvas-state'
-import useKeyControls from '../hooks/use-key-controls'
 import { toolbarHeight } from '../configs'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -52,8 +51,6 @@ const Home: NextPage = () => {
         }
         dispatch({ type: ActionTypes.SET_SIZE, payload: size })
     }, [dispatch])
-
-    useKeyControls(dispatch)
 
     return (
         <>

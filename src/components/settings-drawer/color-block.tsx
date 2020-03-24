@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Box, IconButton, Grid, Typography, Popover } from '@material-ui/core'
 import { ChromePicker, HSLColor, ColorResult } from 'react-color'
-import { CheckTwoTone } from '@material-ui/icons'
+import { CheckCircleRounded } from '@material-ui/icons'
 import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
 import { toHslaStr } from '../../helpers'
 import { defaultPalettes } from '../../palettes'
@@ -12,7 +12,8 @@ const ColorButton = withStyles(({ palette }) => ({
     root: {
         border: '1px solid grey',
         borderRadius: '3px',
-        height: '20px',
+        height: '24px',
+        padding: 0,
         width: '40px',
         minWidth: '40px',
         '&:hover, &:focus': { opacity: 0.6 },
@@ -25,12 +26,13 @@ const ColorButton = withStyles(({ palette }) => ({
 
 const PaletteButton = withStyles(({ palette, spacing }) => ({
     root: {
+        position: 'relative',
         border: '1px solid grey',
         borderRadius: '5px',
-        height: '20px',
+        height: '28px',
+        padding: 0,
         width: '100%',
         margin: spacing(0, 0, 1, 0),
-        position: 'relative',
         '&:hover, &:focus': { opacity: 0.6 },
         '&:focus': {
             outline: '2px solid',
@@ -160,9 +162,10 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         }}
                         style={{
                             background: `linear-gradient(to right, ${p.gradient}), ${checkered}`,
+                            ...(colorState.palette.id === p.id && { border: '2px solid black' }),
                         }}
                     >
-                        {colorState.palette.id === p.id ? <CheckTwoTone color="secondary" /> : null}
+                        {colorState.palette.id === p.id ? <CheckCircleRounded /> : null}
                     </PaletteButton>
                 ))}
             </Box>

@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) => {
         drawerPaper: {
             width: drawerWidth,
             maxWidth: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.94)',
+            backgroundColor: 'rgba(255, 255, 255, 0.88)',
         },
         drawerHeader: {
             display: 'flex',

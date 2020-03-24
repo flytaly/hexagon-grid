@@ -136,6 +136,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         }
         case ActionTypes.INC_HEX_SIZE: {
             const size = clamp(state.hex.size + action.payload, 1, 20)
+            if (size === state.hex.size) return state
             return { ...state, hex: { ...state.hex, size } }
         }
         default:

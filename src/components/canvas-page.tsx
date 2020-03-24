@@ -1,13 +1,12 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
-import { useGesture } from 'react-use-gesture'
-import throttle from 'lodash.throttle'
-import { CanvasState, CanvasStateAction, ActionTypes } from '../canvas-state'
+import { CanvasState, CanvasStateAction } from '../canvas-state'
 import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../generate-hex-data.worker'
 import drawHexagons from '../draw-hexagons'
+import ArrowKeys from './keys'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,41 +45,8 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     const { width, height, aspect } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
     const [genHexWorker, setGenHexWorker] = useState<Worker | null>(null)
-    // const [noises, random] = useNoises(String(state.noise.seed))
     const [canvasData, setCanvData] = useState<CanvasData>({ vertices: [], fillColors: [] })
     const classes = useStyles()
-    const incHexSizeThrottled = useCallback(
-        throttle(
-            (payload: number) => {
-                dispatch({ type: ActionTypes.INC_HEX_SIZE, payload: Math.round(payload * 4) / 2 })
-            },
-            250,
-            { leading: true },
-        ),
-        [],
-    )
-
-    const incNoiseOffsets = useCallback(
-        throttle(
-            (mx: number, my: number) => {
-                dispatch({
-                    type: ActionTypes.INC_NOISE_OFFSET,
-                    payload: {
-                        dx: Math.round(mx / 20),
-                        dy: Math.round(my / 20),
-                    },
-                })
-            },
-            250,
-            { leading: true },
-        ),
-        [],
-    )
-
-    const bind = useGesture({
-        onPinch: ({ vdva }) => incHexSizeThrottled(vdva[0]),
-        onDrag: ({ movement: [mx, my] }) => incNoiseOffsets(-mx, -my),
-    })
 
     useEffect(() => {
         const worker = new Worker()
@@ -124,13 +90,8 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     return (
         <Container className={classes.canvasBox} maxWidth={false}>
             <Typography variant="caption">{`${width}x${height}    offsets: (${state.noise.offsetX};${state.noise.offsetY})`}</Typography>
-            <canvas
-                ref={refCanv}
-                className={classes.canvas}
-                width={width}
-                height={height}
-                {...bind()}
-            />
+            <canvas ref={refCanv} className={classes.canvas} width={width} height={height} />
+            <ArrowKeys dispatch={dispatch} />
         </Container>
     )
 }
