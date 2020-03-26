@@ -70,8 +70,9 @@ function genHexes(state: CanvasState) {
 
         const { hue: H, saturation: S, lightness: L } = state.noise
         const palette = state.colors.palette.colors
+        if (!palette.length) return
         const colorId = Math.floor(clamp((noiseValue + 1) / 2, 0, 0.999999) * palette.length)
-        const { h, s, l, a } = palette[colorId]
+        const { h, s, l, a } = palette[colorId].hsl
 
         // const light = Math.abs((l * 100 + L * noiseValue) % 100)
         fillColors[idx * 4] = h + H * noiseValue // hue

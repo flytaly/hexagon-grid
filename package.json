@@ -22,6 +22,7 @@
         "react": "16.13.1",
         "react-color": "^2.18.0",
         "react-dom": "16.13.1",
+        "react-sortable-hoc": "^1.11.0",
         "simplex-noise": "^2.4.0",
         "tumult": "^3.0.14",
         "worker-loader": "^2.0.0"
@@ -30,6 +31,7 @@
         "@types/lodash.debounce": "^4.0.6",
         "@types/node": "^13.9.3",
         "@types/react": "^16.9.25",
+        "@types/react-beautiful-dnd": "^12.1.2",
         "@types/react-color": "^3.0.1",
         "@typescript-eslint/eslint-plugin": "^2.25.0",
         "@typescript-eslint/parser": "^2.25.0",

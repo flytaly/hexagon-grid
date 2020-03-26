@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Box, IconButton, Grid, Typography, Popover } from '@material-ui/core'
-import { ChromePicker, HSLColor, ColorResult } from 'react-color'
+import { Box, Button, IconButton, Grid, Typography, Popover, Divider } from '@material-ui/core'
+import { SketchPicker, HSLColor, ColorResult } from 'react-color'
 import { CheckCircleRounded } from '@material-ui/icons'
-import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
+import {
+    ColorsSettings,
+    CanvasStateAction,
+    ActionTypes,
+    makePaletteColors,
+} from '../../canvas-state'
 import { toHslaStr } from '../../helpers'
 import { defaultPalettes } from '../../palettes'
 import { checkered } from '../../background'
+import CustomPaletteMaker from './add-custom-palette'
 
 const ColorButton = withStyles(({ palette }) => ({
     root: {
@@ -18,8 +24,8 @@ const ColorButton = withStyles(({ palette }) => ({
         minWidth: '40px',
         '&:hover, &:focus': { opacity: 0.6 },
         '&:focus': {
-            outline: '2px solid',
-            outlineColor: palette.primary.main,
+            outline: `2px solid ${palette.primary.main}`,
+            outlineOffset: '1px',
         },
     },
 }))(IconButton)
@@ -35,8 +41,8 @@ const PaletteButton = withStyles(({ palette, spacing }) => ({
         margin: spacing(0, 0, 1, 0),
         '&:hover, &:focus': { opacity: 0.6 },
         '&:focus': {
-            outline: '2px solid',
-            outlineColor: palette.primary.main,
+            outline: `2px solid ${palette.primary.main}`,
+            outlineOffset: '1px',
         },
     },
 }))(IconButton)
@@ -48,10 +54,16 @@ type ColorProps = {
 
 const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const [border, setBorder] = useState<HSLColor>(colorState.hexBorder)
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
     const [bgColor, setBgColor] = useState<HSLColor | null>(colorState.background)
     const [bgAnchorEl, setBgAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+
+    const paletteColors = useMemo(
+        () => Array.from(new Set(colorState.palette.colors.map((c) => toHslaStr(c)))),
+        [colorState.palette.colors],
+    )
 
     return (
         <>
@@ -87,9 +99,10 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                    <ChromePicker
+                    <SketchPicker
                         color={border}
                         onChange={(color) => setBorder(color.hsl)}
+                        presetColors={paletteColors}
                         onChangeComplete={(color: ColorResult) =>
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
@@ -125,8 +138,9 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                    <ChromePicker
+                    <SketchPicker
                         color={bgColor || { h: 0, s: 0, l: 1, a: 0 }}
+                        presetColors={paletteColors}
                         onChange={(color) => setBgColor(color.hsl)}
                         onChangeComplete={(color: ColorResult) =>
                             dispatch({
@@ -141,6 +155,32 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                 <Typography component="div" gutterBottom>
                     <Box fontWeight="fontWeightBold">Palettes</Box>
                 </Typography>
+                <Box mb={1}>
+                    {!isModalOpen && (
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            fullWidth
+                            onClick={() => {
+                                setIsModalOpen(!isModalOpen)
+                            }}
+                        >
+                            + add color scheme
+                        </Button>
+                    )}
+                    {isModalOpen && (
+                        <CustomPaletteMaker
+                            isOpen={isModalOpen}
+                            handleClose={() => {
+                                setIsModalOpen(false)
+                            }}
+                            dispatch={dispatch}
+                            colorState={colorState}
+                        />
+                    )}
+                </Box>
+                <Divider />
                 {defaultPalettes.map((p) => (
                     <PaletteButton
                         key={p.id}
@@ -153,7 +193,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                                     palette: {
                                         isCustom: false,
                                         id: p.id,
-                                        colors: p.colors,
+                                        colors: makePaletteColors(p.colors, p.id),
                                     },
                                     ...(p.setBackground && { background: p.setBackground }),
                                 },

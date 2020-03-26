@@ -9,6 +9,7 @@ export enum ActionTypes {
     SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
     SET_GRID_OPTIONS = 'SET_GRID_OPTIONS',
     SET_COLOR_OPTIONS = 'SET_COLOR_OPTIONS',
+    MODIFY_PALETTE = 'MODIFY_PALETTE',
     INC_NOISE_OFFSET = 'INC_NOISE_OFFSET',
     INC_HEX_SIZE = 'INC_HEX_SIZE',
 }
@@ -45,14 +46,17 @@ export type GridSettings = {
     signY: 1 | -1
 }
 
+export type paletteColorsArray = Array<{ hsl: HSLColor; id: string | number }>
+
 export type ColorsSettings = {
     hexBorder: HSLColor
     background: HSLColor | null
     palette: {
         isCustom: boolean
-        id: PaletteId | string
-        colors: HSLColor[]
+        id: PaletteId | string | number
+        colors: paletteColorsArray
     }
+    customPalettes: HSLColor[][]
 }
 
 export type CanvasState = {
@@ -69,8 +73,16 @@ export type CanvasStateAction =
     | { type: ActionTypes.SET_NOISE_OPTIONS; payload: Partial<NoiseSettings> }
     | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
     | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
+    | { type: ActionTypes.MODIFY_PALETTE; payload: paletteColorsArray }
     | { type: ActionTypes.INC_NOISE_OFFSET; payload: { dx?: number; dy?: number } }
     | { type: ActionTypes.INC_HEX_SIZE; payload: number }
+
+export const makePaletteColors = (colors: HSLColor[], paletteId: number | string) => {
+    return colors.map((hsl, index) => ({
+        id: `${paletteId}-${index}`,
+        hsl,
+    })) as paletteColorsArray
+}
 
 export const initialState: CanvasState = {
     canvasSize: {
@@ -104,7 +116,12 @@ export const initialState: CanvasState = {
     colors: {
         hexBorder: { h: 0, s: 0, l: 1, a: 1 },
         background: null,
-        palette: { isCustom: false, id: defaultPalettes[1].id, colors: defaultPalettes[1].colors },
+        palette: {
+            isCustom: false,
+            id: defaultPalettes[1].id,
+            colors: makePaletteColors(defaultPalettes[1].colors, defaultPalettes[1].id),
+        },
+        customPalettes: [],
     },
 }
 
@@ -123,6 +140,18 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             return { ...state, noise: { ...state.noise, ...action.payload } }
         case ActionTypes.SET_COLOR_OPTIONS:
             return { ...state, colors: { ...state.colors, ...action.payload } }
+        case ActionTypes.MODIFY_PALETTE:
+            return {
+                ...state,
+                colors: {
+                    ...state.colors,
+                    palette: {
+                        isCustom: true,
+                        id: state.colors.customPalettes.length,
+                        colors: action.payload,
+                    },
+                },
+            }
         case ActionTypes.INC_NOISE_OFFSET: {
             const { dx = 0, dy = 0 } = action.payload
             return {

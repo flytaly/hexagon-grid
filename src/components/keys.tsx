@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
         key: {
             background: 'rgba(255, 255, 255, 0.35)',
             borderRadius: '5px',
-            margin: '1px',
+            margin: '2px',
             '&:active': {
                 transform: 'translateY(2px)',
             },
