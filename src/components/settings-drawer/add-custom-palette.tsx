@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Grid, Button, IconButton, Popover } from '@material-ui/core'
+import { Grid, Button, IconButton, Popover, Typography } from '@material-ui/core'
 import { Add, Remove } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { SketchPicker, ColorResult, HSLColor } from 'react-color'
@@ -188,6 +188,9 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
 
     return (
         <div className={classes.modalContent}>
+            <Typography variant="subtitle1" gutterBottom>
+                Click to change color, drag to sort:
+            </Typography>
             <SortableList
                 addColorHandler={addColorHandler}
                 removeHandler={removeColorHandler}
@@ -215,6 +218,9 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
                         color="primary"
                         size="small"
                         onClick={() => {
+                            dispatch({
+                                type: ActionTypes.SAVE_NEW_PALETTE,
+                            })
                             handleClose()
                         }}
                     >

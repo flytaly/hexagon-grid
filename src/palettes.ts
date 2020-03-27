@@ -1,9 +1,9 @@
 import { HSLColor } from 'react-color'
 import { toHslaStr, toHslaObj } from './helpers'
 
-export type PreDefinedPalette = {
+export type SavedColorPalette = {
     name?: string
-    id: PaletteId
+    id: PaletteId | string | number
     colors: HSLColor[]
     setBackground?: HSLColor
     gradient: string
@@ -12,7 +12,7 @@ export type PreDefinedPalette = {
 const ids = ['b+y', 'grey', 'colorful', 'teal-green'] as const
 export type PaletteId = typeof ids[number]
 
-export const defaultPalettes: PreDefinedPalette[] = [
+export const defaultPalettes: SavedColorPalette[] = [
     {
         id: 'b+y',
         name: 'Blue & Yellow',
@@ -72,8 +72,7 @@ export const defaultPalettes: PreDefinedPalette[] = [
     },
 ]
 
-// Fill discrete gradient
-defaultPalettes.forEach((palette) => {
+export const fillGradient = (palette: SavedColorPalette) => {
     const { length } = palette.colors
     // eslint-disable-next-line no-param-reassign
     palette.gradient = palette.colors.reduce((acc, color, idx) => {
@@ -85,4 +84,7 @@ defaultPalettes.forEach((palette) => {
 
         return result
     }, '')
-})
+}
+
+// Fill discrete gradient
+defaultPalettes.forEach(fillGradient)

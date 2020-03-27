@@ -54,7 +54,7 @@ type ColorProps = {
 
 const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const [border, setBorder] = useState<HSLColor>(colorState.hexBorder)
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
     const [bgColor, setBgColor] = useState<HSLColor | null>(colorState.background)
@@ -166,7 +166,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                                 setIsModalOpen(!isModalOpen)
                             }}
                         >
-                            + add color scheme
+                            + add color palette
                         </Button>
                     )}
                     {isModalOpen && (
@@ -180,6 +180,33 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         />
                     )}
                 </Box>
+                <Divider flexItem />
+                <Divider flexItem />
+                {colorState.customPalettes.map((p) => (
+                    <PaletteButton
+                        key={p.id}
+                        aria-label={`custom palette ${p.id}`}
+                        disableRipple
+                        onClick={() => {
+                            dispatch({
+                                type: ActionTypes.SET_COLOR_OPTIONS,
+                                payload: {
+                                    palette: {
+                                        isCustom: true,
+                                        id: p.id,
+                                        colors: makePaletteColors(p.colors, p.id),
+                                    },
+                                },
+                            })
+                        }}
+                        style={{
+                            background: `linear-gradient(to right, ${p.gradient}), ${checkered}`,
+                            ...(colorState.palette.id === p.id && { border: '2px solid black' }),
+                        }}
+                    >
+                        {colorState.palette.id === p.id ? <CheckCircleRounded /> : null}
+                    </PaletteButton>
+                ))}
                 <Divider />
                 {defaultPalettes.map((p) => (
                     <PaletteButton
