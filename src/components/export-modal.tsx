@@ -35,11 +35,18 @@ type ExportModalProps = {
 
 const ExportModal = ({ canvas, isOpen, handleClose }: ExportModalProps) => {
     const classes = useStyles()
+    const pngClickHandler = () => {
+        if (!canvas.current) return
+        const link = document.createElement('a')
+        link.download = 'hexagons.png'
+        link.href = canvas.current.toDataURL('image/png')
+        link.click()
+    }
     return (
         <Modal aria-label="export modal" open={isOpen} onClose={handleClose}>
             <div className={classes.modal}>
                 <h2>Export</h2>
-                <Button variant="contained" startIcon={<Image />}>
+                <Button variant="contained" startIcon={<Image />} onClick={pngClickHandler}>
                     PNG
                 </Button>
             </div>

@@ -8,8 +8,9 @@ import {
     Add,
     Share,
 } from '@material-ui/icons'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles'
 import { Box, IconButton, Fab, Grid } from '@material-ui/core'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { CanvasStateAction, ActionTypes } from '../canvas-state'
 import useKeyControls from '../hooks/use-key-controls'
 
@@ -26,9 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
         exportBtn: {
             position: 'absolute',
             bottom: theme.spacing(2),
-            right: 0,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
+            right: theme.spacing(3),
+            // borderTopRightRadius: 0,
+            // borderBottomRightRadius: 0,
         },
         extendedIcon: {
             marginRight: theme.spacing(1),
@@ -51,6 +52,8 @@ type ArrowKeysProps = {
 
 const ArrowKeys = ({ dispatch, exportBtnClickHandler }: ArrowKeysProps) => {
     const classes = useStyles()
+    const theme = useTheme()
+    const matches = useMediaQuery(theme.breakpoints.up('md'))
 
     useKeyControls(dispatch)
 
@@ -141,9 +144,9 @@ const ArrowKeys = ({ dispatch, exportBtnClickHandler }: ArrowKeysProps) => {
             </Box>
             <Fab
                 variant="extended"
-                size="small"
-                color="default"
-                aria-label="export"
+                size={matches ? 'medium' : 'small'}
+                color="primary"
+                aria-label="export image"
                 className={classes.exportBtn}
                 onClick={exportBtnClickHandler}
             >
