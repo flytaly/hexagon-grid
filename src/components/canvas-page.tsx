@@ -6,7 +6,8 @@ import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../generate-hex-data.worker'
 import drawHexagons from '../draw-hexagons'
-import ArrowKeys from './keys'
+import Keys from './keys'
+import ExportModal from './export-modal'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,6 +47,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     const refCanv = useRef<HTMLCanvasElement>(null)
     const [genHexWorker, setGenHexWorker] = useState<Worker | null>(null)
     const [canvasData, setCanvData] = useState<CanvasData>({ vertices: [], fillColors: [] })
+    const [exportModalOpen, setExportModalOpen] = useState<boolean>(false)
     const classes = useStyles()
 
     useEffect(() => {
@@ -91,7 +93,19 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         <Container className={classes.canvasBox} maxWidth={false}>
             <Typography variant="caption">{`${width}x${height}    offsets: (${state.noise.offsetX};${state.noise.offsetY})`}</Typography>
             <canvas ref={refCanv} className={classes.canvas} width={width} height={height} />
-            <ArrowKeys dispatch={dispatch} />
+            <Keys
+                dispatch={dispatch}
+                exportBtnClickHandler={() => {
+                    setExportModalOpen((v) => !v)
+                }}
+            />
+            <ExportModal
+                canvas={refCanv}
+                isOpen={exportModalOpen}
+                handleClose={() => {
+                    setExportModalOpen(false)
+                }}
+            />
         </Container>
     )
 }
