@@ -1,6 +1,6 @@
 import { HSLColor } from 'react-color'
 import { clamp } from './helpers'
-import { Noises2D, Noises2DFns } from './noises'
+import { Noises2DFns } from './noises'
 import { PaletteId, defaultPalettes, SavedColorPalette, fillGradient } from './palettes'
 
 export enum ActionTypes {
@@ -37,7 +37,10 @@ export type NoiseSettings = {
     lightness: number
     offsetX: number
     offsetY: number
-    baseNoise: keyof Noises2DFns
+    baseNoise: {
+        id: keyof Noises2DFns | 'custom'
+        customFn: string | null
+    }
     noise2Strength: number
 }
 
@@ -68,10 +71,14 @@ export type CanvasState = {
     colors: ColorsSettings
 }
 
+export type RecursivePartial<T> = {
+    [P in keyof T]?: RecursivePartial<T[P]>
+}
+
 export type CanvasStateAction =
     | { type: ActionTypes.SET_SIZE; payload: Partial<CanvasSize> }
     | { type: ActionTypes.SET_HEX_OPTIONS; payload: Partial<HexSettings> }
-    | { type: ActionTypes.SET_NOISE_OPTIONS; payload: Partial<NoiseSettings> }
+    | { type: ActionTypes.SET_NOISE_OPTIONS; payload: RecursivePartial<NoiseSettings> }
     | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
     | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
     | { type: ActionTypes.MODIFY_PALETTE; payload: paletteColorsArray }
@@ -107,7 +114,11 @@ export const initialState: CanvasState = {
         lightness: 4,
         offsetX: 0,
         offsetY: 0,
-        baseNoise: Noises2D.diagonal.id,
+        baseNoise: {
+            // id: Noises2D.diagonal.id,
+            id: 'custom',
+            customFn: 'sin(x*2) + y*2',
+        },
         noise2Strength: 0,
     },
     grid: {
@@ -139,7 +150,17 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         case ActionTypes.SET_GRID_OPTIONS:
             return { ...state, grid: { ...state.grid, ...action.payload } }
         case ActionTypes.SET_NOISE_OPTIONS:
-            return { ...state, noise: { ...state.noise, ...action.payload } }
+            return {
+                ...state,
+                noise: {
+                    ...state.noise,
+                    ...action.payload,
+                    baseNoise: {
+                        ...state.noise.baseNoise,
+                        ...action.payload.baseNoise,
+                    },
+                },
+            }
         case ActionTypes.SET_COLOR_OPTIONS:
             return { ...state, colors: { ...state.colors, ...action.payload } }
         case ActionTypes.MODIFY_PALETTE:

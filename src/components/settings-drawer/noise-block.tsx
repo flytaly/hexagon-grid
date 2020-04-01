@@ -12,7 +12,7 @@ import {
     FormControl,
     MenuItem,
 } from '@material-ui/core'
-import { NoiseSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
+import { RecursivePartial, NoiseSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
 import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,8 +40,18 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
     const [saturation, setSaturation] = useState<number>(noiseState.saturation)
     const [lightness, setLightness] = useState<number>(noiseState.lightness)
 
-    const dispatchOption = (payload: Partial<NoiseSettings>) =>
+    const dispatchOption = (payload: RecursivePartial<NoiseSettings>) =>
         dispatch({ type: ActionTypes.SET_NOISE_OPTIONS, payload })
+
+    const handleExpChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const expr = event.target.value
+        dispatchOption({
+            baseNoise: {
+                id: 'custom',
+                customFn: expr,
+            },
+        })
+    }
 
     const handleN2InputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = Number(event.target.value)
@@ -79,10 +89,10 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                 <InputLabel id="base-noise-label">Base noise</InputLabel>
                 <Select
                     labelId="base-noise-label"
-                    value={noiseState.baseNoise}
+                    value={noiseState.baseNoise.id}
                     onChange={(ev) => {
                         dispatchOption({
-                            baseNoise: ev.target.value as keyof Noises2DFns,
+                            baseNoise: { id: ev.target.value as keyof Noises2DFns },
                             offsetX: 0,
                             offsetY: 0,
                         })
@@ -95,6 +105,14 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                     ))}
                 </Select>
             </FormControl>
+            {noiseState.baseNoise.id === 'custom' ? (
+                <Box display="flex" flexDirection="column" mb={2}>
+                    <Typography variant="caption">
+                        Enter math expression. Allowed variables: x, y, w (width), h (height)
+                    </Typography>
+                    <Input value={noiseState.baseNoise.customFn} onChange={handleExpChange} />
+                </Box>
+            ) : null}
 
             <Typography id="random-noise" gutterBottom>
                 Second noise strength (0 = disable)

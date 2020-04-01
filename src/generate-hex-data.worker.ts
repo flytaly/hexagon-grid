@@ -1,8 +1,9 @@
 /* eslint-disable no-restricted-globals */
 import * as Honeycomb from 'honeycomb-grid'
+import { Parser } from 'expr-eval'
 import { CanvasState } from './canvas-state'
 import { clamp } from './helpers'
-import { getNoises } from './noises'
+import { getNoises, NoiseFn } from './noises'
 
 // just to suppress ts errors
 interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'> {
@@ -51,12 +52,27 @@ function genHexes(state: CanvasState) {
     const vertices = new Float32Array(grid.length * 6 * 2)
     const fillColors = new Float32Array(grid.length * 4)
 
+    let noiseFn: NoiseFn | undefined
+
+    if (baseNoise.id !== 'custom') {
+        noiseFn = noises[baseNoise.id]
+    } else if (baseNoise.customFn) {
+        try {
+            const expr = Parser.parse(baseNoise.customFn)
+            noiseFn = (x, y, w = 1, h = 1) => expr.evaluate({ x, y, w, h })
+        } catch (e) {
+            //
+        }
+    }
+
+    if (!noiseFn) return { vertices, fillColors }
+
     grid.forEach((hexagon, idx) => {
         const [xx, yy] = [
             (hexagon.x - widthCount / 2 + state.noise.offsetX + 1) / zoom,
             (hexagon.y - heightCount / 2 + state.noise.offsetY + 1) / zoom,
         ]
-        let noiseValue = noises[baseNoise](signX * xx, signY * yy, normalW, normalH)
+        let noiseValue = noiseFn ? noiseFn(signX * xx, signY * yy, normalW, normalH) : 0
 
         if (noise2Strength) {
             noiseValue += random.rnd(noise2Strength)

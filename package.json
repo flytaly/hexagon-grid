@@ -15,6 +15,7 @@
         "@zeit/next-workers": "^1.0.0",
         "alea": "^1.0.0",
         "comlink": "^4.2.0",
+        "expr-eval": "^2.0.2",
         "honeycomb-grid": "^3.1.4",
         "lodash.debounce": "^4.0.8",
         "lodash.throttle": "^4.1.1",

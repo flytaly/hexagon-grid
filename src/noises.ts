@@ -11,7 +11,6 @@ export type Noises2DFns = {
     diagonal: NoiseFn
 
     simplex: NoiseFn
-    cosMul: NoiseFn
 
     circle: NoiseFn
     cubic: NoiseFn
@@ -25,13 +24,13 @@ export type NoisesRnd = {
 }
 
 export type NoiseInfo = {
-    id: keyof Noises2DFns
+    id: keyof Noises2DFns | 'custom'
     name: string
 }
 
 // type NoisesInfoObj = Partial<Record<keyof Noises2D, NoiseInfo>>
 export type NoisesInfoObj = {
-    [key in keyof Noises2DFns]: NoiseInfo
+    [key in keyof Noises2DFns | 'custom']: NoiseInfo
 }
 
 export const Noises2D: NoisesInfoObj = {
@@ -55,10 +54,6 @@ export const Noises2D: NoisesInfoObj = {
         id: 'simplex',
         name: 'Simplex noise',
     },
-    cosMul: {
-        id: 'cosMul',
-        name: 'Сos(x*y)',
-    },
     circle: {
         id: 'circle',
         name: 'Circle',
@@ -70,6 +65,10 @@ export const Noises2D: NoisesInfoObj = {
     quadratic: {
         id: 'quadratic',
         name: 'Quadratic function',
+    },
+    custom: {
+        id: 'custom',
+        name: 'Custom function',
     },
 }
 
@@ -87,6 +86,8 @@ export function getNoises(seed: string) {
     const prng = Alea(seed)
     const n1D = (v: number) => simplex.noise2D(v, 0)
 
+    const rndValue = lerp(0.1, 2, prng())
+
     const noises: Noises2DFns = {
         line: (x) => n1D(x),
         linesSum: (x, y) => n1D(x) + n1D(y),
@@ -94,12 +95,11 @@ export function getNoises(seed: string) {
         diagonal: (x, y) => x + y,
 
         simplex: (x, y) => simplex.noise2D(x, y),
-        cosMul: (x, y) => (x !== 0 ? Math.cos(y * x * 10) : Math.cos(y * 10)),
         circle: (x, y, w = 1, h = 1) => Math.sqrt((x / w) ** 2 + (y / h) ** 2) - 0.5,
 
         // shapes
-        cubic: (x, y) => clamp(x ** 3 + y, -1, 1),
-        quadratic: (x, y) => clamp(x ** 2 + y, -1, 1),
+        cubic: (x, y) => clamp(rndValue * x ** 3 + y, -1, 1),
+        quadratic: (x, y) => clamp(rndValue * x ** 2 + y, -1, 1),
     }
 
     const random: NoisesRnd = {
