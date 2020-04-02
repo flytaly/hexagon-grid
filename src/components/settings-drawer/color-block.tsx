@@ -61,7 +61,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const [bgAnchorEl, setBgAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
     const paletteColors = useMemo(
-        () => Array.from(new Set(colorState.palette.colors.map((c) => toHslaStr(c)))),
+        () => Array.from(new Set(colorState.palette.colors.map((c) => toHslaStr(c.hsl)))),
         [colorState.palette.colors],
     )
 
