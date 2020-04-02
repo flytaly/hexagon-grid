@@ -7,7 +7,6 @@ export type NoiseFn = (x: number, y: number, width?: number, height?: number) =>
 export type Noises2DFns = {
     line: NoiseFn
     linesSum: NoiseFn
-    linesMul: NoiseFn
     diagonal: NoiseFn
 
     simplex: NoiseFn
@@ -15,6 +14,7 @@ export type Noises2DFns = {
     circle: NoiseFn
     cubic: NoiseFn
     quadratic: NoiseFn
+    sin: NoiseFn
 }
 
 export type NoisesRnd = {
@@ -42,10 +42,6 @@ export const Noises2D: NoisesInfoObj = {
         id: 'linesSum',
         name: 'Lines sum',
     },
-    linesMul: {
-        id: 'linesMul',
-        name: 'Lines multiplication',
-    },
     diagonal: {
         id: 'diagonal',
         name: 'Diagonal line',
@@ -65,6 +61,10 @@ export const Noises2D: NoisesInfoObj = {
     quadratic: {
         id: 'quadratic',
         name: 'Quadratic function',
+    },
+    sin: {
+        id: 'sin',
+        name: 'Sine wave',
     },
     custom: {
         id: 'custom',
@@ -91,7 +91,6 @@ export function getNoises(seed: string) {
     const noises: Noises2DFns = {
         line: (x) => n1D(x),
         linesSum: (x, y) => n1D(x) + n1D(y),
-        linesMul: (x, y) => n1D(x) * n1D(y),
         diagonal: (x, y) => x + y,
 
         simplex: (x, y) => simplex.noise2D(x, y),
@@ -100,6 +99,7 @@ export function getNoises(seed: string) {
         // shapes
         cubic: (x, y) => clamp(rndValue * x ** 3 + y, -1, 1),
         quadratic: (x, y) => clamp(rndValue * x ** 2 + y, -1, 1),
+        sin: (x, y) => Math.sin(x * 2) + y * 2,
     }
 
     const random: NoisesRnd = {
