@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core'
 import { RecursivePartial, NoiseSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
 import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
+import { genSeed } from '../../helpers'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -270,7 +271,7 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                 color="primary"
                 variant="outlined"
                 size="small"
-                onClick={() => dispatchOption({ seed: Math.random() })}
+                onClick={() => dispatchOption({ seed: genSeed() })}
             >
                 Generate noise seed
             </Button>

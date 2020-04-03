@@ -1,5 +1,5 @@
 import { HSLColor } from 'react-color'
-import { clamp } from './helpers'
+import { clamp, genSeed } from './helpers'
 import { Noises2DFns } from './noises'
 import { PaletteId, defaultPalettes, SavedColorPalette, fillGradient } from './palettes'
 
@@ -107,7 +107,7 @@ export const initialState: CanvasState = {
         borderWidth: 1,
     },
     noise: {
-        seed: Math.random(),
+        seed: genSeed(),
         zoom: 10,
         hue: 2,
         saturation: 2,

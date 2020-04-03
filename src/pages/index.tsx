@@ -31,6 +31,8 @@ const Home: NextPage = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
 
+    console.log(JSON.stringify(state))
+
     const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))
 
     const classes = useStyles({

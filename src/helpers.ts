@@ -26,3 +26,7 @@ export function toHslaObj(hslStr: string, alpha = 1): HSLColor {
     const [, h, s, l] = regExpArray
     return { h: +h, s: +s / 100, l: +l / 100, a: alpha }
 }
+
+export function genSeed(): number {
+    return Math.round(Math.random() * 10000000)
+}

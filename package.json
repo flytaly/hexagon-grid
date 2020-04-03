@@ -6,7 +6,9 @@
         "dev": "next dev",
         "build": "next build",
         "lint": "eslint ./src --ext .js,.ts,.tsx,.jsx --report-unused-disable-directives",
-        "start": "next start"
+        "start": "next start",
+        "test": "jest",
+        "test:watch": "jest --watch"
     },
     "dependencies": {
         "@material-ui/core": "^4.9.7",
@@ -29,6 +31,7 @@
         "worker-loader": "^2.0.0"
     },
     "devDependencies": {
+        "@types/jest": "^25.2.1",
         "@types/lodash.debounce": "^4.0.6",
         "@types/node": "^13.9.3",
         "@types/react": "^16.9.25",
@@ -42,7 +45,9 @@
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-react": "^7.19.0",
         "eslint-plugin-react-hooks": "^2.5.1",
+        "jest": "^25.2.7",
         "prettier": "^2.0.2",
+        "ts-jest": "^25.3.1",
         "typescript": "^3.8.3"
     }
 }
