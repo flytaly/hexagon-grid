@@ -28,6 +28,7 @@ module.exports = {
             },
             rules: {
                 'no-unused-expressions': 'off', // don't support optional chaining
+                'no-restricted-syntax': 'off',
                 '@typescript-eslint/no-unused-expressions': 'error',
                 'import/prefer-default-export': 'off',
                 'no-console': 'off',

@@ -1,5 +1,6 @@
-import { stateObjectPropIds, mapStateToUrlParams } from './url-state'
-import { testState, urlParams } from './mocks/canvas-test-state'
+import { stateObjectPropIds, mapStateToUrlParams, mapUrlParamsToState } from './url-state'
+import { testState, testParamsQuery, testParamsEntries } from './mocks/canvas-test-state'
+import { initialState } from './canvas-state'
 
 describe('state to url', () => {
     test('all ids should be unique or null', () => {
@@ -23,6 +24,14 @@ describe('state to url', () => {
     })
 
     test('should return string with URL params', () => {
-        expect(mapStateToUrlParams(testState)).toBe(urlParams)
+        expect(mapStateToUrlParams(testState)).toBe(testParamsQuery)
+    })
+})
+
+describe('params to state', () => {
+    test('should return state object from URL params', () => {
+        expect(
+            mapUrlParamsToState(Object.fromEntries(testParamsEntries), initialState),
+        ).toMatchObject(testState)
     })
 })

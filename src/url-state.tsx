@@ -1,3 +1,5 @@
+import set from 'lodash.set'
+import clone from 'lodash.clonedeep'
 import { HSLColor } from 'react-color'
 import { CanvasState, paletteColorsArray } from './canvas-state'
 
@@ -57,6 +59,47 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
     },
 }
 
+type SetState = (param: string, state: CanvasState) => CanvasState
+
+type MapParamToState = { [name: string]: SetState }
+
+const paramToHSL = (param: string): HSLColor => {
+    const [h, s, l, a = 100] = param.split(',')
+    return { h: Number(h), s: +s / 100, l: +l / 100, a: +a / 100 }
+}
+
+const paramToPalette = (param: string): paletteColorsArray => {
+    const result: paletteColorsArray = []
+    param.split(':').forEach((c, idx) => {
+        result.push({ id: idx, hsl: paramToHSL(c) })
+    })
+    return result
+}
+
+export const mapParamToState: MapParamToState = {
+    w: (p, s) => set(s, 'canvasSize.width', Number(p)),
+    h: (p, s) => set(s, 'canvasSize.height', Number(p)),
+    s: (p, s) => set(s, 'hex.size', Number(p)),
+    or: (p, s) => set(s, 'hex.orientation', p === 'p' ? 'pointy' : 'flat'),
+    b: (p, s) => set(s, 'hex.borderWidth', Number(p)),
+    seed: (p, s) => set(s, 'noise.seed', Number(p)),
+    nz: (p, s) => set(s, 'noise.zoom', Number(p)),
+    nh: (p, s) => set(s, 'noise.hue', Number(p)),
+    ns: (p, s) => set(s, 'noise.saturation', Number(p)),
+    nl: (p, s) => set(s, 'noise.lightness', Number(p)),
+    nx: (p, s) => set(s, 'noise.offsetX', Number(p)),
+    ny: (p, s) => set(s, 'noise.offsetY', Number(p)),
+    nid: (p, s) => set(s, 'noise.baseNoise.id', p), // TODO: check if exists
+    n2: (p, s) => set(s, 'noise.noise2Strength', Number(p)),
+    gs: (p, s) => set(s, 'grid.sparse', Number(p)),
+    gx: (p, s) => set(s, 'grid.signX', Number(p)),
+    gy: (p, s) => set(s, 'grid.signY', Number(p)),
+    cb: (p, s) => set(s, 'colors.hexBorder', paramToHSL(p)),
+    cbg: (p, s) => set(s, 'colors.background', paramToHSL(p)),
+    pal: (p, s) => set(s, 'colors.palette.colors', paramToPalette(p)),
+    // pal: 'colors.palette.colors',
+}
+
 export function mapStateToUrlParams(state: CanvasState): string {
     const toParams = (obj: Record<string, unknown>, ids: Record<string, unknown>): string =>
         Object.entries(obj).reduce((acc, curr) => {
@@ -81,4 +124,23 @@ export function mapStateToUrlParams(state: CanvasState): string {
     const urlParamString = toParams(state, stateObjectPropIds)
 
     return urlParamString.slice(0, -1) // remove the last '&'
+}
+
+export function mapUrlParamsToState(
+    params: Record<string, string>,
+    oldState: CanvasState,
+): CanvasState {
+    const state = clone(oldState)
+    const entries = Object.entries(params) as [keyof typeof mapParamToState, string][]
+
+    for (const [key, value] of entries) {
+        const fn = mapParamToState[key]
+        if (fn && value) fn(value, state)
+    }
+    state.canvasSize.wasMeasured = true
+    state.canvasSize.aspect = state.canvasSize.width / state.canvasSize.height
+    state.colors.palette.isCustom = true
+    state.colors.palette.id = state.colors.customPalettes.length
+
+    return state
 }
