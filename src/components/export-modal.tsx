@@ -1,7 +1,9 @@
-import React, { RefObject } from 'react'
-import { Modal, Button } from '@material-ui/core'
+import React, { RefObject, useState, useRef } from 'react'
+import { Modal, Button, IconButton, Popover, TextField, InputAdornment } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { Image } from '@material-ui/icons'
+import { Image, FileCopy } from '@material-ui/icons'
+import { CanvasState } from '../canvas-state-types'
+import { mapStateToUrlParams } from '../url-state'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -11,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            width: 200,
+            width: 300,
             maxWidth: '90%',
             backgroundColor: theme.palette.background.paper,
             border: '2px solid #000',
@@ -24,17 +26,32 @@ const useStyles = makeStyles((theme: Theme) =>
                 marginBottom: theme.spacing(2),
             },
         },
+        fullWidth: {
+            width: '100%',
+        },
+        popper: {
+            border: '1px solid',
+            padding: theme.spacing(1),
+            backgroundColor: theme.palette.background.paper,
+        },
     }),
 )
 
 type ExportModalProps = {
     canvas: RefObject<HTMLCanvasElement>
+    state: CanvasState
     isOpen: boolean
     handleClose: () => void
 }
 
-const ExportModal = ({ canvas, isOpen, handleClose }: ExportModalProps) => {
+const ExportModal = ({ canvas, isOpen, handleClose, state }: ExportModalProps) => {
     const classes = useStyles()
+    const [copyLink, setCopyLink] = useState('')
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+    const popoverAnchor = useRef(null)
+
+    const isCustomFn = state.noise.baseNoise.id === 'custom'
+
     const pngClickHandler = () => {
         if (!canvas.current) return
         const link = document.createElement('a')
@@ -42,13 +59,85 @@ const ExportModal = ({ canvas, isOpen, handleClose }: ExportModalProps) => {
         link.href = canvas.current.toDataURL('image/png')
         link.click()
     }
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text).then(
+            () => setIsPopoverOpen(true),
+            () => console.error('Failed copy to clipboard'),
+        )
+    }
+
+    const linkClickHandler = () => {
+        const params = mapStateToUrlParams(state)
+        const link = `${window.location.origin}/#${params}`
+        setCopyLink(link)
+        copyToClipboard(link)
+    }
+
+    const closeModalHandler = () => {
+        setCopyLink('')
+        handleClose()
+    }
+
     return (
-        <Modal aria-label="export modal" open={isOpen} onClose={handleClose}>
-            <div className={classes.modal}>
+        <Modal aria-label="export modal" open={isOpen} onClose={closeModalHandler}>
+            <div className={classes.modal} ref={popoverAnchor}>
                 <h2>Export</h2>
-                <Button variant="contained" startIcon={<Image />} onClick={pngClickHandler}>
+                <Button
+                    className={classes.fullWidth}
+                    variant="contained"
+                    startIcon={<Image />}
+                    onClick={pngClickHandler}
+                >
                     PNG
                 </Button>
+                {!copyLink || isCustomFn ? (
+                    <Button
+                        className={classes.fullWidth}
+                        variant="contained"
+                        startIcon={<FileCopy />}
+                        onClick={linkClickHandler}
+                        disabled={isCustomFn}
+                    >
+                        {isCustomFn ? "Copy Link (doesn't work with custom function)" : 'Copy Link'}
+                    </Button>
+                ) : (
+                    <TextField
+                        className={classes.fullWidth}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton
+                                        size="small"
+                                        title="Copy link"
+                                        onClick={() => copyToClipboard(copyLink)}
+                                    >
+                                        <FileCopy />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        size="small"
+                        value={copyLink}
+                    />
+                )}
+                <Popover
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'center',
+                        horizontal: 'center',
+                    }}
+                    open={isPopoverOpen}
+                    onClose={() => {
+                        setIsPopoverOpen(false)
+                    }}
+                    anchorEl={popoverAnchor.current}
+                >
+                    <div className={classes.popper}>Link copied</div>
+                </Popover>
             </div>
         </Modal>
     )

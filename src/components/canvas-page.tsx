@@ -101,6 +101,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
             />
             <ExportModal
                 canvas={refCanv}
+                state={state}
                 isOpen={exportModalOpen}
                 handleClose={() => {
                     setExportModalOpen(false)

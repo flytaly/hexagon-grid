@@ -8,6 +8,7 @@ import {
     CanvasState,
     CanvasStateAction,
 } from './canvas-state-types'
+import { Noises2D } from './noises'
 
 export const makePaletteColors = (colors: HSLColor[], paletteId: number | string) => {
     return colors.map((hsl, index) => ({
@@ -38,8 +39,8 @@ export const initialState: CanvasState = {
         offsetX: 0,
         offsetY: 0,
         baseNoise: {
-            // id: Noises2D.diagonal.id,
-            id: 'custom',
+            id: Noises2D.sin.id,
+            // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
         noise2Strength: 0,
