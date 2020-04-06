@@ -10,7 +10,7 @@ import {
     Input,
 } from '@material-ui/core'
 import throttle from 'lodash.throttle'
-import { CanvasStateAction, ActionTypes, HexSettings } from '../../canvas-state'
+import { CanvasStateAction, ActionTypes, HexSettings } from '../../canvas-state-types'
 
 type HexProps = {
     hexState: HexSettings

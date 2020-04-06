@@ -1,9 +1,9 @@
 import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
 import { HSLColor } from 'react-color'
-import { CanvasState, paletteColorsArray } from './canvas-state'
+import { CanvasState, PaletteColorsArray } from './canvas-state-types'
 
-type ParamFn = (p: string | HSLColor | paletteColorsArray) => string
+type ParamFn = (p: string | HSLColor | PaletteColorsArray) => string
 
 export type ObjectPropToStrMap<T> = {
     [P in keyof T]: ObjectPropToStrMap<T[P]> | string | null | ParamFn
@@ -53,7 +53,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
             isCustom: null,
             id: null,
             colors: (cols) =>
-                `pal=${(cols as paletteColorsArray).map((c) => hslaToString(c.hsl)).join(':')}`,
+                `pal=${(cols as PaletteColorsArray).map((c) => hslaToString(c.hsl)).join(':')}`,
         },
         customPalettes: null,
     },
@@ -68,36 +68,41 @@ const paramToHSL = (param: string): HSLColor => {
     return { h: Number(h), s: +s / 100, l: +l / 100, a: +a / 100 }
 }
 
-const paramToPalette = (param: string): paletteColorsArray => {
-    const result: paletteColorsArray = []
+const paramToPalette = (param: string): PaletteColorsArray => {
+    const result: PaletteColorsArray = []
     param.split(':').forEach((c, idx) => {
         result.push({ id: idx, hsl: paramToHSL(c) })
     })
     return result
 }
 
+const setNumberProp = (state: CanvasState, path: string, param: string) => {
+    const p = Number(param)
+    if (Number.isNaN(p)) return state
+    return set(state, path, p)
+}
+
 export const mapParamToState: MapParamToState = {
-    w: (p, s) => set(s, 'canvasSize.width', Number(p)),
-    h: (p, s) => set(s, 'canvasSize.height', Number(p)),
-    s: (p, s) => set(s, 'hex.size', Number(p)),
+    w: (p, s) => setNumberProp(s, 'canvasSize.width', p),
+    h: (p, s) => setNumberProp(s, 'canvasSize.height', p),
+    s: (p, s) => setNumberProp(s, 'hex.size', p),
     or: (p, s) => set(s, 'hex.orientation', p === 'p' ? 'pointy' : 'flat'),
-    b: (p, s) => set(s, 'hex.borderWidth', Number(p)),
-    seed: (p, s) => set(s, 'noise.seed', Number(p)),
-    nz: (p, s) => set(s, 'noise.zoom', Number(p)),
-    nh: (p, s) => set(s, 'noise.hue', Number(p)),
-    ns: (p, s) => set(s, 'noise.saturation', Number(p)),
-    nl: (p, s) => set(s, 'noise.lightness', Number(p)),
-    nx: (p, s) => set(s, 'noise.offsetX', Number(p)),
-    ny: (p, s) => set(s, 'noise.offsetY', Number(p)),
+    b: (p, s) => setNumberProp(s, 'hex.borderWidth', p),
+    seed: (p, s) => setNumberProp(s, 'noise.seed', p),
+    nz: (p, s) => setNumberProp(s, 'noise.zoom', p),
+    nh: (p, s) => setNumberProp(s, 'noise.hue', p),
+    ns: (p, s) => setNumberProp(s, 'noise.saturation', p),
+    nl: (p, s) => setNumberProp(s, 'noise.lightness', p),
+    nx: (p, s) => setNumberProp(s, 'noise.offsetX', p),
+    ny: (p, s) => setNumberProp(s, 'noise.offsetY', p),
     nid: (p, s) => set(s, 'noise.baseNoise.id', p), // TODO: check if exists
-    n2: (p, s) => set(s, 'noise.noise2Strength', Number(p)),
-    gs: (p, s) => set(s, 'grid.sparse', Number(p)),
-    gx: (p, s) => set(s, 'grid.signX', Number(p)),
-    gy: (p, s) => set(s, 'grid.signY', Number(p)),
+    n2: (p, s) => setNumberProp(s, 'noise.noise2Strength', p),
+    gs: (p, s) => setNumberProp(s, 'grid.sparse', p),
+    gx: (p, s) => setNumberProp(s, 'grid.signX', p),
+    gy: (p, s) => setNumberProp(s, 'grid.signY', p),
     cb: (p, s) => set(s, 'colors.hexBorder', paramToHSL(p)),
     cbg: (p, s) => set(s, 'colors.background', paramToHSL(p)),
     pal: (p, s) => set(s, 'colors.palette.colors', paramToPalette(p)),
-    // pal: 'colors.palette.colors',
 }
 
 export function mapStateToUrlParams(state: CanvasState): string {
@@ -109,7 +114,7 @@ export function mapStateToUrlParams(state: CanvasState): string {
 
             if (ids[key] instanceof Function) {
                 const fn = ids[key] as ParamFn
-                return `${acc}${fn(value as string | HSLColor | paletteColorsArray)}&`
+                return `${acc}${fn(value as string | HSLColor | PaletteColorsArray)};`
             }
 
             if (typeof value === 'object' && value !== null) {
@@ -118,12 +123,12 @@ export function mapStateToUrlParams(state: CanvasState): string {
                     toParams(value as Record<string, unknown>, ids[key] as Record<string, unknown>)
                 )
             }
-            return `${acc}${ids[key]}=${value}&`
+            return `${acc}${ids[key]}=${value};`
         }, '')
 
     const urlParamString = toParams(state, stateObjectPropIds)
 
-    return urlParamString.slice(0, -1) // remove the last '&'
+    return urlParamString.slice(0, -1) // remove the last ';'
 }
 
 export function mapUrlParamsToState(

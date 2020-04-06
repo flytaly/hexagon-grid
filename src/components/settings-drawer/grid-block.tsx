@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Grid, Input, Slider, Typography, IconButton } from '@material-ui/core'
 import { SwapHoriz, SwapVert } from '@material-ui/icons'
-import { CanvasStateAction, ActionTypes, GridSettings } from '../../canvas-state'
+import { CanvasStateAction, ActionTypes, GridSettings } from '../../canvas-state-types'
 
 type GridSettingsProps = {
     gridState: GridSettings

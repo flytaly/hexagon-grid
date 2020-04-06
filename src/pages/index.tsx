@@ -3,9 +3,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Fab, useMediaQuery, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
-import { reducer, initialState, ActionTypes } from '../canvas-state'
+import { reducer, initialState } from '../canvas-state'
+import { ActionTypes } from '../canvas-state-types'
 import { toolbarHeight } from '../configs'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,6 +31,7 @@ const Home: NextPage = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
     const [isInitValue, setIsInitValue] = useState(true)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const router = useRouter()
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
 
     const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))
@@ -44,12 +47,27 @@ const Home: NextPage = () => {
     }
 
     useEffect(() => {
+        const onHashChange = () => {
+            const { hash } = window.location
+            if (hash.length && hash.startsWith('#')) {
+                dispatch({
+                    type: ActionTypes.MERGE_STATE_FROM_QUERY,
+                    payload: hash.slice(1),
+                })
+            }
+        }
+
         const size = {
             width: Math.ceil(window.screen.width * window.devicePixelRatio),
             height: Math.ceil(window.screen.height * window.devicePixelRatio),
             pixelRatio: window.devicePixelRatio,
         }
         dispatch({ type: ActionTypes.SET_SIZE, payload: size })
+
+        onHashChange()
+
+        window.addEventListener('hashchange', onHashChange)
+        return () => window.removeEventListener('hashchange', onHashChange)
     }, [dispatch])
 
     return (

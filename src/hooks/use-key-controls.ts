@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { CanvasStateAction, ActionTypes } from '../canvas-state'
+import { CanvasStateAction, ActionTypes } from '../canvas-state-types'
 
 export default function useKeyControls(dispatch: React.Dispatch<CanvasStateAction>) {
     useEffect(() => {

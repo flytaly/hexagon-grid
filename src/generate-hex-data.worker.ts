@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import * as Honeycomb from 'honeycomb-grid'
 import { Parser } from 'expr-eval'
-import { CanvasState } from './canvas-state'
+import { CanvasState } from './canvas-state-types'
 import { clamp } from './helpers'
 import { getNoises, NoiseFn } from './noises'
 

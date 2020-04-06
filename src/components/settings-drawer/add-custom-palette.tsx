@@ -8,8 +8,8 @@ import {
     ColorsSettings,
     CanvasStateAction,
     ActionTypes,
-    paletteColorsArray,
-} from '../../canvas-state'
+    PaletteColorsArray,
+} from '../../canvas-state-types'
 import { toHslaStr, toHslaObj } from '../../helpers'
 
 type ColorModalProps = {
@@ -100,7 +100,7 @@ const SortableItem = SortableElement(({ value, id, changeColorHandler }: Sortabl
 })
 
 type SortableListProps = {
-    items: paletteColorsArray
+    items: PaletteColorsArray
     removeHandler: () => void
     addColorHandler: () => void
     changeColorHandler: ChangeColorAction

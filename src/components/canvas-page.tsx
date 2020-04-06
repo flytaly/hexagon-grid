@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
-import { CanvasState, CanvasStateAction } from '../canvas-state'
+import { CanvasState, CanvasStateAction } from '../canvas-state-types'
 import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../generate-hex-data.worker'

@@ -1,4 +1,4 @@
-import { CanvasState } from '../canvas-state'
+import { CanvasState } from '../canvas-state-types'
 
 export const testState: CanvasState = {
     canvasSize: {
@@ -61,4 +61,4 @@ export const testParamsEntries = [
     ['pal', '202,94,61:200,89,60:196,84,60,88:178,68,57'],
 ]
 
-export const testParamsQuery = testParamsEntries.map((p) => p.join('=')).join('&')
+export const testParamsQuery = testParamsEntries.map((p) => p.join('=')).join(';')

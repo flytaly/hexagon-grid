@@ -12,7 +12,12 @@ import {
     FormControl,
     MenuItem,
 } from '@material-ui/core'
-import { RecursivePartial, NoiseSettings, CanvasStateAction, ActionTypes } from '../../canvas-state'
+import {
+    RecursivePartial,
+    NoiseSettings,
+    CanvasStateAction,
+    ActionTypes,
+} from '../../canvas-state-types'
 import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
 import { genSeed } from '../../helpers'
 

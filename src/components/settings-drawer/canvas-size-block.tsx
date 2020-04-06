@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Grid, IconButton, TextField } from '@material-ui/core'
 import { Rotate90DegreesCcw } from '@material-ui/icons'
-import { CanvasSize, CanvasStateAction, ActionTypes } from '../../canvas-state'
+import { CanvasSize, CanvasStateAction, ActionTypes } from '../../canvas-state-types'
 
 type CanvasProps = {
     canvasSize: CanvasSize

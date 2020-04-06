@@ -3,12 +3,8 @@ import { withStyles } from '@material-ui/core/styles'
 import { Box, Button, IconButton, Grid, Typography, Popover, Divider } from '@material-ui/core'
 import { SketchPicker, HSLColor, ColorResult } from 'react-color'
 import { CheckCircleRounded } from '@material-ui/icons'
-import {
-    ColorsSettings,
-    CanvasStateAction,
-    ActionTypes,
-    makePaletteColors,
-} from '../../canvas-state'
+import { makePaletteColors } from '../../canvas-state'
+import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state-types'
 import { toHslaStr } from '../../helpers'
 import { defaultPalettes } from '../../palettes'
 import { checkered } from '../../background'
