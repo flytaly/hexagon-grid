@@ -8,6 +8,8 @@ export type Noises2DFns = {
     line: NoiseFn
     linesSum: NoiseFn
     diagonal: NoiseFn
+    diagonal1: NoiseFn
+    diagonal2: NoiseFn
 
     simplex: NoiseFn
 
@@ -45,6 +47,14 @@ export const Noises2D: NoisesInfoObj = {
     diagonal: {
         id: 'diagonal',
         name: 'Diagonal line',
+    },
+    diagonal1: {
+        id: 'diagonal1',
+        name: 'Diagonal line 1',
+    },
+    diagonal2: {
+        id: 'diagonal2',
+        name: 'Diagonal line 2',
     },
     simplex: {
         id: 'simplex',
@@ -91,7 +101,17 @@ export function getNoises(seed: string) {
     const noises: Noises2DFns = {
         line: (x) => n1D(x),
         linesSum: (x, y) => n1D(x) + n1D(y),
-        diagonal: (x, y) => x + y,
+        diagonal: (x, y) => clamp(x * Math.cos(Math.PI / 4) + y * Math.sin(Math.PI / 4), -1, 1),
+        diagonal1: (x, y) => {
+            // from center
+            const val = clamp(Math.abs(x * Math.cos(Math.PI / 4) + y * Math.sin(Math.PI / 4)), 0, 1)
+            return val * 2 - 1
+        },
+        diagonal2: (x, y) => {
+            // to center
+            const val = clamp(Math.abs(x * Math.cos(Math.PI / 4) + y * Math.sin(Math.PI / 4)), 0, 1)
+            return val * -2 + 1
+        },
 
         simplex: (x, y) => simplex.noise2D(x, y),
         circle: (x, y, w = 1, h = 1) => Math.sqrt((x / w) ** 2 + (y / h) ** 2) - 0.5,

@@ -26,9 +26,9 @@ export const initialState: CanvasState = {
         wasMeasured: false,
     },
     hex: {
-        size: 3,
+        size: 4,
         orientation: 'pointy',
-        borderWidth: 1,
+        borderWidth: 0,
     },
     noise: {
         seed: genSeed(),
@@ -39,7 +39,7 @@ export const initialState: CanvasState = {
         offsetX: 0,
         offsetY: 0,
         baseNoise: {
-            id: Noises2D.sin.id,
+            id: Noises2D.diagonal.id,
             // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
