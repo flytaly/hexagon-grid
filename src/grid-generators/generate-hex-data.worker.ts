@@ -1,25 +1,31 @@
 /* eslint-disable no-restricted-globals */
 import * as Honeycomb from 'honeycomb-grid'
 import { Parser } from 'expr-eval'
-import { CanvasState } from './canvas-state-types'
-import { clamp } from './helpers'
-import { getNoises, NoiseFn } from './noises'
+import { CanvasState, GridType } from '../canvas-state-types'
+import { clamp } from '../helpers'
+import { getNoises, NoiseFn } from '../noises'
 
 // just to suppress ts errors
 interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'> {
     set(hex: { q: number; r: number; s: number }): Honeycomb.Hex<{}>
 }
 
+type CanvasData = {
+    vertices: Float32Array | number[]
+    fillColors: Float32Array | number[]
+    type: GridType
+}
+
 function genHexes(state: CanvasState) {
     const { width, height, aspect } = state.canvasSize
-    const { orientation } = state.hex
+    const { orientation } = state.cell
     const { zoom, baseNoise, noise2Strength } = state.noise
     const [noises, random] = getNoises(String(state.noise.seed))
 
     const hexSize =
         aspect < 1
-            ? (state.hex.size * height * aspect) / 100
-            : (state.hex.size * width) / aspect / 100
+            ? (state.cell.size * height * aspect) / 100
+            : (state.cell.size * width) / aspect / 100
 
     const Hex = Honeycomb.extendHex({ size: hexSize, orientation })
 
@@ -77,7 +83,7 @@ function genHexes(state: CanvasState) {
         if (noise2Strength) {
             noiseValue += random.rnd(noise2Strength)
         }
-        const point = hexagon.nudge().toPoint()
+        const point = hexagon.toPoint()
         hexagon.corners().forEach((corner, cornerIdx) => {
             const { x, y } = corner.add(point)
             vertices[idx * 12 + cornerIdx * 2] = x
@@ -102,7 +108,19 @@ function genHexes(state: CanvasState) {
 
 self.addEventListener('message', (event) => {
     const { state } = event.data
-    const hexDrawData = genHexes(state)
+
+    let hexDrawData: CanvasData
+
+    switch (state.grid.type) {
+        case 'triangles':
+            // TODO: generate triangles data
+            hexDrawData = { vertices: [], fillColors: [], type: 'triangles' }
+            break
+        case 'hexagons':
+        default:
+            hexDrawData = { ...genHexes(state), type: 'hexagons' }
+    }
+
     self.postMessage(hexDrawData)
 })
 

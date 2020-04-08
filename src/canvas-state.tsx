@@ -25,7 +25,7 @@ export const initialState: CanvasState = {
         pixelRatio: 1,
         wasMeasured: false,
     },
-    hex: {
+    cell: {
         size: 4,
         orientation: 'pointy',
         borderWidth: 0,
@@ -46,12 +46,13 @@ export const initialState: CanvasState = {
         noise2Strength: 0,
     },
     grid: {
+        type: 'hexagons',
         sparse: 1,
         signX: 1,
         signY: 1,
     },
     colors: {
-        hexBorder: { h: 0, s: 0, l: 1, a: 1 },
+        border: { h: 0, s: 0, l: 1, a: 1 },
         background: null,
         palette: {
             isCustom: false,
@@ -69,8 +70,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             canvasSize.aspect = canvasSize.width / canvasSize.height
             return { ...state, canvasSize }
         }
-        case ActionTypes.SET_HEX_OPTIONS:
-            return { ...state, hex: { ...state.hex, ...action.payload } }
+        case ActionTypes.SET_CELL_OPTIONS:
+            return { ...state, cell: { ...state.cell, ...action.payload } }
         case ActionTypes.SET_GRID_OPTIONS:
             return { ...state, grid: { ...state.grid, ...action.payload } }
         case ActionTypes.SET_NOISE_OPTIONS:
@@ -136,10 +137,10 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                 },
             }
         }
-        case ActionTypes.INC_HEX_SIZE: {
-            const size = clamp(state.hex.size + action.payload, 1, 20)
-            if (size === state.hex.size) return state
-            return { ...state, hex: { ...state.hex, size } }
+        case ActionTypes.INC_CELL_SIZE: {
+            const size = clamp(state.cell.size + action.payload, 1, 20)
+            if (size === state.cell.size) return state
+            return { ...state, cell: { ...state.cell, size } }
         }
         case ActionTypes.MERGE_STATE_FROM_QUERY: {
             const params = {} as Record<string, string>

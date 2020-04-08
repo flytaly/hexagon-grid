@@ -1,14 +1,39 @@
 import React, { useState } from 'react'
-import { Box, Grid, Input, Slider, Typography, IconButton } from '@material-ui/core'
+import {
+    Box,
+    FormControl,
+    Grid,
+    IconButton,
+    Input,
+    InputLabel,
+    MenuItem,
+    Select,
+    Slider,
+    Typography,
+} from '@material-ui/core'
 import { SwapHoriz, SwapVert } from '@material-ui/icons'
-import { CanvasStateAction, ActionTypes, GridSettings } from '../../canvas-state-types'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { CanvasStateAction, ActionTypes, GridSettings, GridType } from '../../canvas-state-types'
 
 type GridSettingsProps = {
     gridState: GridSettings
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const NoiseSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        formControl: {
+            margin: theme.spacing(2, 0),
+            minWidth: '150px',
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2),
+        },
+    }),
+)
+
+const GridSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
+    const classes = useStyles()
     const [sparse, setSparse] = useState<number>(gridState.sparse)
     const { signX, signY } = gridState
 
@@ -30,36 +55,59 @@ const NoiseSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
                 <Box fontWeight="fontWeightBold">Grid settings</Box>
             </Typography>
 
-            <Typography id="sparce-factor" gutterBottom>
-                Sparce Factor
-            </Typography>
-            <Grid container spacing={2}>
-                <Grid item xs={9}>
-                    <Slider
-                        value={sparse}
-                        aria-labelledby="sparse-factor"
-                        step={0.05}
-                        min={1}
-                        max={3}
-                        onChange={(e, val) => setSparse(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ sparse: Number(val) })}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <Input
-                        value={sparse}
-                        onChange={handleSparceInputChange}
-                        margin="dense"
-                        inputProps={{
-                            step: 0.05,
-                            min: 1,
-                            max: 3,
-                            type: 'number',
-                            'aria-labelledby': 'sparse-factor',
-                        }}
-                    />
-                </Grid>
-            </Grid>
+            <FormControl className={classes.formControl}>
+                <InputLabel id="grid-type-label">Grid cells</InputLabel>
+                <Select
+                    labelId="grid-type-label"
+                    value={gridState.type}
+                    onChange={(ev) => {
+                        dispatchOption({ type: ev.target.value as GridType })
+                    }}
+                >
+                    {(['hexagons', 'triangles'] as GridType[]).map((t) => (
+                        <MenuItem key={t} value={t}>
+                            {t}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            {gridState.type === 'hexagons' ? (
+                <>
+                    <Typography id="sparce-factor" gutterBottom>
+                        Sparce Factor
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={9}>
+                            <Slider
+                                value={sparse}
+                                aria-labelledby="sparse-factor"
+                                step={0.05}
+                                min={1}
+                                max={3}
+                                onChange={(e, val) => setSparse(Number(val))}
+                                onChangeCommitted={(e, val) =>
+                                    dispatchOption({ sparse: Number(val) })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Input
+                                value={sparse}
+                                onChange={handleSparceInputChange}
+                                margin="dense"
+                                inputProps={{
+                                    step: 0.05,
+                                    min: 1,
+                                    max: 3,
+                                    type: 'number',
+                                    'aria-labelledby': 'sparse-factor',
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                </>
+            ) : null}
             <Grid container spacing={2} alignItems="center">
                 <Grid item>
                     <Typography>Mirror axes</Typography>
@@ -87,4 +135,4 @@ const NoiseSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
     )
 }
 
-export default NoiseSettingBlock
+export default GridSettingBlock

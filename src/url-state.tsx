@@ -22,7 +22,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         pixelRatio: null,
         wasMeasured: null,
     },
-    hex: {
+    cell: {
         size: 's',
         orientation: (or) => (or === 'pointy' ? 'or=p' : 'or=f'),
         borderWidth: 'b',
@@ -42,12 +42,13 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         noise2Strength: 'n2',
     },
     grid: {
+        type: (gt) => (gt === 'hexagons' ? 'gt=h' : 'gt=t'),
         sparse: 'gs',
         signX: 'gx',
         signY: 'gy',
     },
     colors: {
-        hexBorder: (c) => `cb=${hslaToString(c as HSLColor)}`,
+        border: (c) => `cb=${hslaToString(c as HSLColor)}`,
         background: 'cbg',
         palette: {
             isCustom: null,
@@ -85,9 +86,9 @@ const setNumberProp = (state: CanvasState, path: string, param: string) => {
 export const mapParamToState: MapParamToState = {
     w: (p, s) => setNumberProp(s, 'canvasSize.width', p),
     h: (p, s) => setNumberProp(s, 'canvasSize.height', p),
-    s: (p, s) => setNumberProp(s, 'hex.size', p),
-    or: (p, s) => set(s, 'hex.orientation', p === 'p' ? 'pointy' : 'flat'),
-    b: (p, s) => setNumberProp(s, 'hex.borderWidth', p),
+    s: (p, s) => setNumberProp(s, 'cell.size', p),
+    or: (p, s) => set(s, 'cell.orientation', p === 'p' ? 'pointy' : 'flat'),
+    b: (p, s) => setNumberProp(s, 'cell.borderWidth', p),
     seed: (p, s) => setNumberProp(s, 'noise.seed', p),
     nz: (p, s) => setNumberProp(s, 'noise.zoom', p),
     nh: (p, s) => setNumberProp(s, 'noise.hue', p),
@@ -97,10 +98,11 @@ export const mapParamToState: MapParamToState = {
     ny: (p, s) => setNumberProp(s, 'noise.offsetY', p),
     nid: (p, s) => set(s, 'noise.baseNoise.id', p), // TODO: check if exists
     n2: (p, s) => setNumberProp(s, 'noise.noise2Strength', p),
+    gt: (p, s) => set(s, 'grid.type', p === 't' ? 'triangles' : 'hexagons'),
     gs: (p, s) => setNumberProp(s, 'grid.sparse', p),
     gx: (p, s) => setNumberProp(s, 'grid.signX', p),
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),
-    cb: (p, s) => set(s, 'colors.hexBorder', paramToHSL(p)),
+    cb: (p, s) => set(s, 'colors.border', paramToHSL(p)),
     cbg: (p, s) => set(s, 'colors.background', paramToHSL(p)),
     pal: (p, s) => set(s, 'colors.palette.colors', paramToPalette(p)),
 }

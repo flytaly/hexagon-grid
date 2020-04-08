@@ -49,7 +49,7 @@ type ColorProps = {
 }
 
 const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
-    const [border, setBorder] = useState<HSLColor>(colorState.hexBorder)
+    const [border, setBorder] = useState<HSLColor>(colorState.border)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
@@ -69,7 +69,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                 </Typography>
                 <Grid container spacing={2}>
                     <Grid item xs={9}>
-                        <Typography>Hex border</Typography>
+                        <Typography>Cell border</Typography>
                     </Grid>
                     <Grid item xs={3}>
                         <ColorButton
@@ -102,7 +102,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         onChangeComplete={(color: ColorResult) =>
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: { hexBorder: color.hsl },
+                                payload: { border: color.hsl },
                             })
                         }
                     />

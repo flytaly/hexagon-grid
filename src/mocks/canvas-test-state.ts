@@ -8,7 +8,7 @@ export const testState: CanvasState = {
         pixelRatio: 1,
         wasMeasured: true,
     },
-    hex: { size: 5, orientation: 'flat', borderWidth: 2 },
+    cell: { size: 5, orientation: 'flat', borderWidth: 2 },
     noise: {
         seed: 4814090,
         zoom: 13,
@@ -20,9 +20,9 @@ export const testState: CanvasState = {
         baseNoise: { id: 'sin', customFn: 'sin(x*2) + y*2' },
         noise2Strength: 3,
     },
-    grid: { sparse: 2, signX: -1, signY: -1 },
+    grid: { type: 'triangles', sparse: 2, signX: -1, signY: -1 },
     colors: {
-        hexBorder: { h: 10, s: 0.3, l: 1, a: 0.4 },
+        border: { h: 10, s: 0.3, l: 1, a: 0.4 },
         background: null,
         palette: {
             isCustom: true,
@@ -53,6 +53,7 @@ export const testParamsEntries = [
     ['ny', '10'],
     ['nid', 'sin'],
     ['n2', '3'],
+    ['gt', 't'],
     ['gs', '2'],
     ['gx', '-1'],
     ['gy', '-1'],

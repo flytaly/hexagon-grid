@@ -10,36 +10,42 @@ import {
     Input,
 } from '@material-ui/core'
 import throttle from 'lodash.throttle'
-import { CanvasStateAction, ActionTypes, HexSettings } from '../../canvas-state-types'
+import { CanvasStateAction, ActionTypes, CellSettings, GridType } from '../../canvas-state-types'
 
-type HexProps = {
-    hexState: HexSettings
+type CellProps = {
+    cellState: CellSettings
     dispatch: React.Dispatch<CanvasStateAction>
     isBigScreen: boolean
+    type: GridType
 }
 
-const HexagonsSettingsBlock = ({ hexState, dispatch, isBigScreen }: HexProps) => {
-    const [hexSize, setHexSize] = useState(hexState.size)
-    const [borderWidth, setBorderWidth] = useState(hexState.borderWidth)
+const cellNames: Record<GridType, string> = {
+    hexagons: 'Hexagons',
+    triangles: 'Triangles',
+}
+
+const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps) => {
+    const [hexSize, setHexSize] = useState(cellState.size)
+    const [borderWidth, setBorderWidth] = useState(cellState.borderWidth)
     const setHexOptsThrottled = useCallback(
-        throttle((payload: Partial<HexSettings>) => {
-            dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
+        throttle((payload: Partial<CellSettings>) => {
+            dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
         }, 100),
         [],
     )
     React.useMemo(() => {
-        if (hexState.size !== hexSize) {
-            setHexSize(hexState.size)
+        if (cellState.size !== hexSize) {
+            setHexSize(cellState.size)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hexState.size])
-    const dispatchOption = (payload: Partial<HexSettings>) =>
-        dispatch({ type: ActionTypes.SET_HEX_OPTIONS, payload })
+    }, [cellState.size])
+    const dispatchOption = (payload: Partial<CellSettings>) =>
+        dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
 
     return (
         <Box component="form" m={2} onSubmit={(e) => e.preventDefault()}>
             <Typography component="div" gutterBottom>
-                <Box fontWeight="fontWeightBold">Hexagons</Box>
+                <Box fontWeight="fontWeightBold">{cellNames[type]}</Box>
             </Typography>
             <Typography id="hexagons_size" gutterBottom>
                 Size
@@ -99,30 +105,38 @@ const HexagonsSettingsBlock = ({ hexState, dispatch, isBigScreen }: HexProps) =>
                 </Grid>
             </Grid>
 
-            <Typography>Orientation</Typography>
-            <RadioGroup
-                aria-label="orientation"
-                name="orientation"
-                value={hexState.orientation}
-                onChange={(e, value) => {
-                    const orientation = value === 'flat' ? 'flat' : 'pointy'
-                    dispatch({
-                        type: ActionTypes.SET_HEX_OPTIONS,
-                        payload: { orientation },
-                    })
-                }}
-            >
-                <Grid container>
-                    <Grid item>
-                        <FormControlLabel value="pointy" control={<Radio />} label="pointy" />
-                    </Grid>
-                    <Grid item>
-                        <FormControlLabel value="flat" control={<Radio />} label="flat" />
-                    </Grid>
-                </Grid>
-            </RadioGroup>
+            {type === 'hexagons' ? (
+                <>
+                    <Typography>Orientation</Typography>
+                    <RadioGroup
+                        aria-label="orientation"
+                        name="orientation"
+                        value={cellState.orientation}
+                        onChange={(e, value) => {
+                            const orientation = value === 'flat' ? 'flat' : 'pointy'
+                            dispatch({
+                                type: ActionTypes.SET_CELL_OPTIONS,
+                                payload: { orientation },
+                            })
+                        }}
+                    >
+                        <Grid container>
+                            <Grid item>
+                                <FormControlLabel
+                                    value="pointy"
+                                    control={<Radio />}
+                                    label="pointy"
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel value="flat" control={<Radio />} label="flat" />
+                            </Grid>
+                        </Grid>
+                    </RadioGroup>
+                </>
+            ) : null}
         </Box>
     )
 }
 
-export default HexagonsSettingsBlock
+export default CellSettingsBlock

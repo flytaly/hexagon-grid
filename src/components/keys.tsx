@@ -65,7 +65,7 @@ const ArrowKeys = ({ dispatch, exportBtnClickHandler }: ArrowKeysProps) => {
     }
 
     const dispatchHexSize = (payload: number) => {
-        dispatch({ type: ActionTypes.INC_HEX_SIZE, payload })
+        dispatch({ type: ActionTypes.INC_CELL_SIZE, payload })
     }
 
     return (

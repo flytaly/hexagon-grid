@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Box, Divider, Drawer, IconButton, Toolbar, Tabs, Tab } from '@material-ui/core'
 import { ChevronRight, Settings, GraphicEq, ColorLens } from '@material-ui/icons'
 import { CanvasState, CanvasStateAction } from '../../canvas-state-types'
-import HexagonsSettingsBlock from './hexagons-block'
+import CellSettingsBlock from './cells-block'
 import NoiseSettingsBlock from './noise-block'
 import CanvasSizeBlock from './canvas-size-block'
 import GridBlock from './grid-block'
@@ -100,13 +100,14 @@ const SettingsPanel = ({
                         <CanvasSizeBlock canvasSize={state.canvasSize} dispatch={dispatch} />
                     )}
                     <Divider />
-                    <HexagonsSettingsBlock
-                        dispatch={dispatch}
-                        hexState={state.hex}
-                        isBigScreen={isBigScreen}
-                    />
-                    <Divider />
                     <GridBlock dispatch={dispatch} gridState={state.grid} />
+                    <Divider />
+                    <CellSettingsBlock
+                        dispatch={dispatch}
+                        cellState={state.cell}
+                        isBigScreen={isBigScreen}
+                        type={state.grid.type}
+                    />
                 </TabPanel>
                 <TabPanel value={tabIdx} index={1}>
                     <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
