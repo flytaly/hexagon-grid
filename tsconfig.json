@@ -20,6 +20,6 @@
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
-        "src/grid-generators/generate-hex-data.worker.ts"
+        "src/grid-generators/generate-data.worker.ts"
     ]
 }

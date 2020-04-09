@@ -39,14 +39,14 @@ export const initialState: CanvasState = {
         offsetX: 0,
         offsetY: 0,
         baseNoise: {
-            id: Noises2D.diagonal.id,
+            id: Noises2D.circle.id,
             // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
         noise2Strength: 0,
     },
     grid: {
-        type: 'hexagons',
+        type: 'triangles',
         sparse: 1,
         signX: 1,
         signY: 1,

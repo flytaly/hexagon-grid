@@ -29,6 +29,11 @@ export type CellSettings = {
     borderWidth: number
 }
 
+export type BaseNoise = {
+    id: keyof Noises2DFns | 'custom'
+    customFn: string | null
+}
+
 export type NoiseSettings = {
     zoom: number
     seed: number | string
@@ -37,10 +42,7 @@ export type NoiseSettings = {
     lightness: number
     offsetX: number
     offsetY: number
-    baseNoise: {
-        id: keyof Noises2DFns | 'custom'
-        customFn: string | null
-    }
+    baseNoise: BaseNoise
     noise2Strength: number
 }
 

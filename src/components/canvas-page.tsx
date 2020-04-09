@@ -4,8 +4,9 @@ import { Container, Typography } from '@material-ui/core'
 import { CanvasState, CanvasStateAction, GridType } from '../canvas-state-types'
 import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
-import Worker from '../grid-generators/generate-hex-data.worker'
+import Worker from '../grid-generators/generate-data.worker'
 import drawHexagons from '../grid-generators/draw-hexagons'
+import drawTriangles from '../grid-generators/draw-triangles'
 import Keys from './keys'
 import ExportModal from './export-modal'
 
@@ -86,7 +87,13 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         }
 
         if (canvasData.type === 'triangles') {
-            // TODO:
+            drawTriangles({
+                fillColors: canvasData.fillColors,
+                vertices: canvasData.vertices,
+                borderWidth: state.cell.borderWidth,
+                borderColor: toHslaStr(state.colors.border),
+                ctx,
+            })
         } else {
             drawHexagons({
                 fillColors: canvasData.fillColors,
