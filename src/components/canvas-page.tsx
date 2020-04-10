@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useRef, useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
@@ -5,8 +6,7 @@ import { CanvasState, CanvasStateAction, GridType } from '../canvas-state-types'
 import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../grid-generators/generate-data.worker'
-import drawHexagons from '../grid-generators/draw-hexagons'
-import drawTriangles from '../grid-generators/draw-triangles'
+import drawPolygons from '../grid-generators/draw-polygons'
 import Keys from './keys'
 import ExportModal from './export-modal'
 
@@ -86,23 +86,22 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
             ctx.restore()
         }
 
-        if (canvasData.type === 'triangles') {
-            drawTriangles({
-                fillColors: canvasData.fillColors,
-                vertices: canvasData.vertices,
-                borderWidth: state.cell.borderWidth,
-                borderColor: toHslaStr(state.colors.border),
-                ctx,
-            })
-        } else {
-            drawHexagons({
-                fillColors: canvasData.fillColors,
-                vertices: canvasData.vertices,
-                borderWidth: state.cell.borderWidth,
-                borderColor: toHslaStr(state.colors.border),
-                ctx,
-            })
+        const vertsPerPolygon = {
+            triangles: 3,
+            hexagons: 6,
+            voronoi: 0, // 'variable'
         }
+        const verticesNum = vertsPerPolygon[canvasData.type]
+
+        drawPolygons({
+            borderColor: toHslaStr(state.colors.border),
+            borderWidth: state.cell.borderWidth,
+            closePath: canvasData.type === 'hexagons',
+            ctx,
+            fillColors: canvasData.fillColors,
+            vertices: canvasData.vertices,
+            verticesNum,
+        })
     }, [canvasData, width, height, state.colors.border, state.cell.borderWidth, state])
 
     return (

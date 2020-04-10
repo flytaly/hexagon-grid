@@ -47,7 +47,7 @@ export type NoiseSettings = {
     noise2Strength: number
 }
 
-export type GridType = 'hexagons' | 'triangles'
+export type GridType = 'hexagons' | 'triangles' | 'voronoi'
 
 export type GridSettings = {
     type: GridType

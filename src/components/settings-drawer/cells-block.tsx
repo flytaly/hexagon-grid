@@ -22,6 +22,7 @@ type CellProps = {
 const cellNames: Record<GridType, string> = {
     hexagons: 'Hexagons',
     triangles: 'Triangles',
+    voronoi: 'Voronoi',
 }
 
 const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps) => {

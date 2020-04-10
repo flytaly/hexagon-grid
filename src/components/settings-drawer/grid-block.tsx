@@ -64,7 +64,7 @@ const GridSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
                         dispatchOption({ type: ev.target.value as GridType })
                     }}
                 >
-                    {(['hexagons', 'triangles'] as GridType[]).map((t) => (
+                    {(['hexagons', 'triangles', 'voronoi'] as GridType[]).map((t) => (
                         <MenuItem key={t} value={t}>
                             {t}
                         </MenuItem>

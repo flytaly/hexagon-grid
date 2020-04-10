@@ -1,7 +1,7 @@
 import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
 import { HSLColor } from 'react-color'
-import { CanvasState, PaletteColorsArray } from './canvas-state-types'
+import { CanvasState, PaletteColorsArray, GridType } from './canvas-state-types'
 
 type ParamFn = (p: string | HSLColor | PaletteColorsArray) => string
 
@@ -43,7 +43,11 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         noise2Strength: 'n2',
     },
     grid: {
-        type: (gt) => (gt === 'hexagons' ? 'gt=h' : 'gt=t'),
+        type: (gt) => {
+            if (gt === 'voronoi') return 'gt=v'
+            if (gt === 'triangles') return 'gt=t'
+            return 'gt=h'
+        },
         sparse: 'gs',
         signX: 'gx',
         signY: 'gy',
@@ -84,6 +88,13 @@ const setNumberProp = (state: CanvasState, path: string, param: string) => {
     return set(state, path, p)
 }
 
+const setGridType = (state: CanvasState, param: string) => {
+    let p: GridType = 'hexagons'
+    if (param === 't') p = 'triangles'
+    if (param === 'v') p = 'voronoi'
+    return set(state, 'grid.type', p)
+}
+
 export const mapParamToState: MapParamToState = {
     w: (p, s) => setNumberProp(s, 'canvasSize.width', p),
     h: (p, s) => setNumberProp(s, 'canvasSize.height', p),
@@ -100,7 +111,7 @@ export const mapParamToState: MapParamToState = {
     ny: (p, s) => setNumberProp(s, 'noise.offsetY', p),
     nid: (p, s) => set(s, 'noise.baseNoise.id', p), // TODO: check if exists
     n2: (p, s) => setNumberProp(s, 'noise.noise2Strength', p),
-    gt: (p, s) => set(s, 'grid.type', p === 't' ? 'triangles' : 'hexagons'),
+    gt: (p, s) => setGridType(s, p),
     gs: (p, s) => setNumberProp(s, 'grid.sparse', p),
     gx: (p, s) => setNumberProp(s, 'grid.signX', p),
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),

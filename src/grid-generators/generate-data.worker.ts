@@ -47,7 +47,7 @@ function setFillColor(
     noiseValue: number,
     noise: NoiseSettings,
     palette: PaletteColorsArray,
-    fillColors: Float32Array,
+    fillColors: Float32Array | Array<number>,
     index: number,
 ) {
     const { hue: H, saturation: S, lightness: L } = noise
@@ -133,7 +133,7 @@ function genHexData(state: CanvasState): CanvasData {
     return result
 }
 
-function genTrianglesData(state: CanvasState): CanvasData {
+function genDelaunayData(state: CanvasState, type = 'triangles' as GridType): CanvasData {
     const { width, height, aspect } = state.canvasSize
     const { zoom, baseNoise, noise2Strength } = state.noise
     const [noises, random] = getNoises(String(state.noise.seed))
@@ -156,6 +156,7 @@ function genTrianglesData(state: CanvasState): CanvasData {
         [width, height],
         [0, height],
     ]
+
     // add rest points
     for (let i = 0; i <= cellsNumW; i += 1) {
         for (let j = 0; j <= cellsNumH; j += 1) {
@@ -170,62 +171,82 @@ function genTrianglesData(state: CanvasState): CanvasData {
     }
 
     const delaunay = Delaunay.from(points)
-    const len = delaunay.triangles.length / 3
-
     const palette = state.colors.palette.colors
-
-    const vertices = new Float32Array(delaunay.triangles.length * 6)
-    const fillColors = new Float32Array(len * 4)
-
-    const result: CanvasData = { vertices, fillColors, type: 'triangles' }
-
     const noiseFn = getNoiseFn(noises, baseNoise)
 
-    if (!palette.length || !noiseFn) return result
+    if (!palette.length || !noiseFn)
+        return { vertices: new Float32Array(), fillColors: new Float32Array(), type }
 
-    for (let i = 0; i < len; i += 1) {
-        const v1 = [
-            points[delaunay.triangles[i * 3]][0], //
-            points[delaunay.triangles[i * 3]][1],
-        ]
-        const v2 = [
-            points[delaunay.triangles[i * 3 + 1]][0],
-            points[delaunay.triangles[i * 3 + 1]][1],
-        ]
-        const v3 = [
-            points[delaunay.triangles[i * 3 + 2]][0],
-            points[delaunay.triangles[i * 3 + 2]][1],
-        ]
-
-        const cx = (v1[0] + v2[0] + v3[0]) / 3
-        const cy = (v1[1] + v2[1] + v3[1]) / 3
-        const xx = (cx / cellSquareSize - cellsNumW + state.noise.offsetX) / (zoom * 2)
-        const yy = (cy / cellSquareSize - cellsNumH + state.noise.offsetY) / (zoom * 2)
-        let noiseValue = noiseFn(signX * xx, signY * yy, normalW, normalH)
-
+    const getNoiseVal = (cx: number, cy: number) => {
+        const x = (cx / cellSquareSize - cellsNumW + state.noise.offsetX) / (zoom * 2)
+        const y = (cy / cellSquareSize - cellsNumH + state.noise.offsetY) / (zoom * 2)
+        let noiseValue = noiseFn(signX * x, signY * y, normalW, normalH)
         if (noise2Strength) {
             noiseValue += random.rnd(noise2Strength)
         }
-
-        setFillColor(noiseValue, state.noise, palette, fillColors, i)
-
-        //
-        ;[vertices[i * 6], vertices[i * 6 + 1]] = v1
-        ;[vertices[i * 6 + 2], vertices[i * 6 + 3]] = v2
-        ;[vertices[i * 6 + 4], vertices[i * 6 + 5]] = v3
+        return noiseValue
     }
 
-    return result
+    // generate triangles
+    if (type === 'triangles') {
+        const len = delaunay.triangles.length / 3
+        const vertices = new Float32Array(delaunay.triangles.length * 6)
+        const fillColors = new Float32Array(len * 4)
+
+        for (let i = 0; i < len; i += 1) {
+            const v1 = [
+                points[delaunay.triangles[i * 3]][0], //
+                points[delaunay.triangles[i * 3]][1],
+            ]
+            const v2 = [
+                points[delaunay.triangles[i * 3 + 1]][0],
+                points[delaunay.triangles[i * 3 + 1]][1],
+            ]
+            const v3 = [
+                points[delaunay.triangles[i * 3 + 2]][0],
+                points[delaunay.triangles[i * 3 + 2]][1],
+            ]
+            const cx = (v1[0] + v2[0] + v3[0]) / 3
+            const cy = (v1[1] + v2[1] + v3[1]) / 3
+            setFillColor(getNoiseVal(cx, cy), state.noise, palette, fillColors, i)
+            ;[vertices[i * 6], vertices[i * 6 + 1]] = v1
+            ;[vertices[i * 6 + 2], vertices[i * 6 + 3]] = v2
+            ;[vertices[i * 6 + 4], vertices[i * 6 + 5]] = v3
+        }
+        return { vertices, fillColors, type }
+    }
+
+    // generate Voronoi
+    const voronoi = delaunay.voronoi([0, 0, width, height])
+    const vertices: Array<number> = []
+    const fillColors: Array<number> = []
+    let count = 0
+    for (const vertCoords of voronoi.cellPolygons()) {
+        vertices.push(vertCoords.length * 2)
+        const sum = [0, 0]
+        for (let i = 0; i < vertCoords.length; i += 1) {
+            sum[0] += vertCoords[i][0]
+            sum[1] += vertCoords[i][1]
+            vertices.push(vertCoords[i][0], vertCoords[i][1])
+        }
+        const cx = sum[0] / vertCoords.length
+        const cy = sum[1] / vertCoords.length
+        setFillColor(getNoiseVal(cx, cy), state.noise, palette, fillColors, count++)
+    }
+    return { vertices: new Float32Array(vertices), fillColors: new Float32Array(fillColors), type }
 }
 
 self.addEventListener('message', (event) => {
-    const { state } = event.data
+    const { state } = event.data as { state: CanvasState }
 
     let hexDrawData: CanvasData
 
     switch (state.grid.type) {
         case 'triangles':
-            hexDrawData = genTrianglesData(state)
+            hexDrawData = genDelaunayData(state, 'triangles')
+            break
+        case 'voronoi':
+            hexDrawData = genDelaunayData(state, 'voronoi')
             break
         case 'hexagons':
         default:

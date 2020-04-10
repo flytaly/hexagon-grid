@@ -32,6 +32,7 @@ module.exports = {
                 '@typescript-eslint/no-unused-expressions': 'error',
                 'import/prefer-default-export': 'off',
                 'no-console': 'off',
+                'no-plusplus': 'off',
                 'react-hooks/rules-of-hooks': 'error',
                 'react-hooks/exhaustive-deps': 'warn',
                 'react/react-in-jsx-scope': 'off',
