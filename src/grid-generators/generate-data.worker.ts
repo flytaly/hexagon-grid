@@ -159,8 +159,8 @@ function genTrianglesData(state: CanvasState): CanvasData {
     // add rest points
     for (let i = 0; i <= cellsNumW; i += 1) {
         for (let j = 0; j <= cellsNumH; j += 1) {
-            const rndW = random.rnd(30) // TODO: ADD OPTION TO CHANGE VARIANCE STRENGTH
-            const rndH = random.rnd(30)
+            const rndW = random.rnd(state.cell.variance)
+            const rndH = random.rnd(state.cell.variance)
             const x = (i + rndW) * cellW
             const y = (j + rndH) * cellH
             if (x < width + cellW && y < height + cellH) {

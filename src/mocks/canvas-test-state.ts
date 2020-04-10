@@ -8,7 +8,7 @@ export const testState: CanvasState = {
         pixelRatio: 1,
         wasMeasured: true,
     },
-    cell: { size: 5, orientation: 'flat', borderWidth: 2 },
+    cell: { size: 5, orientation: 'flat', borderWidth: 2, variance: 20 },
     noise: {
         seed: 4814090,
         zoom: 13,
@@ -44,6 +44,7 @@ export const testParamsEntries = [
     ['s', '5'],
     ['or', 'f'],
     ['b', '2'],
+    ['v', '20'],
     ['seed', '4814090'],
     ['nz', '13'],
     ['nh', '22'],

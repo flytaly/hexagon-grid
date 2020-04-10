@@ -27,7 +27,8 @@ export const initialState: CanvasState = {
     },
     cell: {
         size: 4,
-        orientation: 'pointy',
+        orientation: 'pointy', // for hexagons only
+        variance: 10,
         borderWidth: 0,
     },
     noise: {

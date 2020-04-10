@@ -3,7 +3,6 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Fab, useMediaQuery, AppBar, Toolbar, Typography } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
 import { reducer, initialState } from '../canvas-state'
@@ -31,7 +30,6 @@ const Home: NextPage = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
     const [isInitValue, setIsInitValue] = useState(true)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-    const router = useRouter()
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
 
     const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))

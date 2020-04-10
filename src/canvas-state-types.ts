@@ -27,6 +27,7 @@ export type CellSettings = {
     size: number
     orientation: 'pointy' | 'flat'
     borderWidth: number
+    variance: number
 }
 
 export type BaseNoise = {

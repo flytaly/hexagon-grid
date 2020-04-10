@@ -26,6 +26,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         size: 's',
         orientation: (or) => (or === 'pointy' ? 'or=p' : 'or=f'),
         borderWidth: 'b',
+        variance: 'v',
     },
     noise: {
         seed: 'seed',
@@ -89,6 +90,7 @@ export const mapParamToState: MapParamToState = {
     s: (p, s) => setNumberProp(s, 'cell.size', p),
     or: (p, s) => set(s, 'cell.orientation', p === 'p' ? 'pointy' : 'flat'),
     b: (p, s) => setNumberProp(s, 'cell.borderWidth', p),
+    v: (p, s) => setNumberProp(s, 'cell.variance', p),
     seed: (p, s) => setNumberProp(s, 'noise.seed', p),
     nz: (p, s) => setNumberProp(s, 'noise.zoom', p),
     nh: (p, s) => setNumberProp(s, 'noise.hue', p),

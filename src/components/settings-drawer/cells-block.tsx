@@ -27,6 +27,7 @@ const cellNames: Record<GridType, string> = {
 const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps) => {
     const [hexSize, setHexSize] = useState(cellState.size)
     const [borderWidth, setBorderWidth] = useState(cellState.borderWidth)
+    const [cellVariance, setCellVariance] = useState(cellState.variance)
     const setHexOptsThrottled = useCallback(
         throttle((payload: Partial<CellSettings>) => {
             dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
@@ -104,6 +105,46 @@ const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps
                     />
                 </Grid>
             </Grid>
+
+            {type !== 'hexagons' ? (
+                <>
+                    <Typography id="cell-variance" gutterBottom>
+                        Cell variance
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={9}>
+                            <Slider
+                                value={cellVariance}
+                                aria-labelledby="cell-variance"
+                                min={0}
+                                max={100}
+                                onChange={(e, val) => setCellVariance(Number(val))}
+                                onChangeCommitted={(e, val) =>
+                                    dispatchOption({ variance: Number(val) })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Input
+                                value={cellVariance}
+                                onChange={(event) => {
+                                    const value = Number(event.target.value)
+                                    setCellVariance(value)
+                                    dispatchOption({ variance: value })
+                                }}
+                                margin="none"
+                                inputProps={{
+                                    step: 1,
+                                    min: 0,
+                                    max: 100,
+                                    type: 'number',
+                                    'aria-labelledby': 'cell-variance',
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                </>
+            ) : null}
 
             {type === 'hexagons' ? (
                 <>
