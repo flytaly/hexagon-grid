@@ -29,7 +29,7 @@ export const initialState: CanvasState = {
         size: 4,
         orientation: 'pointy', // for hexagons only
         variance: 10,
-        borderWidth: 0,
+        borderWidth: 1,
     },
     noise: {
         seed: genSeed(),
@@ -40,7 +40,7 @@ export const initialState: CanvasState = {
         offsetX: 0,
         offsetY: 0,
         baseNoise: {
-            id: Noises2D.circle.id,
+            id: Noises2D.diagonal1.id,
             // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
@@ -53,7 +53,7 @@ export const initialState: CanvasState = {
         signY: 1,
     },
     colors: {
-        border: { h: 0, s: 0, l: 1, a: 1 },
+        border: { h: 0, s: 0, l: 1, a: 0.1 },
         background: null,
         palette: {
             isCustom: false,
@@ -71,8 +71,17 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             canvasSize.aspect = canvasSize.width / canvasSize.height
             return { ...state, canvasSize }
         }
-        case ActionTypes.SET_CELL_OPTIONS:
+        case ActionTypes.SET_CELL_OPTIONS: {
+            const keys = Object.keys(action.payload)
+            if (
+                keys.length === 1 &&
+                keys[0] === 'size' &&
+                action.payload.size === state.cell.size
+            ) {
+                return state
+            }
             return { ...state, cell: { ...state.cell, ...action.payload } }
+        }
         case ActionTypes.SET_GRID_OPTIONS:
             return { ...state, grid: { ...state.grid, ...action.payload } }
         case ActionTypes.SET_NOISE_OPTIONS:
