@@ -19,6 +19,7 @@ export const testState: CanvasState = {
         offsetY: 10,
         baseNoise: { id: 'sin', customFn: 'sin(x*2) + y*2' },
         noise2Strength: 3,
+        imageDataString: '',
     },
     grid: { type: 'triangles', sparse: 2, signX: -1, signY: -1 },
     colors: {
