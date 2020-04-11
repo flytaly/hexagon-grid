@@ -29,7 +29,7 @@ const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps
     const [hexSize, setHexSize] = useState(cellState.size)
     const [borderWidth, setBorderWidth] = useState(cellState.borderWidth)
     const [cellVariance, setCellVariance] = useState(cellState.variance)
-    const setHexOptsThrottled = useCallback(
+    const setCellOptsThrottled = useCallback(
         throttle((payload: Partial<CellSettings>) => {
             dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
         }, 100),
@@ -58,17 +58,17 @@ const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps
                 getAriaValueText={(value) => `${value}%`}
                 step={0.5}
                 marks
-                min={1}
+                min={2}
                 max={20}
                 valueLabelDisplay="auto"
                 onChange={(e, size) => {
                     if (Array.isArray(size)) return
                     setHexSize(size)
-                    if (isBigScreen) setHexOptsThrottled({ size })
+                    if (isBigScreen) setCellOptsThrottled({ size })
                 }}
                 onChangeCommitted={(e, size) => {
                     if (!isBigScreen && !Array.isArray(size))
-                        setHexOptsThrottled({
+                        setCellOptsThrottled({
                             size,
                         })
                 }}

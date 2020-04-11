@@ -26,13 +26,13 @@ export type NoisesRnd = {
 }
 
 export type NoiseInfo = {
-    id: keyof Noises2DFns | 'custom'
+    id: keyof Noises2DFns | 'custom' | 'image'
     name: string
 }
 
 // type NoisesInfoObj = Partial<Record<keyof Noises2D, NoiseInfo>>
 export type NoisesInfoObj = {
-    [key in keyof Noises2DFns | 'custom']: NoiseInfo
+    [key in keyof Noises2DFns | 'custom' | 'image']: NoiseInfo
 }
 
 export const Noises2D: NoisesInfoObj = {
@@ -79,6 +79,10 @@ export const Noises2D: NoisesInfoObj = {
     custom: {
         id: 'custom',
         name: 'Custom function',
+    },
+    image: {
+        id: 'image',
+        name: 'Image',
     },
 }
 

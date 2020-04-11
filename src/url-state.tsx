@@ -41,6 +41,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
             customFn: null,
         },
         noise2Strength: 'n2',
+        imageDataString: null,
     },
     grid: {
         type: (gt) => {

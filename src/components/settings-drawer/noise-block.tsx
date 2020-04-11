@@ -120,6 +120,31 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                 </Box>
             ) : null}
 
+            {noiseState.baseNoise.id === 'image' ? (
+                <Box display="flex" flexDirection="column" mb={2}>
+                    <Typography gutterBottom>Load image</Typography>
+                    <input
+                        type="file"
+                        onChange={(e) => {
+                            let reader
+                            const input = e.target
+
+                            if (input.files && input.files[0]) {
+                                reader = new FileReader()
+
+                                reader.onload = (ev) => {
+                                    dispatchOption({
+                                        imageDataString: ev?.target?.result as string,
+                                    })
+                                }
+
+                                reader.readAsDataURL(input.files[0])
+                            }
+                        }}
+                    />
+                </Box>
+            ) : null}
+
             <Typography id="random-noise" gutterBottom>
                 Second noise strength (0 = disable)
             </Typography>

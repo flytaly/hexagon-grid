@@ -31,7 +31,7 @@ export type CellSettings = {
 }
 
 export type BaseNoise = {
-    id: keyof Noises2DFns | 'custom'
+    id: keyof Noises2DFns | 'custom' | 'image'
     customFn: string | null
 }
 
@@ -45,6 +45,7 @@ export type NoiseSettings = {
     offsetY: number
     baseNoise: BaseNoise
     noise2Strength: number
+    imageDataString: string | null
 }
 
 export type GridType = 'hexagons' | 'triangles' | 'voronoi'

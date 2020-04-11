@@ -45,6 +45,7 @@ export const initialState: CanvasState = {
             customFn: 'sin(x*2) + y*2',
         },
         noise2Strength: 0,
+        imageDataString: '',
     },
     grid: {
         type: 'triangles',

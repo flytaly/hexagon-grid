@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useRef, useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
@@ -6,9 +5,11 @@ import { CanvasState, CanvasStateAction, GridType } from '../canvas-state-types'
 import { toHslaStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../grid-generators/generate-data.worker'
+import { getGridCellSizes, getHexCellSize } from '../grid-generators/get-sizes'
 import drawPolygons from '../grid-generators/draw-polygons'
 import Keys from './keys'
 import ExportModal from './export-modal'
+import { drawImageProp } from '../draw-image'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,21 +46,50 @@ type CanvasData = {
 }
 
 const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
-    const { width, height, aspect } = state.canvasSize
+    const { width, height } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
-    const [genHexWorker, setGenHexWorker] = useState<Worker | null>(null)
+    const [genGridWorker, setGenGridWorker] = useState<Worker | null>(null)
     const [canvasData, setCanvData] = useState<CanvasData>({
         vertices: [],
         fillColors: [],
         type: state.grid.type,
     })
     const [exportModalOpen, setExportModalOpen] = useState<boolean>(false)
+    const [imgData, setImgData] = useState<Uint8ClampedArray | null>(null)
     const classes = useStyles()
+
+    useEffect(() => {
+        if (state.noise.imageDataString && state.noise.baseNoise.id === 'image') {
+            const { cellsNumW, cellsNumH } =
+                state.grid.type === 'hexagons'
+                    ? getHexCellSize(state.cell, state.canvasSize, state.grid)
+                    : getGridCellSizes(state.cell.size, state.canvasSize)
+
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            canvas.width = cellsNumW
+            canvas.height = cellsNumH
+            const img = new Image()
+            img.src = state.noise.imageDataString
+            img.onload = () => {
+                if (!ctx) return
+                drawImageProp(ctx, img)
+                setImgData(ctx.getImageData(0, 0, cellsNumW, cellsNumH).data)
+            }
+            document.body.appendChild(canvas)
+        }
+    }, [
+        state.canvasSize,
+        state.cell,
+        state.grid,
+        state.noise.baseNoise.id,
+        state.noise.imageDataString,
+    ])
 
     useEffect(() => {
         const worker = new Worker()
 
-        setGenHexWorker(worker)
+        setGenGridWorker(worker)
 
         worker.addEventListener('message', ({ data }: { data: CanvasData }) => {
             setCanvData(data)
@@ -72,8 +102,10 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     useEffect(() => {
         const context = refCanv.current?.getContext('2d')
         if (!context || !state.canvasSize.wasMeasured) return
-        genHexWorker?.postMessage({ state })
-    }, [aspect, height, width, state, genHexWorker])
+        if (state.noise.baseNoise.id !== 'image') {
+            genGridWorker?.postMessage({ state, imgData })
+        }
+    }, [state, genGridWorker, imgData])
 
     useEffect(() => {
         const ctx = refCanv.current?.getContext('2d')
