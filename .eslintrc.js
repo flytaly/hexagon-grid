@@ -14,6 +14,11 @@ module.exports = {
         jest: true,
     },
     globals: {},
+    settings: {
+        react: {
+            version: 'detect',
+        },
+    },
     overrides: [
         {
             files: ['**/*.ts', '**/*.tsx'],
