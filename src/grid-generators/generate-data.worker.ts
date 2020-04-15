@@ -123,8 +123,8 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
         }
 
         if (isImg) {
-            const col = clamp(Math.round(hexagon.x), 0, sizes.cellsNumW)
-            const row = clamp(Math.round(hexagon.y), 0, sizes.cellsNumH)
+            const col = clamp(Math.ceil(hexagon.x), 0, sizes.cellsNumW)
+            const row = clamp(Math.ceil(hexagon.y), 0, sizes.cellsNumH)
 
             setFillColorFromImg(
                 row * sizes.cellsNumW + col,
@@ -162,13 +162,17 @@ function genDelaunayData(
         state.canvasSize,
     )
 
-    // add bounding points
-    const points = [
-        [0, 0],
-        [width, 0],
-        [width, height],
-        [0, height],
-    ]
+    // Add bounding points if variance isn't 0. If variance == 0 it means
+    // the grid's cells are square and adding bounding points is not only
+    // unnecessary but also adds distortion
+    const points = state.cell.variance
+        ? [
+              [0, 0],
+              [width, 0],
+              [width, height],
+              [0, height],
+          ]
+        : []
 
     // add rest points
     for (let i = 0; i <= cellsNumW; i += 1) {
@@ -222,8 +226,8 @@ function genDelaunayData(
             const cy = (v1[1] + v2[1] + v3[1]) / 3
 
             if (isImg) {
-                const col = clamp(Math.round(cx / cellSize), 0, cellsNumW)
-                const row = clamp(Math.round(cy / cellSize), 0, cellsNumH)
+                const col = clamp(Math.floor(cx / cellSize), 0, cellsNumW)
+                const row = clamp(Math.floor(cy / cellSize), 0, cellsNumH)
 
                 setFillColorFromImg(
                     row * cellsNumW + col,
@@ -243,7 +247,7 @@ function genDelaunayData(
     }
 
     // generate Voronoi
-    const voronoi = delaunay.voronoi([0, 0, width, height])
+    const voronoi = delaunay.voronoi([0, 0, width + cellSize, height + cellSize])
     const vertices: Array<number> = []
     const fillColors: Array<number> = []
     let count = 0
@@ -259,8 +263,8 @@ function genDelaunayData(
         const cy = sum[1] / vertCoords.length
 
         if (isImg) {
-            const col = clamp(Math.round(cx / cellSize), 0, cellsNumW)
-            const row = clamp(Math.round(cy / cellSize), 0, cellsNumH)
+            const col = clamp(Math.floor(cx / cellSize), 0, cellsNumW)
+            const row = clamp(Math.floor(cy / cellSize), 0, cellsNumH)
 
             setFillColorFromImg(
                 row * cellsNumW + col,

@@ -7,8 +7,8 @@ export function getGridCellSizes(size: number, canvasSize: CanvasSize) {
         aspect < 1 //
             ? (size * height * aspect) / 100
             : (size * width) / aspect / 100
-    const cellsNumW = Math.round(width / cellSize)
-    const cellsNumH = Math.round(height / cellSize)
+    const cellsNumW = Math.ceil(width / cellSize)
+    const cellsNumH = Math.ceil(height / cellSize)
 
     return {
         cellSize,
