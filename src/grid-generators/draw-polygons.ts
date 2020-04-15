@@ -41,12 +41,16 @@ export default function drawPolygons({
             }
 
             ctx.fill()
+
+            closePath && ctx.closePath()
             if (borderWidth) {
                 ctx.strokeStyle = borderColor
                 ctx.lineWidth = borderWidth
-                closePath && ctx.closePath()
-                ctx.stroke()
+            } else {
+                ctx.strokeStyle = fillColor
+                ctx.lineWidth = 1
             }
+            ctx.stroke()
         }
 
         vertIdx += coordsNum
