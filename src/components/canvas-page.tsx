@@ -105,6 +105,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
             fillColors: canvasData.fillColors,
             vertices: canvasData.vertices,
             verticesNum,
+            onlyBorder: !!state.colors.noFill,
         })
     }, [
         canvasData,

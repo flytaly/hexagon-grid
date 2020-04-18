@@ -56,6 +56,7 @@ export const initialState: CanvasState = {
     colors: {
         border: { h: 0, s: 0, l: 1, a: 0.1 },
         background: null,
+        noFill: false,
         palette: {
             isCustom: false,
             id: defaultPalettes[1].id,

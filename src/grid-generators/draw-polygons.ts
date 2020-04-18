@@ -8,6 +8,7 @@ interface DrawPolygonsProperties {
     fillColors: Float32Array | number[]
     vertices: Float32Array | number[]
     verticesNum: number // vertices per polygon (0 = variable)
+    onlyBorder?: boolean
 }
 
 export default function drawPolygons({
@@ -18,6 +19,7 @@ export default function drawPolygons({
     fillColors,
     vertices,
     verticesNum,
+    onlyBorder = false,
 }: DrawPolygonsProperties) {
     const c = fillColors
     const v = vertices
@@ -40,10 +42,15 @@ export default function drawPolygons({
                 ctx.lineTo(v[vertIdx + i], v[vertIdx + i + 1])
             }
 
-            ctx.fill()
+            if (!onlyBorder) {
+                ctx.fill()
+            }
 
             closePath && ctx.closePath()
-            if (borderWidth) {
+            if (onlyBorder) {
+                ctx.strokeStyle = fillColor
+                ctx.lineWidth = Math.max(1, borderWidth)
+            } else if (borderWidth) {
                 ctx.strokeStyle = borderColor
                 ctx.lineWidth = borderWidth
             } else {

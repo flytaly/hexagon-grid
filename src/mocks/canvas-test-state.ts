@@ -25,6 +25,7 @@ export const testState: CanvasState = {
     colors: {
         border: { h: 10, s: 0.3, l: 1, a: 0.4 },
         background: null,
+        noFill: false,
         palette: {
             isCustom: true,
             id: 0,

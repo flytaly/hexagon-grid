@@ -1,6 +1,17 @@
 import React, { useState, useMemo } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Box, Button, IconButton, Grid, Typography, Popover, Divider } from '@material-ui/core'
+import {
+    Box,
+    Button,
+    IconButton,
+    Grid,
+    Typography,
+    Popover,
+    Divider,
+    FormGroup,
+    FormControlLabel,
+    Switch,
+} from '@material-ui/core'
 import { SketchPicker, HSLColor, ColorResult } from 'react-color'
 import { CheckCircleRounded } from '@material-ui/icons'
 import { makePaletteColors } from '../../canvas-state'
@@ -61,30 +72,36 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
         [colorState.palette.colors],
     )
 
+    const handleNoFillChange = () => {
+        dispatch({ type: ActionTypes.SET_COLOR_OPTIONS, payload: { noFill: !colorState.noFill } })
+    }
+
     return (
         <>
             <Box component="form" m={2}>
                 <Typography component="div" gutterBottom>
                     <Box fontWeight="fontWeightBold">Colors</Box>
                 </Typography>
-                <Grid container spacing={2}>
-                    <Grid item xs={9}>
-                        <Typography>Cell border</Typography>
+                {colorState.noFill ? null : (
+                    <Grid container spacing={2}>
+                        <Grid item xs={9}>
+                            <Typography>Cell border</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <ColorButton
+                                onClick={(e) => setBordAnchorEl(e.currentTarget)}
+                                aria-label="Hexagon border color"
+                                size="small"
+                                disableRipple
+                                style={{
+                                    background: border.a ? toHslaStr(border) : checkered,
+                                }}
+                            >
+                                <div />
+                            </ColorButton>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={3}>
-                        <ColorButton
-                            onClick={(e) => setBordAnchorEl(e.currentTarget)}
-                            aria-label="Hexagon border color"
-                            size="small"
-                            disableRipple
-                            style={{
-                                background: border.a ? toHslaStr(border) : checkered,
-                            }}
-                        >
-                            <div />
-                        </ColorButton>
-                    </Grid>
-                </Grid>
+                )}
                 <Popover
                     id="border-color-picker"
                     open={Boolean(bordAnchorEl)}
@@ -146,6 +163,19 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         }
                     />
                 </Popover>
+                <FormGroup row style={{ margin: 0 }}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={Boolean(colorState.noFill)}
+                                onChange={handleNoFillChange}
+                                color="primary"
+                            />
+                        }
+                        label="fill only borders"
+                        title="Don't fill cell's body"
+                    />
+                </FormGroup>
             </Box>
             <Box component="form" m={2}>
                 <Typography component="div" gutterBottom>

@@ -26,6 +26,15 @@ describe('state to url', () => {
     test('should return string with URL params', () => {
         expect(mapStateToUrlParams(testState)).toBe(testParamsQuery)
     })
+
+    test('should not contain falsy boolean values', () => {
+        const initValue = testState.colors.noFill
+        testState.colors.noFill = true
+        expect(mapStateToUrlParams(testState)).toMatch(/.*nf=y;.*/)
+        testState.colors.noFill = false
+        expect(mapStateToUrlParams(testState)).not.toMatch(/.*nf=.*/)
+        testState.colors.noFill = initValue
+    })
 })
 
 describe('params to state', () => {

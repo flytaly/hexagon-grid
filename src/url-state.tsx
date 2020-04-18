@@ -56,6 +56,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
     colors: {
         border: (c) => `cb=${hslaToString(c as HSLColor)}`,
         background: 'cbg',
+        noFill: (noFill) => (noFill ? 'nf=y' : ''),
         palette: {
             isCustom: null,
             id: null,
@@ -117,6 +118,7 @@ export const mapParamToState: MapParamToState = {
     gx: (p, s) => setNumberProp(s, 'grid.signX', p),
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),
     cb: (p, s) => set(s, 'colors.border', paramToHSL(p)),
+    nf: (p, s) => set(s, 'colors.noFill', p === 'y' || false),
     cbg: (p, s) => set(s, 'colors.background', paramToHSL(p)),
     pal: (p, s) => set(s, 'colors.palette.colors', paramToPalette(p)),
 }
@@ -130,7 +132,8 @@ export function mapStateToUrlParams(state: CanvasState): string {
 
             if (ids[key] instanceof Function) {
                 const fn = ids[key] as ParamFn
-                return `${acc}${fn(value as string | HSLColor | PaletteColorsArray)};`
+                const keyValuePair = fn(value as string | HSLColor | PaletteColorsArray)
+                return keyValuePair ? `${acc}${keyValuePair};` : acc
             }
 
             if (typeof value === 'object' && value !== null) {

@@ -62,6 +62,7 @@ export type PaletteColorsArray = Array<{ hsl: HSLColor; id: string | number }>
 export type ColorsSettings = {
     border: HSLColor
     background: HSLColor | null
+    noFill: boolean | null
     palette: {
         isCustom: boolean
         id: PaletteId | string | number
