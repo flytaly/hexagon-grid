@@ -75,6 +75,12 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const handleNoFillChange = () => {
         dispatch({ type: ActionTypes.SET_COLOR_OPTIONS, payload: { noFill: !colorState.noFill } })
     }
+    const handleIsGradientChange = () => {
+        dispatch({
+            type: ActionTypes.SET_COLOR_OPTIONS,
+            payload: { isGradient: !colorState.isGradient },
+        })
+    }
 
     return (
         <>
@@ -163,7 +169,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         }
                     />
                 </Popover>
-                <FormGroup row style={{ margin: 0 }}>
+                <FormGroup row>
                     <FormControlLabel
                         control={
                             <Switch
@@ -174,6 +180,19 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         }
                         label="fill only borders"
                         title="Don't fill cell's body"
+                    />
+                </FormGroup>
+                <FormGroup row>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={colorState.isGradient}
+                                onChange={handleIsGradientChange}
+                                color="primary"
+                            />
+                        }
+                        label="gradient"
+                        title="Make smooth gradient between colors"
                     />
                 </FormGroup>
             </Box>

@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-globals */
 import { Delaunay } from 'd3-delaunay'
-
+import chroma from 'chroma-js'
 import * as Honeycomb from 'honeycomb-grid'
 import { Parser } from 'expr-eval'
+import { HSLColor } from 'react-color'
 import {
     CanvasState,
     GridType,
@@ -26,6 +27,9 @@ type CanvasData = {
     type: GridType
 }
 
+/** n - number ∈ [0,1] */
+type GetColorFromRange = (n: number) => HSLColor
+
 function getNoiseFn(noises: Noises2DFns, baseNoise: BaseNoise) {
     let noiseFn: NoiseFn | undefined
 
@@ -47,17 +51,38 @@ function getNoiseFn(noises: Noises2DFns, baseNoise: BaseNoise) {
     return noiseFn
 }
 
+function getColorPickerFn(palette: PaletteColorsArray, isGradient = true): GetColorFromRange {
+    if (!isGradient) {
+        return (n: number) => {
+            const colorId = clamp(Math.round(n * (palette.length - 1)), 0, palette.length - 1)
+            return palette[colorId].hsl
+        }
+    }
+
+    const fn = chroma
+        .scale(palette.map(({ hsl }) => chroma.hsl(hsl.h, hsl.s, hsl.l).alpha(hsl.a || 0)))
+        .mode('lrgb')
+
+    return (n: number) => {
+        const color = fn(n)
+
+        const [h, s, l] = color.hsl()
+        // h could be NaN if color is grey
+        return { h: h || 0, s, l, a: color.alpha() }
+    }
+}
+
 function setFillColor(
     noiseValue: number,
     noise: NoiseSettings,
-    palette: PaletteColorsArray,
+    getColor: GetColorFromRange,
     fillColors: Float32Array | Array<number>,
     index: number,
 ) {
     const { hue: H, saturation: S, lightness: L } = noise
 
-    const colorId = Math.floor(clamp((noiseValue + 1) / 2, 0, 0.999999) * palette.length)
-    const { h, s, l, a } = palette[colorId].hsl
+    const colorId = clamp((noiseValue + 1) / 2, 0, 1)
+    const { h, s, l, a } = getColor(colorId)
 
     fillColors[index * 4] = h + H * noiseValue // hue
     fillColors[index * 4 + 1] = s * 100 + S * noiseValue // saturation
@@ -111,6 +136,8 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
     const noiseFn = getNoiseFn(noises, baseNoise)
     if (!palette.length || !noiseFn) return result
 
+    const getColor = getColorPickerFn(palette, state.colors.isGradient)
+
     grid.forEach((hexagon, idx) => {
         const [xx, yy] = [
             (hexagon.x - (sparse * sizes.cellsNumW) / 2 + state.noise.offsetX + 1) / zoom,
@@ -133,7 +160,7 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
                 idx,
             )
         } else {
-            setFillColor(noiseValue, state.noise, palette, fillColors, idx)
+            setFillColor(noiseValue, state.noise, getColor, fillColors, idx)
         }
 
         const point = hexagon.toPoint()
@@ -194,6 +221,8 @@ function genDelaunayData(
     if (!palette.length || !noiseFn)
         return { vertices: new Float32Array(), fillColors: new Float32Array(), type }
 
+    const getColor = getColorPickerFn(palette, state.colors.isGradient)
+
     const getNoiseVal = (cx: number, cy: number) => {
         const x = (cx / cellSize - cellsNumW / 2 + state.noise.offsetX) / (zoom * 2)
         const y = (cy / cellSize - cellsNumH / 2 + state.noise.offsetY) / (zoom * 2)
@@ -236,7 +265,7 @@ function genDelaunayData(
                     i,
                 )
             } else {
-                setFillColor(getNoiseVal(cx, cy), state.noise, palette, fillColors, i)
+                setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, i)
             }
 
             ;[vertices[i * 6], vertices[i * 6 + 1]] = v1
@@ -273,7 +302,7 @@ function genDelaunayData(
                 count++,
             )
         } else {
-            setFillColor(getNoiseVal(cx, cy), state.noise, palette, fillColors, count++)
+            setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, count++)
         }
     }
     return { vertices: new Float32Array(vertices), fillColors: new Float32Array(fillColors), type }

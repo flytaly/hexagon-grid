@@ -63,6 +63,7 @@ export type ColorsSettings = {
     border: HSLColor
     background: HSLColor | null
     noFill: boolean | null
+    isGradient: boolean
     palette: {
         isCustom: boolean
         id: PaletteId | string | number

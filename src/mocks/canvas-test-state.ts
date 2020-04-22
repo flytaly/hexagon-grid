@@ -26,6 +26,7 @@ export const testState: CanvasState = {
         border: { h: 10, s: 0.3, l: 1, a: 0.4 },
         background: null,
         noFill: false,
+        isGradient: true,
         palette: {
             isCustom: true,
             id: 0,
@@ -61,7 +62,7 @@ export const testParamsEntries = [
     ['gx', '-1'],
     ['gy', '-1'],
     ['cb', '10,30,100,40'],
-    // ['cbg', ''],
+    ['gr', 'y'],
     ['pal', '202,94,61:200,89,60:196,84,60,88:178,68,57'],
 ]
 

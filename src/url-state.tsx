@@ -57,6 +57,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         border: (c) => `cb=${hslaToString(c as HSLColor)}`,
         background: 'cbg',
         noFill: (noFill) => (noFill ? 'nf=y' : ''),
+        isGradient: (isGradient) => (isGradient ? 'gr=y' : ''),
         palette: {
             isCustom: null,
             id: null,
@@ -119,6 +120,7 @@ export const mapParamToState: MapParamToState = {
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),
     cb: (p, s) => set(s, 'colors.border', paramToHSL(p)),
     nf: (p, s) => set(s, 'colors.noFill', p === 'y' || false),
+    gr: (p, s) => set(s, 'colors.isGradient', p === 'y' || false),
     cbg: (p, s) => set(s, 'colors.background', paramToHSL(p)),
     pal: (p, s) => set(s, 'colors.palette.colors', paramToPalette(p)),
 }

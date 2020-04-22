@@ -40,7 +40,7 @@ export const initialState: CanvasState = {
         offsetX: 0,
         offsetY: 0,
         baseNoise: {
-            id: Noises2D.diagonal1.id,
+            id: Noises2D.diagonal.id,
             // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
@@ -57,6 +57,7 @@ export const initialState: CanvasState = {
         border: { h: 0, s: 0, l: 1, a: 0.1 },
         background: null,
         noFill: false,
+        isGradient: false,
         palette: {
             isCustom: false,
             id: defaultPalettes[1].id,
