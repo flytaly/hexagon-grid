@@ -54,7 +54,7 @@ function getNoiseFn(noises: Noises2DFns, baseNoise: BaseNoise) {
 function getColorPickerFn(palette: PaletteColorsArray, isGradient = true): GetColorFromRange {
     if (!isGradient) {
         return (n: number) => {
-            const colorId = clamp(Math.round(n * (palette.length - 1)), 0, palette.length - 1)
+            const colorId = clamp(Math.floor(n * 0.999999 * palette.length), 0, palette.length - 1)
             return palette[colorId].hsl
         }
     }

@@ -14,6 +14,9 @@ import {
 import { SwapHoriz, SwapVert } from '@material-ui/icons'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { CanvasStateAction, ActionTypes, GridSettings, GridType } from '../../canvas-state-types'
+import HexIcon from '../../../assets/hex-grid.svg'
+import TriangleIcon from '../../../assets/triangle.svg'
+import VoronoiIcon from '../../../assets/voronoi.svg'
 
 type GridSettingsProps = {
     gridState: GridSettings
@@ -28,6 +31,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         selectEmpty: {
             marginTop: theme.spacing(2),
+        },
+        icon: {
+            height: '1em',
         },
     }),
 )
@@ -46,6 +52,7 @@ const GridSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
         dispatchOption({ sparse: value })
     }
 
+    const setGridType = (type: GridType) => dispatchOption({ type })
     const swapXAxis = () => dispatchOption({ signX: signX === 1 ? -1 : 1 })
     const swapYAxis = () => dispatchOption({ signY: signY === 1 ? -1 : 1 })
 
@@ -54,24 +61,67 @@ const GridSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
             <Typography component="div" gutterBottom>
                 <Box fontWeight="fontWeightBold">Grid settings</Box>
             </Typography>
-
-            <FormControl className={classes.formControl}>
-                <InputLabel id="grid-type-label">Grid cells</InputLabel>
-                <Select
-                    labelId="grid-type-label"
-                    value={gridState.type}
-                    onChange={(ev) => {
-                        dispatchOption({ type: ev.target.value as GridType })
-                    }}
-                >
-                    {(['hexagons', 'triangles', 'voronoi'] as GridType[]).map((t) => (
-                        <MenuItem key={t} value={t}>
-                            {t}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-
+            <Grid container spacing={2} alignItems="center">
+                <Grid item>
+                    <Typography>Mirror axes</Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={signX === -1 ? 'primary' : undefined}
+                        onClick={swapXAxis}
+                        aria-label="Mirror horizontal axis"
+                    >
+                        <SwapHoriz />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={signY === -1 ? 'primary' : undefined}
+                        onClick={swapYAxis}
+                        aria-label="Mirror vertical axis"
+                    >
+                        <SwapVert />
+                    </IconButton>
+                </Grid>
+            </Grid>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item>
+                    <Typography>Grid cells</Typography>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={gridState.type === 'hexagons' ? 'primary' : undefined}
+                        onClick={() => {
+                            setGridType('hexagons')
+                        }}
+                        aria-label="Hexagon grid"
+                    >
+                        <HexIcon className={classes.icon} title="hexagons" />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={gridState.type === 'triangles' ? 'primary' : undefined}
+                        onClick={() => {
+                            setGridType('triangles')
+                        }}
+                        aria-label="Triangle grid"
+                    >
+                        <TriangleIcon className={classes.icon} title="triangles" />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={gridState.type === 'voronoi' ? 'primary' : undefined}
+                        onClick={() => {
+                            setGridType('voronoi')
+                        }}
+                        aria-label="Voronoi grid"
+                    >
+                        <VoronoiIcon className={classes.icon} title="Voronoi" />
+                    </IconButton>
+                </Grid>
+            </Grid>
             {gridState.type === 'hexagons' ? (
                 <>
                     <Typography id="sparce-factor" gutterBottom>
@@ -108,29 +158,6 @@ const GridSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
                     </Grid>
                 </>
             ) : null}
-            <Grid container spacing={2} alignItems="center">
-                <Grid item>
-                    <Typography>Mirror axes</Typography>
-                </Grid>
-                <Grid item>
-                    <IconButton
-                        color={signX === -1 ? 'primary' : undefined}
-                        onClick={swapXAxis}
-                        aria-label="Mirror horizontal axis"
-                    >
-                        <SwapHoriz />
-                    </IconButton>
-                </Grid>
-                <Grid item>
-                    <IconButton
-                        color={signY === -1 ? 'primary' : undefined}
-                        onClick={swapYAxis}
-                        aria-label="Mirror vertical axis"
-                    >
-                        <SwapVert />
-                    </IconButton>
-                </Grid>
-            </Grid>
         </Box>
     )
 }
