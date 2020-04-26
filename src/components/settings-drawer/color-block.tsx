@@ -85,12 +85,12 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
 
     const getGradientBg = (p: SavedColorPalette) => {
         const st: CSSProperties = {}
-        if (!colorState.isGradient) {
-            st.background = `linear-gradient(to right, ${p.gradient}), ${checkered}`
+        if (p.colors.length > 1) {
+            const grad = !colorState.isGradient ? p.gradient : p.colors.map((c) => toHslaStr(c))
+            st.background = `linear-gradient(to right, ${grad}), ${checkered}`
         } else {
-            st.background = `linear-gradient(to right, ${p.colors.map((c) =>
-                toHslaStr(c),
-            )}), ${checkered}`
+            st.background = checkered
+            st.backgroundColor = toHslaStr(p.colors[0])
         }
         if (colorState.palette.id === p.id) st.border = '2px solid black'
         return st
