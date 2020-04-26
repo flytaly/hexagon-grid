@@ -1,16 +1,5 @@
 import React, { useState } from 'react'
-import {
-    Box,
-    FormControl,
-    Grid,
-    IconButton,
-    Input,
-    InputLabel,
-    MenuItem,
-    Select,
-    Slider,
-    Typography,
-} from '@material-ui/core'
+import { Box, Grid, IconButton, Input, Slider, Typography } from '@material-ui/core'
 import { SwapHoriz, SwapVert } from '@material-ui/icons'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { CanvasStateAction, ActionTypes, GridSettings, GridType } from '../../canvas-state-types'
@@ -28,9 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
         formControl: {
             margin: theme.spacing(2, 0),
             minWidth: '150px',
-        },
-        selectEmpty: {
-            marginTop: theme.spacing(2),
         },
         icon: {
             height: '1em',

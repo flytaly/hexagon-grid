@@ -197,8 +197,8 @@ export const fillGradient = (palette: SavedColorPalette) => {
         let result = acc + toHslaStr(color)
 
         const step = 100 / length
-        if (idx > 0) result += ` ${step * idx}%` // left
-        if (idx < length - 1) result += ` ${step * (idx + 1)}%,` // right
+        if (idx > 0) result += ` ${Math.round(step * idx)}%` // left
+        if (idx < length - 1) result += ` ${Math.round(step * (idx + 1))}%,` // right
 
         return result
     }, '')

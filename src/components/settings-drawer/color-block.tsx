@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, CSSProperties } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import {
     Box,
@@ -17,7 +17,7 @@ import { CheckCircleRounded } from '@material-ui/icons'
 import { makePaletteColors } from '../../canvas-state'
 import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state-types'
 import { toHslaStr } from '../../helpers'
-import { defaultPalettes } from '../../palettes'
+import { defaultPalettes, SavedColorPalette } from '../../palettes'
 import { checkered } from '../../background'
 import CustomPaletteMaker from './add-custom-palette'
 
@@ -75,11 +75,40 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const handleNoFillChange = () => {
         dispatch({ type: ActionTypes.SET_COLOR_OPTIONS, payload: { noFill: !colorState.noFill } })
     }
+
     const handleIsGradientChange = () => {
         dispatch({
             type: ActionTypes.SET_COLOR_OPTIONS,
             payload: { isGradient: !colorState.isGradient },
         })
+    }
+
+    const getGradientBg = (p: SavedColorPalette) => {
+        const st: CSSProperties = {}
+        if (!colorState.isGradient) {
+            st.background = `linear-gradient(to right, ${p.gradient}), ${checkered}`
+        } else {
+            st.background = `linear-gradient(to right, ${p.colors.map((c) =>
+                toHslaStr(c),
+            )}), ${checkered}`
+        }
+        if (colorState.palette.id === p.id) st.border = '2px solid black'
+        return st
+    }
+
+    const paletteBtnClick = (p: SavedColorPalette) => {
+        dispatch({
+            type: ActionTypes.SET_COLOR_OPTIONS,
+            payload: {
+                palette: {
+                    isCustom: false,
+                    id: p.id,
+                    colors: makePaletteColors(p.colors, p.id),
+                },
+                ...(p.setBackground && { background: p.setBackground }),
+            },
+        })
+        if (p.setBackground) setBgColor(p.setBackground)
     }
 
     return (
@@ -232,22 +261,8 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         key={p.id}
                         aria-label={`custom palette ${p.id}`}
                         disableRipple
-                        onClick={() => {
-                            dispatch({
-                                type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: {
-                                    palette: {
-                                        isCustom: true,
-                                        id: p.id,
-                                        colors: makePaletteColors(p.colors, p.id),
-                                    },
-                                },
-                            })
-                        }}
-                        style={{
-                            background: `linear-gradient(to right, ${p.gradient}), ${checkered}`,
-                            ...(colorState.palette.id === p.id && { border: '2px solid black' }),
-                        }}
+                        onClick={() => paletteBtnClick(p)}
+                        style={getGradientBg(p)}
                     >
                         {colorState.palette.id === p.id ? <CheckCircleRounded /> : null}
                     </PaletteButton>
@@ -258,24 +273,8 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         key={p.id}
                         aria-label={p.name}
                         disableRipple
-                        onClick={() => {
-                            dispatch({
-                                type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: {
-                                    palette: {
-                                        isCustom: false,
-                                        id: p.id,
-                                        colors: makePaletteColors(p.colors, p.id),
-                                    },
-                                    ...(p.setBackground && { background: p.setBackground }),
-                                },
-                            })
-                            if (p.setBackground) setBgColor(p.setBackground)
-                        }}
-                        style={{
-                            background: `linear-gradient(to right, ${p.gradient}), ${checkered}`,
-                            ...(colorState.palette.id === p.id && { border: '2px solid black' }),
-                        }}
+                        onClick={() => paletteBtnClick(p)}
+                        style={getGradientBg(p)}
                     >
                         {colorState.palette.id === p.id ? <CheckCircleRounded /> : null}
                     </PaletteButton>
