@@ -1,4 +1,4 @@
-import { HSLColor } from 'react-color'
+import { RGBColor } from 'react-color'
 import { clamp, genSeed } from './helpers'
 import { defaultPalettes, SavedColorPalette, fillGradient } from './palettes'
 import { mapUrlParamsToState } from './url-state'
@@ -10,10 +10,10 @@ import {
 } from './canvas-state-types'
 import { Noises2D } from './noises'
 
-export const makePaletteColors = (colors: HSLColor[], paletteId: number | string) => {
-    return colors.map((hsl, index) => ({
+export const makePaletteColors = (colors: RGBColor[], paletteId: number | string) => {
+    return colors.map((rgb, index) => ({
         id: `${paletteId}-${index}`,
-        hsl,
+        rgb,
     })) as PaletteColorsArray
 }
 
@@ -54,7 +54,7 @@ export const initialState: CanvasState = {
         signY: 1,
     },
     colors: {
-        border: { h: 0, s: 0, l: 1, a: 0.1 },
+        border: { r: 100, g: 100, b: 100, a: 0.1 },
         background: null,
         noFill: false,
         isGradient: false,
@@ -116,7 +116,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         case ActionTypes.SAVE_NEW_PALETTE: {
             const colorState = state.colors
             const customPaletteId = colorState.customPalettes.length
-            const hslArray = colorState.palette.colors.map((c) => c.hsl)
+            const hslArray = colorState.palette.colors.map((c) => c.rgb)
             const colorsWithId = makePaletteColors(hslArray, `custom_${customPaletteId}`)
 
             const newCustomPalette: SavedColorPalette = {

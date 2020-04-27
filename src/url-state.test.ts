@@ -24,7 +24,7 @@ describe('state to url', () => {
     })
 
     test('should return string with URL params', () => {
-        expect(mapStateToUrlParams(testState)).toBe(testParamsQuery)
+        expect(mapStateToUrlParams(testState).toLowerCase()).toBe(testParamsQuery.toLowerCase())
     })
 
     test('should not contain falsy boolean values', () => {

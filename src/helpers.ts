@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { HSLColor } from 'react-color'
+import { HSLColor, RGBColor } from 'react-color'
 
 /**
  * @param x start of the range
@@ -18,6 +18,10 @@ export function toHslaStr(color: HSLColor) {
     return `hsla(${color.h},${Math.round(color.s * 100)}%,${Math.round(color.l * 100)}%,${color.a})`
 }
 
+export function toRGBAStr(color: RGBColor) {
+    return `rgba(${color.r},${Math.round(color.g)},${Math.round(color.b)},${color.a})`
+}
+
 export function toHslaObj(hslStr: string, alpha = 1): HSLColor {
     const re = /hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/g
     const regExpArray = re.exec(hslStr)
@@ -26,6 +30,26 @@ export function toHslaObj(hslStr: string, alpha = 1): HSLColor {
 
     const [, h, s, l] = regExpArray
     return { h: +h, s: +s / 100, l: +l / 100, a: alpha }
+}
+
+export function toRGBaObj(rgbHexStr: string, alpha = 1): RGBColor {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
+    const hex = rgbHexStr.replace(shorthandRegex, (m, r, g, b) => {
+        return r + r + g + g + b + b
+    })
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+
+    if (!result) {
+        throw new SyntaxError(`Not an RGB color: ${rgbHexStr}`)
+    }
+    return {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+        a: alpha,
+    }
 }
 
 export function genSeed(): number {

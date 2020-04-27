@@ -1,4 +1,4 @@
-import { HSLColor } from 'react-color'
+import { RGBColor } from 'react-color'
 import { Noises2DFns } from './noises'
 import { PaletteId, SavedColorPalette } from './palettes'
 
@@ -57,11 +57,11 @@ export type GridSettings = {
     signY: 1 | -1
 }
 
-export type PaletteColorsArray = Array<{ hsl: HSLColor; id: string | number }>
+export type PaletteColorsArray = Array<{ rgb: RGBColor; id: string | number }>
 
 export type ColorsSettings = {
-    border: HSLColor
-    background: HSLColor | null
+    border: RGBColor
+    background: RGBColor | null
     noFill: boolean | null
     isGradient: boolean
     palette: {

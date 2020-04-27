@@ -23,7 +23,7 @@ export const testState: CanvasState = {
     },
     grid: { type: 'triangles', sparse: 2, signX: -1, signY: -1 },
     colors: {
-        border: { h: 10, s: 0.3, l: 1, a: 0.4 },
+        border: { r: 67, g: 193, b: 239, a: 0.2 },
         background: null,
         noFill: false,
         isGradient: true,
@@ -31,10 +31,10 @@ export const testState: CanvasState = {
             isCustom: true,
             id: 0,
             colors: [
-                { id: 0, hsl: { h: 202, s: 0.94, l: 0.61, a: 1 } },
-                { id: 1, hsl: { h: 200, s: 0.89, l: 0.6, a: 1 } },
-                { id: 2, hsl: { h: 196, s: 0.84, l: 0.6, a: 0.88 } },
-                { id: 3, hsl: { h: 178, s: 0.68, l: 0.57, a: 1 } },
+                { id: 0, rgb: { r: 67, g: 193, b: 239, a: 1 } },
+                { id: 1, rgb: { r: 71, g: 220, b: 215, a: 1 } },
+                { id: 2, rgb: { r: 165, g: 207, b: 175, a: 0.88 } },
+                { id: 3, rgb: { r: 243, g: 188, b: 98, a: 0.6 } },
             ],
         },
         customPalettes: [],
@@ -61,9 +61,9 @@ export const testParamsEntries = [
     ['gs', '2'],
     ['gx', '-1'],
     ['gy', '-1'],
-    ['cb', '10,30,100,40'],
+    ['cb', '43C1EF,20'],
     ['gr', 'y'],
-    ['pal', '202,94,61:200,89,60:196,84,60,88:178,68,57'],
+    ['pal', '43C1EF:47DCD7:A5CFAF,88:F3BC62,60'],
 ]
 
 export const testParamsQuery = testParamsEntries.map((p) => p.join('=')).join(';')

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
 import { CanvasState, CanvasStateAction, GridType } from '../canvas-state-types'
-import { toHslaStr } from '../helpers'
+import { toRGBAStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../grid-generators/generate-data.worker'
 import drawPolygons from '../grid-generators/draw-polygons'
@@ -85,7 +85,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         ctx.clearRect(0, 0, width, height)
         if (state.colors.background) {
             ctx.save()
-            ctx.fillStyle = toHslaStr(state.colors.background)
+            ctx.fillStyle = toRGBAStr(state.colors.background)
             ctx.fillRect(0, 0, width, height)
             ctx.restore()
         }
@@ -98,7 +98,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         const verticesNum = vertsPerPolygon[canvasData.type]
 
         drawPolygons({
-            borderColor: toHslaStr(state.colors.border),
+            borderColor: toRGBAStr(state.colors.border),
             borderWidth: state.cell.borderWidth,
             closePath: canvasData.type === 'hexagons',
             ctx,
@@ -114,6 +114,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         state.colors.border,
         state.cell.borderWidth,
         state.colors.background,
+        state.colors.noFill,
     ])
 
     return (

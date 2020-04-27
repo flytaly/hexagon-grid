@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Grid, Button, IconButton, Popover, Typography } from '@material-ui/core'
 import { Add, Remove } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { SketchPicker, ColorResult, HSLColor } from 'react-color'
+import { SketchPicker, ColorResult, RGBColor } from 'react-color'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import {
     ColorsSettings,
@@ -10,7 +10,7 @@ import {
     ActionTypes,
     PaletteColorsArray,
 } from '../../canvas-state-types'
-import { toHslaStr, toHslaObj } from '../../helpers'
+import { toRGBaObj, toRGBAStr } from '../../helpers'
 
 type ColorModalProps = {
     isOpen: boolean
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-type ChangeColorAction = (id: number | string, newColor: HSLColor) => void
+type ChangeColorAction = (id: number | string, newColor: RGBColor) => void
 
 type SortableItemProps = {
     value: string
@@ -88,10 +88,10 @@ const SortableItem = SortableElement(({ value, id, changeColorHandler }: Sortabl
             >
                 <SketchPicker
                     color={color}
-                    onChange={(col) => setColor(toHslaStr(col.hsl))}
+                    onChange={(col) => setColor(toRGBAStr(col.rgb))}
                     presetColors={[]}
                     onChangeComplete={(colorRes: ColorResult) =>
-                        changeColorHandler(id, colorRes.hsl)
+                        changeColorHandler(id, colorRes.rgb)
                     }
                 />
             </Popover>
@@ -117,7 +117,7 @@ const SortableList = SortableContainer(
                         index={index}
                         id={value.id}
                         changeColorHandler={changeColorHandler}
-                        value={toHslaStr(value.hsl)}
+                        value={toRGBAStr(value.rgb)}
                     />
                 ))}
                 <IconButton
@@ -170,7 +170,7 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
                 ...colors,
                 {
                     id: Date.now(),
-                    hsl: toHslaObj('hsl(0, 0%, 80%)', 1),
+                    rgb: toRGBaObj('hsl(0, 0%, 80%)', 1),
                 },
             ],
         })
@@ -181,7 +181,7 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
             type: ActionTypes.MODIFY_PALETTE,
             payload: colors.map((col) => ({
                 id: col.id,
-                hsl: col.id === id ? newColor : col.hsl,
+                rgb: col.id === id ? newColor : col.rgb,
             })),
         })
     }

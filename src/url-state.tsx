@@ -1,16 +1,22 @@
 import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
-import { HSLColor } from 'react-color'
+import { HSLColor, RGBColor } from 'react-color'
 import { CanvasState, PaletteColorsArray, GridType } from './canvas-state-types'
+import { toRGBaObj } from './helpers'
 
-type ParamFn = (p: string | HSLColor | PaletteColorsArray) => string
+type ParamFn = (p: string | RGBColor | PaletteColorsArray) => string
 
 export type ObjectPropToStrMap<T> = {
     [P in keyof T]: ObjectPropToStrMap<T[P]> | string | null | ParamFn
 }
-
+/*
 const hslaToString = ({ h, s, l, a = 1 }: HSLColor) => {
     const base = `${h},${Math.round(s * 100)},${Math.round(l * 100)}`
+    return a === 1 ? base : `${base},${Math.round(a * 100)}`
+} */
+
+const rgbaToString = ({ r, g, b, a = 1 }: RGBColor) => {
+    const base = `${r.toString(16)}${g.toString(16)}${b.toString(16)}`
     return a === 1 ? base : `${base},${Math.round(a * 100)}`
 }
 
@@ -54,15 +60,15 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         signY: 'gy',
     },
     colors: {
-        border: (c) => `cb=${hslaToString(c as HSLColor)}`,
-        background: 'cbg',
+        border: (c) => `cb=${rgbaToString(c as RGBColor)}`,
+        background: (c) => `cbg=${rgbaToString(c as RGBColor)}`,
         noFill: (noFill) => (noFill ? 'nf=y' : ''),
         isGradient: (isGradient) => (isGradient ? 'gr=y' : ''),
         palette: {
             isCustom: null,
             id: null,
             colors: (cols) =>
-                `pal=${(cols as PaletteColorsArray).map((c) => hslaToString(c.hsl)).join(':')}`,
+                `pal=${(cols as PaletteColorsArray).map((c) => rgbaToString(c.rgb)).join(':')}`,
         },
         customPalettes: null,
     },
@@ -72,15 +78,20 @@ type SetState = (param: string, state: CanvasState) => CanvasState
 
 type MapParamToState = { [name: string]: SetState }
 
-const paramToHSL = (param: string): HSLColor => {
+/* const paramToHSL = (param: string): HSLColor => {
     const [h, s, l, a = 100] = param.split(',')
     return { h: Number(h), s: +s / 100, l: +l / 100, a: +a / 100 }
+} */
+
+const paramToRGB = (param: string): RGBColor => {
+    const [rgbStr, a = 100] = param.split(',')
+    return toRGBaObj(rgbStr, +a / 100)
 }
 
 const paramToPalette = (param: string): PaletteColorsArray => {
     const result: PaletteColorsArray = []
     param.split(':').forEach((c, idx) => {
-        result.push({ id: idx, hsl: paramToHSL(c) })
+        result.push({ id: idx, rgb: paramToRGB(c) })
     })
     return result
 }
@@ -118,10 +129,10 @@ export const mapParamToState: MapParamToState = {
     gs: (p, s) => setNumberProp(s, 'grid.sparse', p),
     gx: (p, s) => setNumberProp(s, 'grid.signX', p),
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),
-    cb: (p, s) => set(s, 'colors.border', paramToHSL(p)),
+    cb: (p, s) => set(s, 'colors.border', paramToRGB(p)),
     nf: (p, s) => set(s, 'colors.noFill', p === 'y' || false),
     gr: (p, s) => set(s, 'colors.isGradient', p === 'y' || false),
-    cbg: (p, s) => set(s, 'colors.background', paramToHSL(p)),
+    cbg: (p, s) => set(s, 'colors.background', paramToRGB(p)),
     pal: (p, s) => set(s, 'colors.palette.colors', paramToPalette(p)),
 }
 
@@ -134,7 +145,7 @@ export function mapStateToUrlParams(state: CanvasState): string {
 
             if (ids[key] instanceof Function) {
                 const fn = ids[key] as ParamFn
-                const keyValuePair = fn(value as string | HSLColor | PaletteColorsArray)
+                const keyValuePair = fn(value as string | RGBColor | PaletteColorsArray)
                 return keyValuePair ? `${acc}${keyValuePair};` : acc
             }
 

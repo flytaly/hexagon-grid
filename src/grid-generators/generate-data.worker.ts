@@ -4,7 +4,8 @@ import { Delaunay } from 'd3-delaunay'
 import chroma from 'chroma-js'
 import * as Honeycomb from 'honeycomb-grid'
 import { Parser } from 'expr-eval'
-import { HSLColor } from 'react-color'
+import { RGBColor } from 'react-color'
+import { hslToRgb } from '@material-ui/core'
 import {
     CanvasState,
     GridType,
@@ -28,7 +29,7 @@ type CanvasData = {
 }
 
 /** n - number ∈ [0,1] */
-type GetColorFromRange = (n: number) => HSLColor
+type GetColorFromRange = (n: number) => RGBColor
 
 function getNoiseFn(noises: Noises2DFns, baseNoise: BaseNoise) {
     let noiseFn: NoiseFn | undefined
@@ -55,20 +56,18 @@ function getColorPickerFn(palette: PaletteColorsArray, isGradient = true): GetCo
     if (!isGradient) {
         return (n: number) => {
             const colorId = clamp(Math.floor(n * 0.999999 * palette.length), 0, palette.length - 1)
-            return palette[colorId].hsl
+            return palette[colorId].rgb
         }
     }
 
     const fn = chroma
-        .scale(palette.map(({ hsl }) => chroma.hsl(hsl.h, hsl.s, hsl.l).alpha(hsl.a || 0)))
+        .scale(palette.map(({ rgb }) => chroma.rgb(rgb.r, rgb.g, rgb.b).alpha(rgb.a || 0)))
         .mode('lrgb')
 
     return (n: number) => {
         const color = fn(n)
-
-        const [h, s, l] = color.hsl()
-        // h could be NaN if color is grey
-        return { h: h || 0, s, l, a: color.alpha() }
+        const [r, g, b, a] = color.rgba()
+        return { r, g, b, a }
     }
 }
 
@@ -82,12 +81,14 @@ function setFillColor(
     const { hue: H, saturation: S, lightness: L } = noise
 
     const colorId = clamp((noiseValue + 1) / 2, 0, 1)
-    const { h, s, l, a } = getColor(colorId)
+    const color = getColor(colorId)
+
+    const [h, s, l] = rgbToHsl(color.r, color.g, color.b)
 
     fillColors[index * 4] = h + H * noiseValue // hue
-    fillColors[index * 4 + 1] = s * 100 + S * noiseValue // saturation
-    fillColors[index * 4 + 2] = l * 100 + L * noiseValue // light
-    fillColors[index * 4 + 3] = a || 0 // alpha
+    fillColors[index * 4 + 1] = s + S * noiseValue // saturation
+    fillColors[index * 4 + 2] = l + L * noiseValue // light
+    fillColors[index * 4 + 3] = color.a || 0 // alpha
 }
 
 function setFillColorFromImg(

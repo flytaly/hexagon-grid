@@ -12,11 +12,11 @@ import {
     FormControlLabel,
     Switch,
 } from '@material-ui/core'
-import { SketchPicker, HSLColor, ColorResult } from 'react-color'
+import { SketchPicker, ColorResult, RGBColor } from 'react-color'
 import { CheckCircleRounded } from '@material-ui/icons'
 import { makePaletteColors } from '../../canvas-state'
 import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state-types'
-import { toHslaStr } from '../../helpers'
+import { toRGBAStr } from '../../helpers'
 import { defaultPalettes, SavedColorPalette } from '../../palettes'
 import { checkered } from '../../background'
 import CustomPaletteMaker from './add-custom-palette'
@@ -60,15 +60,15 @@ type ColorProps = {
 }
 
 const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
-    const [border, setBorder] = useState<HSLColor>(colorState.border)
+    const [border, setBorder] = useState<RGBColor>(colorState.border)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
-    const [bgColor, setBgColor] = useState<HSLColor | null>(colorState.background)
+    const [bgColor, setBgColor] = useState<RGBColor | null>(colorState.background)
     const [bgAnchorEl, setBgAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
     const paletteColors = useMemo(
-        () => Array.from(new Set(colorState.palette.colors.map((c) => toHslaStr(c.hsl)))),
+        () => Array.from(new Set(colorState.palette.colors.map((c) => toRGBAStr(c.rgb)))),
         [colorState.palette.colors],
     )
 
@@ -86,11 +86,11 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
     const getGradientBg = (p: SavedColorPalette) => {
         const st: CSSProperties = {}
         if (p.colors.length > 1) {
-            const grad = !colorState.isGradient ? p.gradient : p.colors.map((c) => toHslaStr(c))
+            const grad = !colorState.isGradient ? p.gradient : p.colors.map((c) => toRGBAStr(c))
             st.background = `linear-gradient(to right, ${grad}), ${checkered}`
         } else {
             st.background = checkered
-            st.backgroundColor = toHslaStr(p.colors[0])
+            st.backgroundColor = toRGBAStr(p.colors[0])
         }
         if (colorState.palette.id === p.id) st.border = '2px solid black'
         return st
@@ -129,7 +129,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                                 size="small"
                                 disableRipple
                                 style={{
-                                    background: border.a ? toHslaStr(border) : checkered,
+                                    background: border.a ? toRGBAStr(border) : checkered,
                                 }}
                             >
                                 <div />
@@ -149,12 +149,12 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                 >
                     <SketchPicker
                         color={border}
-                        onChange={(color) => setBorder(color.hsl)}
+                        onChange={(color) => setBorder(color.rgb)}
                         presetColors={paletteColors}
                         onChangeComplete={(color: ColorResult) =>
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: { border: color.hsl },
+                                payload: { border: color.rgb },
                             })
                         }
                     />
@@ -171,7 +171,7 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             disableRipple
                             style={{
                                 background:
-                                    bgColor && bgColor.a !== 0 ? toHslaStr(bgColor) : checkered,
+                                    bgColor && bgColor.a !== 0 ? toRGBAStr(bgColor) : checkered,
                             }}
                         />
                     </Grid>
@@ -189,11 +189,11 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                     <SketchPicker
                         color={bgColor || { h: 0, s: 0, l: 1, a: 0 }}
                         presetColors={paletteColors}
-                        onChange={(color) => setBgColor(color.hsl)}
+                        onChange={(color) => setBgColor(color.rgb)}
                         onChangeComplete={(color: ColorResult) =>
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: { background: color.hsl },
+                                payload: { background: color.rgb },
                             })
                         }
                     />
