@@ -144,7 +144,11 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
 
     const getRandomNoiseVal = () => (noise2Strength ? random.rnd(noise2Strength) : 0)
     const getNoiseVal = (cx: number, cy: number) =>
-        noiseFn(signX * cx, signY * cy, sizes.normalW, sizes.normalH) + getRandomNoiseVal()
+        clamp(
+            noiseFn(signX * cx, signY * cy, sizes.normalW, sizes.normalH) + getRandomNoiseVal(),
+            -1,
+            1,
+        )
 
     grid.forEach((hexagon, idx) => {
         if (isImg) {
@@ -233,7 +237,7 @@ function genDelaunayData(
         const x = (cx / cellSize - cellsNumW / 2 + state.noise.offsetX) / (zoom * 2)
         const y = (cy / cellSize - cellsNumH / 2 + state.noise.offsetY) / (zoom * 2)
         const noiseValue = noiseFn(signX * x, signY * y, normalW, normalH) + getRandomNoiseVal()
-        return noiseValue
+        return clamp(noiseValue, -1, 1)
     }
 
     // generate triangles

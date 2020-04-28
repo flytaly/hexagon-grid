@@ -17,6 +17,7 @@ export type Noises2DFns = {
     cubic: NoiseFn
     quadratic: NoiseFn
     sin: NoiseFn
+    sinCos: NoiseFn
 }
 
 export type NoisesRnd = {
@@ -46,15 +47,15 @@ export const Noises2D: NoisesInfoObj = {
     },
     diagonal: {
         id: 'diagonal',
-        name: 'Diagonal line',
+        name: 'Diagonal',
     },
     diagonal1: {
         id: 'diagonal1',
-        name: 'Diagonal line 1',
+        name: 'Diagonal (from center)',
     },
     diagonal2: {
         id: 'diagonal2',
-        name: 'Diagonal line 2',
+        name: 'Diagonal (to center)',
     },
     simplex: {
         id: 'simplex',
@@ -75,6 +76,10 @@ export const Noises2D: NoisesInfoObj = {
     sin: {
         id: 'sin',
         name: 'Sine wave',
+    },
+    sinCos: {
+        id: 'sinCos',
+        name: 'Sin x Cos',
     },
     custom: {
         id: 'custom',
@@ -124,6 +129,7 @@ export function getNoises(seed: string) {
         cubic: (x, y) => clamp(rndValue * x ** 3 + y, -1, 1),
         quadratic: (x, y) => clamp(rndValue * x ** 2 + y, -1, 1),
         sin: (x, y) => Math.sin(x * 2) + y * 2,
+        sinCos: (x, y) => Math.cos(x) * Math.sin(y),
     }
 
     const random: NoisesRnd = {
