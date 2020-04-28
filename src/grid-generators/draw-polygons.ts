@@ -1,26 +1,37 @@
+import { GridType } from '../canvas-state-types'
+
 /* eslint-disable @typescript-eslint/no-unused-expressions */
+export type PolygonData = {
+    vertices: Float32Array | number[]
+    fillColors: Float32Array | number[]
+    type: GridType
+}
+
+export const vertsPerPolygon = {
+    triangles: 3,
+    hexagons: 6,
+    voronoi: 0, // 'variable'
+}
 
 interface DrawPolygonsProperties {
     borderColor: string
     borderWidth: number
     closePath: boolean // triangles with closed path don't look good because their tips could intersect
     ctx: CanvasRenderingContext2D
-    fillColors: Float32Array | number[]
-    vertices: Float32Array | number[]
-    verticesNum: number // vertices per polygon (0 = variable)
+    polygonData: PolygonData
     onlyBorder?: boolean
 }
 
 export default function drawPolygons({
     borderColor,
     borderWidth,
-    closePath = false,
     ctx,
-    fillColors,
-    vertices,
-    verticesNum,
+    polygonData,
+    closePath = false,
     onlyBorder = false,
 }: DrawPolygonsProperties) {
+    const { fillColors, vertices, type } = polygonData
+    const verticesNum = vertsPerPolygon[type]
     const c = fillColors
     const v = vertices
     let vertIdx = 0

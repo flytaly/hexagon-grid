@@ -5,7 +5,7 @@ import chroma from 'chroma-js'
 import * as Honeycomb from 'honeycomb-grid'
 import { Parser } from 'expr-eval'
 import { RGBColor } from 'react-color'
-import { hslToRgb } from '@material-ui/core'
+import { PolygonData } from './draw-polygons'
 import {
     CanvasState,
     GridType,
@@ -22,12 +22,6 @@ interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'
     set(hex: { q: number; r: number; s: number }): Honeycomb.Hex<{}>
 }
 
-type CanvasData = {
-    vertices: Float32Array | number[]
-    fillColors: Float32Array | number[]
-    type: GridType
-}
-
 /** n - number ∈ [0,1] */
 type GetColorFromRange = (n: number) => RGBColor
 
@@ -41,7 +35,7 @@ function getNoiseFn(noises: Noises2DFns, baseNoise: BaseNoise) {
             expr.evaluate({ x: 1, y: 1, w: 1, h: 1 })
             noiseFn = (x, y, w = 1, h = 1) => expr.evaluate({ x, y, w, h })
         } catch (e) {
-            // console.log(e)
+            console.warn(e)
         }
     } else if (baseNoise.id === 'image') {
         noiseFn = () => 0
@@ -108,7 +102,7 @@ function setFillColorFromImg(
     fillColors[index * 4 + 3] = imgData[$offset + 3]
 }
 
-function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): CanvasData {
+function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): PolygonData {
     const { orientation } = state.cell
     const { zoom, baseNoise, noise2Strength } = state.noise
     const { sparse, signX, signY } = state.grid
@@ -135,7 +129,7 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
 
     const vertices = new Float32Array(grid.length * 6 * 2)
     const fillColors = new Float32Array(grid.length * 4)
-    const result: CanvasData = { vertices, fillColors, type: 'hexagons' }
+    const result: PolygonData = { vertices, fillColors, type: 'hexagons' }
 
     const noiseFn = getNoiseFn(noises, baseNoise)
     if (!palette.length || !noiseFn) return result
@@ -185,7 +179,7 @@ function genDelaunayData(
     state: CanvasState,
     type = 'triangles' as GridType,
     imgData?: Uint8ClampedArray | null,
-): CanvasData {
+): PolygonData {
     const { width, height } = state.canvasSize
     const { zoom, baseNoise, noise2Strength } = state.noise
     const [noises, random] = getNoises(String(state.noise.seed))

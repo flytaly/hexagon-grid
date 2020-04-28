@@ -13,6 +13,7 @@
     "dependencies": {
         "@material-ui/core": "^4.9.12",
         "@material-ui/icons": "^4.9.1",
+        "@svgdotjs/svg.js": "^3.0.16",
         "@zeit/next-workers": "^1.0.0",
         "alea": "^1.0.0",
         "chroma-js": "^2.1.0",

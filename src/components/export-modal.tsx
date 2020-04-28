@@ -4,6 +4,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { Image, FileCopy } from '@material-ui/icons'
 import { CanvasState } from '../canvas-state-types'
 import { mapStateToUrlParams } from '../url-state'
+import renderSVG from '../grid-generators/render-svg'
+import { PolygonData } from '../grid-generators/draw-polygons'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,10 +43,11 @@ type ExportModalProps = {
     canvas: RefObject<HTMLCanvasElement>
     state: CanvasState
     isOpen: boolean
+    polygonData: PolygonData
     handleClose: () => void
 }
 
-const ExportModal = ({ canvas, isOpen, handleClose, state }: ExportModalProps) => {
+const ExportModal = ({ canvas, isOpen, handleClose, polygonData, state }: ExportModalProps) => {
     const classes = useStyles()
     const [copyLink, setCopyLink] = useState('')
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
@@ -55,8 +58,15 @@ const ExportModal = ({ canvas, isOpen, handleClose, state }: ExportModalProps) =
     const pngClickHandler = () => {
         if (!canvas.current) return
         const link = document.createElement('a')
-        link.download = 'hexagons.png'
+        link.download = `${state.grid.type}.png`
         link.href = canvas.current.toDataURL('image/png')
+        link.click()
+    }
+    const svgClickHandler = () => {
+        const svg = renderSVG({ state, polygonData })
+        const link = document.createElement('a')
+        link.download = `${state.grid.type}.svg`
+        link.href = `data:image/svg+xml;base64,${btoa(svg.node.outerHTML)}`
         link.click()
     }
 
@@ -90,6 +100,14 @@ const ExportModal = ({ canvas, isOpen, handleClose, state }: ExportModalProps) =
                     onClick={pngClickHandler}
                 >
                     PNG
+                </Button>
+                <Button
+                    className={classes.fullWidth}
+                    variant="contained"
+                    startIcon={<Image />}
+                    onClick={svgClickHandler}
+                >
+                    SVG
                 </Button>
                 {!copyLink || isCustomFn ? (
                     <Button

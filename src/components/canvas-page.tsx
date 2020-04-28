@@ -5,7 +5,7 @@ import { CanvasState, CanvasStateAction, GridType } from '../canvas-state-types'
 import { toRGBAStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../grid-generators/generate-data.worker'
-import drawPolygons from '../grid-generators/draw-polygons'
+import drawPolygons, { PolygonData } from '../grid-generators/draw-polygons'
 import Keys from './keys'
 import ExportModal from './export-modal'
 import { useDataFromImageEffect } from '../hooks/use-data-from-image'
@@ -39,17 +39,11 @@ type CanvasPageProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-type CanvasData = {
-    vertices: Float32Array | number[]
-    fillColors: Float32Array | number[]
-    type: GridType
-}
-
 const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     const { width, height } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
     const [genGridWorker, setGenGridWorker] = useState<Worker | null>(null)
-    const [canvasData, setCanvData] = useState<CanvasData>({
+    const [polygonData, setPolyData] = useState<PolygonData>({
         vertices: [],
         fillColors: [],
         type: state.grid.type,
@@ -63,8 +57,8 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
 
         setGenGridWorker(worker)
 
-        worker.addEventListener('message', ({ data }: { data: CanvasData }) => {
-            setCanvData(data)
+        worker.addEventListener('message', ({ data }: { data: PolygonData }) => {
+            setPolyData(data)
         })
         return () => {
             worker.terminate()
@@ -83,7 +77,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
     useEffect(() => {
         const ctx = refCanv.current?.getContext('2d')
         if (!ctx) return
-        if (!canvasData.vertices.length) {
+        if (!polygonData.vertices.length) {
             loadingPlaceholder(ctx, width, height)
             return
         }
@@ -96,25 +90,16 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
             ctx.restore()
         }
 
-        const vertsPerPolygon = {
-            triangles: 3,
-            hexagons: 6,
-            voronoi: 0, // 'variable'
-        }
-        const verticesNum = vertsPerPolygon[canvasData.type]
-
         drawPolygons({
             borderColor: toRGBAStr(state.colors.border),
             borderWidth: state.cell.borderWidth,
-            closePath: canvasData.type === 'hexagons',
+            closePath: polygonData.type === 'hexagons',
             ctx,
-            fillColors: canvasData.fillColors,
-            vertices: canvasData.vertices,
-            verticesNum,
+            polygonData,
             onlyBorder: !!state.colors.noFill,
         })
     }, [
-        canvasData,
+        polygonData,
         width,
         height,
         state.colors.border,
@@ -137,6 +122,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
                 canvas={refCanv}
                 state={state}
                 isOpen={exportModalOpen}
+                polygonData={polygonData}
                 handleClose={() => {
                     setExportModalOpen(false)
                 }}
