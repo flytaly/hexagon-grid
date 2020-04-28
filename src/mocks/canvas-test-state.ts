@@ -23,7 +23,7 @@ export const testState: CanvasState = {
     },
     grid: { type: 'triangles', sparse: 2, signX: -1, signY: -1 },
     colors: {
-        border: { r: 67, g: 193, b: 239, a: 0.2 },
+        border: { r: 7, g: 193, b: 239, a: 0.2 },
         background: null,
         noFill: false,
         isGradient: true,
@@ -61,7 +61,7 @@ export const testParamsEntries = [
     ['gs', '2'],
     ['gx', '-1'],
     ['gy', '-1'],
-    ['cb', '43C1EF,20'],
+    ['cb', '07C1EF,20'],
     ['gr', 'y'],
     ['pal', '43C1EF:47DCD7:A5CFAF,88:F3BC62,60'],
 ]

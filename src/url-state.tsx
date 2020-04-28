@@ -1,6 +1,6 @@
 import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
-import { HSLColor, RGBColor } from 'react-color'
+import { RGBColor } from 'react-color'
 import { CanvasState, PaletteColorsArray, GridType } from './canvas-state-types'
 import { toRGBaObj } from './helpers'
 
@@ -15,8 +15,10 @@ const hslaToString = ({ h, s, l, a = 1 }: HSLColor) => {
     return a === 1 ? base : `${base},${Math.round(a * 100)}`
 } */
 
+const toHex = (n: number) => n.toString(16).padStart(2, '0')
+
 const rgbaToString = ({ r, g, b, a = 1 }: RGBColor) => {
-    const base = `${r.toString(16)}${g.toString(16)}${b.toString(16)}`
+    const base = `${toHex(r)}${toHex(g)}${toHex(b)}`
     return a === 1 ? base : `${base},${Math.round(a * 100)}`
 }
 
