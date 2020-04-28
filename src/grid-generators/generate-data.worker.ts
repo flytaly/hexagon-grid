@@ -237,7 +237,7 @@ function genDelaunayData(
     // generate triangles
     if (type === 'triangles') {
         const len = delaunay.triangles.length / 3
-        const vertices = new Float32Array(delaunay.triangles.length * 6)
+        const vertices = new Float32Array(len * 6)
         const fillColors = new Float32Array(len * 4)
         for (let i = 0; i < len; i += 1) {
             const v1 = [
