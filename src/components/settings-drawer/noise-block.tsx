@@ -177,37 +177,41 @@ const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
                     />
                 </Grid>
             </Grid>
-
-            <Typography id="zoom-factor" gutterBottom>
-                Zoom Factor
-            </Typography>
-            <Grid container spacing={2}>
-                <Grid item xs={9}>
-                    <Slider
-                        value={zoom}
-                        aria-labelledby="zoom-factor"
-                        min={1}
-                        max={50}
-                        onChange={(e, val) => setZoom(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ zoom: Number(val) })}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <Input
-                        value={zoom}
-                        onChange={handleZoomInputChange}
-                        margin="dense"
-                        inputProps={{
-                            step: 1,
-                            min: 1,
-                            max: 50,
-                            type: 'number',
-                            'aria-labelledby': 'zoom-factor',
-                        }}
-                    />
-                </Grid>
-            </Grid>
-
+            {noiseState.baseNoise.id === 'image' ? null : (
+                <>
+                    <Typography id="zoom-factor" gutterBottom>
+                        Zoom Factor
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={9}>
+                            <Slider
+                                value={zoom}
+                                aria-labelledby="zoom-factor"
+                                min={1}
+                                max={50}
+                                onChange={(e, val) => setZoom(Number(val))}
+                                onChangeCommitted={(e, val) =>
+                                    dispatchOption({ zoom: Number(val) })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Input
+                                value={zoom}
+                                onChange={handleZoomInputChange}
+                                margin="dense"
+                                inputProps={{
+                                    step: 1,
+                                    min: 1,
+                                    max: 50,
+                                    type: 'number',
+                                    'aria-labelledby': 'zoom-factor',
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                </>
+            )}
             <Typography id="hue-factor" gutterBottom>
                 Hue Variance
             </Typography>

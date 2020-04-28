@@ -96,12 +96,15 @@ function setFillColorFromImg(
     imgData: Uint8ClampedArray,
     fillColors: Float32Array | Array<number>,
     index: number,
+    noiseValue: number,
+    noise: NoiseSettings,
 ) {
+    const { hue: H, saturation: S, lightness: L } = noise
     const $offset = offset * 4
     const [h, s, l] = rgbToHsl(imgData[$offset], imgData[$offset + 1], imgData[$offset + 2])
-    fillColors[index * 4] = h
-    fillColors[index * 4 + 1] = s
-    fillColors[index * 4 + 2] = l
+    fillColors[index * 4] = h + H * noiseValue // hue
+    fillColors[index * 4 + 1] = s + S * noiseValue // saturation
+    fillColors[index * 4 + 2] = l + L * noiseValue // light
     fillColors[index * 4 + 3] = imgData[$offset + 3]
 }
 
@@ -139,17 +142,11 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
 
     const getColor = getColorPickerFn(palette, state.colors.isGradient)
 
+    const getRandomNoiseVal = () => (noise2Strength ? random.rnd(noise2Strength) : 0)
+    const getNoiseVal = (cx: number, cy: number) =>
+        noiseFn(signX * cx, signY * cy, sizes.normalW, sizes.normalH) + getRandomNoiseVal()
+
     grid.forEach((hexagon, idx) => {
-        const [xx, yy] = [
-            (hexagon.x - (sparse * sizes.cellsNumW) / 2 + state.noise.offsetX + 1) / zoom,
-            (hexagon.y - (sparse * sizes.cellsNumH) / 2 + state.noise.offsetY + 1) / zoom,
-        ]
-
-        let noiseValue = noiseFn(signX * xx, signY * yy, sizes.normalW, sizes.normalH)
-        if (noise2Strength) {
-            noiseValue += random.rnd(noise2Strength)
-        }
-
         if (isImg) {
             const col = clamp(Math.ceil(hexagon.x), 0, sizes.cellsNumW)
             const row = clamp(Math.ceil(hexagon.y), 0, sizes.cellsNumH)
@@ -159,9 +156,15 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Can
                 imgData as Uint8ClampedArray,
                 fillColors,
                 idx,
+                getRandomNoiseVal(),
+                state.noise,
             )
         } else {
-            setFillColor(noiseValue, state.noise, getColor, fillColors, idx)
+            const [cx, cy] = [
+                (hexagon.x - (sparse * sizes.cellsNumW) / 2 + state.noise.offsetX + 1) / zoom,
+                (hexagon.y - (sparse * sizes.cellsNumH) / 2 + state.noise.offsetY + 1) / zoom,
+            ]
+            setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, idx)
         }
 
         const point = hexagon.toPoint()
@@ -224,13 +227,12 @@ function genDelaunayData(
 
     const getColor = getColorPickerFn(palette, state.colors.isGradient)
 
+    const getRandomNoiseVal = () => (noise2Strength ? random.rnd(noise2Strength) : 0)
+
     const getNoiseVal = (cx: number, cy: number) => {
         const x = (cx / cellSize - cellsNumW / 2 + state.noise.offsetX) / (zoom * 2)
         const y = (cy / cellSize - cellsNumH / 2 + state.noise.offsetY) / (zoom * 2)
-        let noiseValue = noiseFn(signX * x, signY * y, normalW, normalH)
-        if (noise2Strength) {
-            noiseValue += random.rnd(noise2Strength)
-        }
+        const noiseValue = noiseFn(signX * x, signY * y, normalW, normalH) + getRandomNoiseVal()
         return noiseValue
     }
 
@@ -264,6 +266,8 @@ function genDelaunayData(
                     imgData as Uint8ClampedArray,
                     fillColors,
                     i,
+                    getRandomNoiseVal(),
+                    state.noise,
                 )
             } else {
                 setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, i)
@@ -301,6 +305,8 @@ function genDelaunayData(
                 imgData as Uint8ClampedArray,
                 fillColors,
                 count++,
+                getRandomNoiseVal(),
+                state.noise,
             )
         } else {
             setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, count++)
