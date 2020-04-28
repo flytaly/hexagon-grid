@@ -9,6 +9,7 @@ import drawPolygons from '../grid-generators/draw-polygons'
 import Keys from './keys'
 import ExportModal from './export-modal'
 import { useDataFromImageEffect } from '../hooks/use-data-from-image'
+import loadingPlaceholder from '../loading-placeholder'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,7 +82,12 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
 
     useEffect(() => {
         const ctx = refCanv.current?.getContext('2d')
-        if (!ctx || !canvasData.vertices.length) return
+        if (!ctx) return
+        if (!canvasData.vertices.length) {
+            loadingPlaceholder(ctx, width, height)
+            return
+        }
+
         ctx.clearRect(0, 0, width, height)
         if (state.colors.background) {
             ctx.save()

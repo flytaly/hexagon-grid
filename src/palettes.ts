@@ -14,15 +14,6 @@ export type PaletteId = typeof ids[number]
 
 export const defaultPalettes: SavedColorPalette[] = [
     {
-        id: 'b+y',
-        name: 'Blue & Yellow',
-        colors: [
-            toRGBaObj('#f8a116'), //
-            toRGBaObj('#1f5aa8'),
-        ],
-        gradient: '',
-    },
-    {
         // from https://uhdpixel.com/wall/minimalist-abstract-hexagon-colorful-4k-a1949/
         id: 'colorful',
         name: 'colorful palette',
@@ -185,6 +176,15 @@ export const defaultPalettes: SavedColorPalette[] = [
             toRGBaObj('#f0cc00'),
             toRGBaObj('#333837'),
             toRGBaObj('#333837'),
+        ],
+        gradient: '',
+    },
+    {
+        id: 'b+y',
+        name: 'Blue & Yellow',
+        colors: [
+            toRGBaObj('#f8a116'), //
+            toRGBaObj('#1f5aa8'),
         ],
         gradient: '',
     },
