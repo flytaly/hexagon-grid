@@ -35,7 +35,7 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
 
             const poly = [] as [number, number][]
             for (let i = 0; i < coordsNum; i += 2) {
-                poly.push([v[vertIdx + i], v[vertIdx + i + 1]])
+                poly.push([Math.round(v[vertIdx + i]), Math.round(v[vertIdx + i + 1])])
             }
 
             if (onlyBorder) {

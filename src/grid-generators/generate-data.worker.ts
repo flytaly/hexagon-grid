@@ -79,9 +79,9 @@ function setFillColor(
 
     const [h, s, l] = rgbToHsl(color.r, color.g, color.b)
 
-    fillColors[index * 4] = h + H * noiseValue // hue
-    fillColors[index * 4 + 1] = s + S * noiseValue // saturation
-    fillColors[index * 4 + 2] = l + L * noiseValue // light
+    fillColors[index * 4] = Math.round(h + H * noiseValue) // hue
+    fillColors[index * 4 + 1] = Math.round(s + S * noiseValue) // saturation
+    fillColors[index * 4 + 2] = Math.round(l + L * noiseValue) // light
     fillColors[index * 4 + 3] = color.a || 0 // alpha
 }
 
@@ -96,9 +96,9 @@ function setFillColorFromImg(
     const { hue: H, saturation: S, lightness: L } = noise
     const $offset = offset * 4
     const [h, s, l] = rgbToHsl(imgData[$offset], imgData[$offset + 1], imgData[$offset + 2])
-    fillColors[index * 4] = h + H * noiseValue // hue
-    fillColors[index * 4 + 1] = s + S * noiseValue // saturation
-    fillColors[index * 4 + 2] = l + L * noiseValue // light
+    fillColors[index * 4] = Math.round(h + H * noiseValue) // hue
+    fillColors[index * 4 + 1] = Math.round(s + S * noiseValue) // saturation
+    fillColors[index * 4 + 2] = Math.round(l + L * noiseValue) // light
     fillColors[index * 4 + 3] = imgData[$offset + 3]
 }
 
