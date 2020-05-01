@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { SVG } from '@svgdotjs/svg.js'
 import { CanvasState } from '../canvas-state-types'
 import { toRGBAStr } from '../helpers'

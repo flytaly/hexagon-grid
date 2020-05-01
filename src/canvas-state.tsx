@@ -60,8 +60,8 @@ export const initialState: CanvasState = {
         isGradient: false,
         palette: {
             isCustom: false,
-            id: defaultPalettes[1].id,
-            colors: makePaletteColors(defaultPalettes[1].colors, defaultPalettes[1].id),
+            id: defaultPalettes[0].id,
+            colors: makePaletteColors(defaultPalettes[0].colors, defaultPalettes[0].id),
         },
         customPalettes: [],
     },
@@ -122,9 +122,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             const newCustomPalette: SavedColorPalette = {
                 id: customPaletteId,
                 colors: hslArray,
-                gradient: '',
+                gradient: fillGradient(hslArray),
             }
-            fillGradient(newCustomPalette)
 
             return {
                 ...state,
