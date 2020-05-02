@@ -76,6 +76,13 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
         dispatch({ type: ActionTypes.SET_COLOR_OPTIONS, payload: { noFill: !colorState.noFill } })
     }
 
+    const handleBordFillChange = () => {
+        dispatch({
+            type: ActionTypes.SET_COLOR_OPTIONS,
+            payload: { useBodyColor: !colorState.useBodyColor },
+        })
+    }
+
     const handleIsGradientChange = () => {
         dispatch({
             type: ActionTypes.SET_COLOR_OPTIONS,
@@ -117,7 +124,60 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                 <Typography component="div" gutterBottom>
                     <Box fontWeight="fontWeightBold">Colors</Box>
                 </Typography>
-                {colorState.noFill ? null : (
+                <Grid container spacing={2}>
+                    <Grid item xs={9}>
+                        <Typography>Background</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <ColorButton
+                            onClick={(e) => setBgAnchorEl(e.currentTarget)}
+                            aria-label="Background color"
+                            size="small"
+                            disableRipple
+                            style={{
+                                background:
+                                    bgColor && bgColor.a !== 0 ? toRGBAStr(bgColor) : checkered,
+                            }}
+                        />
+                    </Grid>
+                </Grid>
+                <Popover
+                    id="bg-color-picker"
+                    open={Boolean(bgAnchorEl)}
+                    anchorEl={bgAnchorEl}
+                    onClose={() => {
+                        setBgAnchorEl(null)
+                    }}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <SketchPicker
+                        color={bgColor || { h: 0, s: 0, l: 1, a: 0 }}
+                        presetColors={paletteColors}
+                        onChange={(color) => setBgColor(color.rgb)}
+                        onChangeComplete={(color: ColorResult) =>
+                            dispatch({
+                                type: ActionTypes.SET_COLOR_OPTIONS,
+                                payload: { background: color.rgb },
+                            })
+                        }
+                    />
+                </Popover>
+
+                <FormGroup row>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={Boolean(colorState.useBodyColor)}
+                                onChange={handleBordFillChange}
+                                color="primary"
+                            />
+                        }
+                        label="fill borders in cell's colors"
+                        title="Fill border and cell with the same color"
+                    />
+                </FormGroup>
+                {colorState.useBodyColor ? null : (
                     <Grid container spacing={2}>
                         <Grid item xs={9}>
                             <Typography>Cell border</Typography>
@@ -159,58 +219,24 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         }
                     />
                 </Popover>
-                <Grid container spacing={2}>
-                    <Grid item xs={9}>
-                        <Typography>Background</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <ColorButton
-                            onClick={(e) => setBgAnchorEl(e.currentTarget)}
-                            aria-label="Background color"
-                            size="small"
-                            disableRipple
-                            style={{
-                                background:
-                                    bgColor && bgColor.a !== 0 ? toRGBAStr(bgColor) : checkered,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-                <Popover
-                    id="bg-color-picker"
-                    open={Boolean(bgAnchorEl)}
-                    anchorEl={bgAnchorEl}
-                    onClose={() => {
-                        setBgAnchorEl(null)
-                    }}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                    <SketchPicker
-                        color={bgColor || { h: 0, s: 0, l: 1, a: 0 }}
-                        presetColors={paletteColors}
-                        onChange={(color) => setBgColor(color.rgb)}
-                        onChangeComplete={(color: ColorResult) =>
-                            dispatch({
-                                type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: { background: color.rgb },
-                            })
-                        }
-                    />
-                </Popover>
                 <FormGroup row>
                     <FormControlLabel
                         control={
                             <Switch
-                                checked={Boolean(colorState.noFill)}
+                                checked={!colorState.noFill}
                                 onChange={handleNoFillChange}
                                 color="primary"
                             />
                         }
-                        label="fill only borders"
-                        title="Don't fill cell's body"
+                        label="fill cell's body"
+                        title="fill cell's body"
                     />
                 </FormGroup>
+            </Box>
+            <Box component="form" m={2}>
+                <Typography component="div" gutterBottom>
+                    <Box fontWeight="fontWeightBold">Palettes</Box>
+                </Typography>
                 <FormGroup row>
                     <FormControlLabel
                         control={
@@ -224,11 +250,6 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                         title="Make smooth gradient between colors"
                     />
                 </FormGroup>
-            </Box>
-            <Box component="form" m={2}>
-                <Typography component="div" gutterBottom>
-                    <Box fontWeight="fontWeightBold">Palettes</Box>
-                </Typography>
                 <Box mb={1}>
                     {!isModalOpen && (
                         <Button

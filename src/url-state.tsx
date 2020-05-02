@@ -63,6 +63,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
     },
     colors: {
         border: (c) => `cb=${rgbaToString(c as RGBColor)}`,
+        useBodyColor: (c) => (c ? 'cbb=y' : ''),
         background: (c) => `cbg=${rgbaToString(c as RGBColor)}`,
         noFill: (noFill) => (noFill ? 'nf=y' : ''),
         isGradient: (isGradient) => (isGradient ? 'gr=y' : ''),
@@ -132,6 +133,7 @@ export const mapParamToState: MapParamToState = {
     gx: (p, s) => setNumberProp(s, 'grid.signX', p),
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),
     cb: (p, s) => set(s, 'colors.border', paramToRGB(p)),
+    cbb: (p, s) => set(s, 'colors.useBodyColor', p === 'y' || false),
     nf: (p, s) => set(s, 'colors.noFill', p === 'y' || false),
     gr: (p, s) => set(s, 'colors.isGradient', p === 'y' || false),
     cbg: (p, s) => set(s, 'colors.background', paramToRGB(p)),

@@ -55,6 +55,7 @@ export const initialState: CanvasState = {
     },
     colors: {
         border: { r: 100, g: 100, b: 100, a: 0.1 },
+        useBodyColor: false,
         background: null,
         noFill: false,
         isGradient: false,

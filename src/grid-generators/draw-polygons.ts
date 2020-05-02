@@ -19,7 +19,8 @@ interface DrawPolygonsProperties {
     closePath: boolean // triangles with closed path don't look good because their tips could intersect
     ctx: CanvasRenderingContext2D
     polygonData: PolygonData
-    onlyBorder?: boolean
+    useBodyColor?: boolean
+    fillBody?: boolean
 }
 
 export default function drawPolygons({
@@ -28,7 +29,8 @@ export default function drawPolygons({
     ctx,
     polygonData,
     closePath = false,
-    onlyBorder = false,
+    fillBody = true,
+    useBodyColor = false,
 }: DrawPolygonsProperties) {
     const { fillColors, vertices, type } = polygonData
     const verticesNum = vertsPerPolygon[type]
@@ -53,21 +55,15 @@ export default function drawPolygons({
                 ctx.lineTo(v[vertIdx + i], v[vertIdx + i + 1])
             }
 
-            if (!onlyBorder) {
+            if (fillBody) {
                 ctx.fill()
+                ctx.lineWidth = borderWidth
+            } else {
+                ctx.lineWidth = Math.max(1, borderWidth)
             }
 
             closePath && ctx.closePath()
-            if (onlyBorder) {
-                ctx.strokeStyle = fillColor
-                ctx.lineWidth = Math.max(1, borderWidth)
-            } else if (borderWidth) {
-                ctx.strokeStyle = borderColor
-                ctx.lineWidth = borderWidth
-            } else {
-                ctx.strokeStyle = fillColor
-                ctx.lineWidth = 1
-            }
+            ctx.strokeStyle = useBodyColor ? fillColor : borderColor
             ctx.stroke()
         }
 

@@ -14,7 +14,8 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
     const { width, height } = state.canvasSize
     const { borderWidth } = state.cell
     const borderColor = toRGBAStr(state.colors.border)
-    const onlyBorder = !!state.colors.noFill
+    const fillBody = !state.colors.noFill
+    const useBodyColor = Boolean(state.colors.useBodyColor)
 
     const draw = SVG().size(width, height)
 
@@ -37,19 +38,12 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
                 poly.push([Math.round(v[vertIdx + i]), Math.round(v[vertIdx + i + 1])])
             }
 
-            if (onlyBorder) {
-                draw.polygon(poly.join(' '))
-                    .fill('none')
-                    .stroke({
-                        color: fillColor,
-                        width: Math.max(1, borderWidth),
-                    })
-            } else {
-                draw.polygon(poly.join(' ')).fill(fillColor).stroke({
-                    color: borderColor,
-                    width: borderWidth,
+            draw.polygon(poly.join(' '))
+                .fill(fillBody ? fillColor : 'none')
+                .stroke({
+                    color: useBodyColor ? fillColor : borderColor,
+                    width: useBodyColor ? Math.max(1, borderWidth) : borderWidth,
                 })
-            }
 
             vertIdx += coordsNum
             colIdx += 4

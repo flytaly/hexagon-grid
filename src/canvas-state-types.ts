@@ -61,6 +61,7 @@ export type PaletteColorsArray = Array<{ rgb: RGBColor; id: string | number }>
 
 export type ColorsSettings = {
     border: RGBColor
+    useBodyColor: boolean | null
     background: RGBColor | null
     noFill: boolean | null
     isGradient: boolean

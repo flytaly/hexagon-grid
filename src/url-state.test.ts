@@ -28,12 +28,21 @@ describe('state to url', () => {
     })
 
     test('should not contain falsy boolean values', () => {
-        const initValue = testState.colors.noFill
+        const noFillInitValue = testState.colors.noFill
+        const useBodyColorInitValue = testState.colors.useBodyColor
+
         testState.colors.noFill = true
+        testState.colors.useBodyColor = true
         expect(mapStateToUrlParams(testState)).toMatch(/.*nf=y;.*/)
+        expect(mapStateToUrlParams(testState)).toMatch(/.*cbb=y;.*/)
+
         testState.colors.noFill = false
+        testState.colors.useBodyColor = false
         expect(mapStateToUrlParams(testState)).not.toMatch(/.*nf=.*/)
-        testState.colors.noFill = initValue
+        expect(mapStateToUrlParams(testState)).not.toMatch(/.*cbb=.*/)
+
+        testState.colors.noFill = noFillInitValue
+        testState.colors.useBodyColor = useBodyColorInitValue
     })
 })
 

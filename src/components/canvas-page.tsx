@@ -96,7 +96,8 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
             closePath: polygonData.type === 'hexagons',
             ctx,
             polygonData,
-            onlyBorder: !!state.colors.noFill,
+            fillBody: !state.colors.noFill,
+            useBodyColor: !!state.colors.useBodyColor,
         })
     }, [
         polygonData,
@@ -106,6 +107,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         state.cell.borderWidth,
         state.colors.background,
         state.colors.noFill,
+        state.colors.useBodyColor,
     ])
 
     return (
