@@ -101,45 +101,25 @@ const SortableItem = SortableElement(({ value, id, changeColorHandler }: Sortabl
 
 type SortableListProps = {
     items: PaletteColorsArray
-    removeHandler: () => void
-    addColorHandler: () => void
     changeColorHandler: ChangeColorAction
 }
 
-const SortableList = SortableContainer(
-    ({ items, removeHandler, addColorHandler, changeColorHandler }: SortableListProps) => {
-        const classes = useStyles()
-        return (
-            <ul className={classes.ul}>
-                {items.map((value, index) => (
-                    <SortableItem
-                        key={value.id}
-                        index={index}
-                        id={value.id}
-                        changeColorHandler={changeColorHandler}
-                        value={toRGBAStr(value.rgb)}
-                    />
-                ))}
-                <IconButton
-                    className={classes.button}
-                    disableRipple
-                    onClick={removeHandler}
-                    aria-label="Remove color"
-                >
-                    <Remove />
-                </IconButton>
-                <IconButton
-                    className={classes.button}
-                    disableRipple
-                    onClick={addColorHandler}
-                    aria-label="Add color"
-                >
-                    <Add />
-                </IconButton>
-            </ul>
-        )
-    },
-)
+const SortableList = SortableContainer(({ items, changeColorHandler }: SortableListProps) => {
+    const classes = useStyles()
+    return (
+        <ul className={classes.ul}>
+            {items.map((value, index) => (
+                <SortableItem
+                    key={value.id}
+                    index={index}
+                    id={value.id}
+                    changeColorHandler={changeColorHandler}
+                    value={toRGBAStr(value.rgb)}
+                />
+            ))}
+        </ul>
+    )
+})
 
 const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalProps) => {
     const classes = useStyles()
@@ -192,16 +172,32 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
                 Click to change color, drag to sort:
             </Typography>
             <SortableList
-                addColorHandler={addColorHandler}
-                removeHandler={removeColorHandler}
                 changeColorHandler={changeColorHandler}
                 items={colors}
                 axis="xy"
                 onSortEnd={sortEndHandle}
                 distance={1}
             />
-            <Grid container justify="flex-end" alignItems="center" spacing={2}>
-                <Grid item>
+            <Grid container alignItems="center" spacing={2}>
+                <Grid item justify="flex-start">
+                    <IconButton
+                        className={classes.button}
+                        disableRipple
+                        onClick={removeColorHandler}
+                        aria-label="Remove color"
+                    >
+                        <Remove />
+                    </IconButton>
+                    <IconButton
+                        className={classes.button}
+                        disableRipple
+                        onClick={addColorHandler}
+                        aria-label="Add color"
+                    >
+                        <Add />
+                    </IconButton>
+                </Grid>
+                <Grid item style={{ marginLeft: 'auto' }}>
                     <Button
                         variant="outlined"
                         size="small"
