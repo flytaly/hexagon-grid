@@ -170,7 +170,7 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
                 ...colors,
                 {
                     id: Date.now(),
-                    rgb: toRGBaObj('hsl(0, 0%, 80%)', 1),
+                    rgb: colors.length ? colors[colors.length - 1].rgb : toRGBaObj('#d2d2d2', 1),
                 },
             ],
         })
