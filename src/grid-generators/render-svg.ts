@@ -41,8 +41,8 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
             draw.polygon(poly.join(' '))
                 .fill(fillBody ? fillColor : 'none')
                 .stroke({
-                    color: useBodyColor ? fillColor : borderColor,
-                    width: useBodyColor ? Math.max(1, borderWidth) : borderWidth,
+                    color: useBodyColor || !borderWidth ? fillColor : borderColor,
+                    width: Math.max(1, borderWidth),
                 })
 
             vertIdx += coordsNum

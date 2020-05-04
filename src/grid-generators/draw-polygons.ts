@@ -57,13 +57,11 @@ export default function drawPolygons({
 
             if (fillBody) {
                 ctx.fill()
-                ctx.lineWidth = borderWidth
-            } else {
-                ctx.lineWidth = Math.max(1, borderWidth)
             }
+            ctx.lineWidth = Math.max(1, borderWidth)
 
             closePath && ctx.closePath()
-            ctx.strokeStyle = useBodyColor ? fillColor : borderColor
+            ctx.strokeStyle = useBodyColor || !borderWidth ? fillColor : borderColor
             ctx.stroke()
         }
 
