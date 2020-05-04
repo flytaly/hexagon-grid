@@ -179,7 +179,7 @@ const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalPro
                 distance={1}
             />
             <Grid container alignItems="center" spacing={2}>
-                <Grid item justify="flex-start">
+                <Grid item>
                     <IconButton
                         className={classes.button}
                         disableRipple

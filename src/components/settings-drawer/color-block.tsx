@@ -13,10 +13,16 @@ import {
     Switch,
 } from '@material-ui/core'
 import { SketchPicker, ColorResult, RGBColor } from 'react-color'
-import { CheckCircleRounded } from '@material-ui/icons'
+import { CheckCircleRounded, Shuffle, Add } from '@material-ui/icons'
+import nicePalettes from 'nice-color-palettes/1000'
 import { makePaletteColors } from '../../canvas-state'
-import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../canvas-state-types'
-import { toRGBAStr } from '../../helpers'
+import {
+    ColorsSettings,
+    CanvasStateAction,
+    ActionTypes,
+    PaletteColorsArray,
+} from '../../canvas-state-types'
+import { toRGBAStr, toRGBaObj } from '../../helpers'
 import { defaultPalettes, SavedColorPalette } from '../../palettes'
 import { checkered } from '../../background'
 import CustomPaletteMaker from './add-custom-palette'
@@ -87,6 +93,23 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
         dispatch({
             type: ActionTypes.SET_COLOR_OPTIONS,
             payload: { isGradient: !colorState.isGradient },
+        })
+    }
+
+    const generatePaletteHandler = () => {
+        if (!isModalOpen) {
+            setIsModalOpen(true)
+        }
+        const colors: PaletteColorsArray = nicePalettes[
+            Math.floor(Math.random() * nicePalettes.length)
+        ].map((c, idx) => ({
+            id: `${idx}_${Date.now()}`,
+            rgb: toRGBaObj(c),
+        }))
+
+        dispatch({
+            type: ActionTypes.MODIFY_PALETTE,
+            payload: colors,
         })
     }
 
@@ -260,8 +283,9 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             onClick={() => {
                                 setIsModalOpen(!isModalOpen)
                             }}
+                            startIcon={<Add />}
                         >
-                            + add color palette
+                            add color palette
                         </Button>
                     )}
                     {isModalOpen && (
@@ -274,6 +298,18 @@ const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
                             colorState={colorState}
                         />
                     )}
+                </Box>
+                <Box mb={1}>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        fullWidth
+                        onClick={generatePaletteHandler}
+                        startIcon={<Shuffle />}
+                    >
+                        generate palette
+                    </Button>
                 </Box>
                 <Divider flexItem />
                 <Divider flexItem />

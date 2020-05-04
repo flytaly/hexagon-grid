@@ -27,6 +27,7 @@
         "lodash.set": "^4.3.2",
         "lodash.throttle": "^4.1.1",
         "next": "^9.3.6",
+        "nice-color-palettes": "^3.0.0",
         "react": "16.13.1",
         "react-color": "^2.18.0",
         "react-dom": "16.13.1",
