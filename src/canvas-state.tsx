@@ -44,11 +44,11 @@ export const initialState: CanvasState = {
             // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
-        noise2Strength: 0,
+        noise2Strength: 0.1,
         imageDataString: '',
     },
     grid: {
-        type: 'triangles',
+        type: 'hexagons',
         sparse: 1,
         signX: 1,
         signY: 1,

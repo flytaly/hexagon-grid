@@ -88,6 +88,26 @@
         "name": "Blue Grey",
         "colors": ["#6e7f80", "#536872", "#708090", "#536878", "#36454f"]
     },
+    {
+        "name": "pastel-01",
+        "colors": ["#f6f7f1", "#f6f7f1", "#349fa2", "#dd987b", "#94bcbc", "#94bcbc"]
+    },
+    {
+        "name": "pastel-02",
+        "colors": ["#ede7e9", "#ae2c46", "#f16d85", "#edca56", "#7977b7"]
+    },
+    {
+        "name": "pastel-03",
+        "colors": ["#f16d85", "#f6f7f1", "#f6f7f1", "#786ea2", "#e94a5e", "#f6f7f1", "#f6f7f1", "#abcf85"]
+    },
+    {
+        "name": "pastel-04",
+        "colors": ["#90786c", "#90786c", "#90786c", "#f8efe8", "#4c392b", "#4368af", "#f8efe8", "#90786c", "#90786c", "#90786c"]
+    },
+    {
+        "name": "pastel-05",
+        "colors": ["#6c184f", "#6c184f", "#6c184f", "#eeb0a3", "#264dc6", "#f9ba1a", "#6c184f", "#6c184f", "#6c184f"]
+    },
     { "name": "Blue&Yellow", "colors": ["#f8a116", "#1f5aa8"] },
     { "name": "ios-gradient", "colors": ["#B65EBA", "#2E8DE1"] },
     { "name": "ios-gradient", "colors": ["#FF9482", "#7D77FF"] },
