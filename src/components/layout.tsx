@@ -5,7 +5,7 @@ type PageProps = {
     children: React.ReactNode
 }
 
-const PageLayout = ({ children }: PageProps) => {
+const PageLayout: React.FC<PageProps> = ({ children }) => {
     return (
         <>
             <Meta />

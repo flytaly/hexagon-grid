@@ -96,7 +96,7 @@ export const Noises2DList = Object.keys(Noises2D) as Array<keyof typeof Noises2D
 let prevSeed: string | null = null
 let simplex: SimplexNoise
 
-export function getNoises(seed: string) {
+export function getNoises(seed: string): [Noises2DFns, NoisesRnd] {
     if (prevSeed !== seed || !simplex) {
         simplex = new SimplexNoise(String(seed))
         prevSeed = seed
@@ -138,5 +138,5 @@ export function getNoises(seed: string) {
         rndAsymmetric: (left = -1, right = 1) => lerp(left, right, prng()),
     }
 
-    return [noises, random] as [Noises2DFns, NoisesRnd]
+    return [noises, random]
 }

@@ -20,7 +20,7 @@ const getImgData = (width: number, height: number, imgElem: HTMLImageElement) =>
     return ctx?.getImageData(0, 0, width, height).data
 }
 
-export const useDataFromImageEffect = (state: CanvasState, genGridWorker: Worker | null) => {
+export const useDataFromImageEffect = (state: CanvasState, genGridWorker: Worker | null): void => {
     const [imageInfo, setImageInfo] = useState<ImageInfo>({})
 
     const { cellsNumW, cellsNumH } = useMemo(() => {
@@ -66,5 +66,13 @@ export const useDataFromImageEffect = (state: CanvasState, genGridWorker: Worker
             return
         }
         genGridWorker?.postMessage({ state, imgData: imageInfo.imgData })
-    }, [cellsNumH, cellsNumW, genGridWorker, imageInfo, setImageInfo, state])
+    }, [
+        cellsNumH,
+        cellsNumW,
+        genGridWorker,
+        genGridWorker?.postMessage,
+        imageInfo,
+        setImageInfo,
+        state,
+    ])
 }

@@ -47,7 +47,13 @@ type ExportModalProps = {
     handleClose: () => void
 }
 
-const ExportModal = ({ canvas, isOpen, handleClose, polygonData, state }: ExportModalProps) => {
+const ExportModal: React.FC<ExportModalProps> = ({
+    canvas,
+    isOpen,
+    handleClose,
+    polygonData,
+    state,
+}) => {
     const classes = useStyles()
     const [copyLink, setCopyLink] = useState('')
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)

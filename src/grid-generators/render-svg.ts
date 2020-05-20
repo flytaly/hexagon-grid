@@ -1,4 +1,4 @@
-import { SVG } from '@svgdotjs/svg.js'
+import { SVG, Svg } from '@svgdotjs/svg.js'
 import { CanvasState } from '../canvas-state-types'
 import { toRGBAStr } from '../helpers'
 import { PolygonData, vertsPerPolygon } from './draw-polygons'
@@ -8,7 +8,7 @@ interface DrawPolygonsProperties {
     polygonData: PolygonData
 }
 
-export default function renderSVg({ state, polygonData }: DrawPolygonsProperties) {
+export default function renderSVg({ state, polygonData }: DrawPolygonsProperties): Svg {
     const { fillColors, vertices, type } = polygonData
     const verticesNum = vertsPerPolygon[type]
     const { width, height } = state.canvasSize

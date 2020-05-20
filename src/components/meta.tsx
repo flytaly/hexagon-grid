@@ -1,7 +1,8 @@
 import Head from 'next/head'
+import React from 'react'
 import theme from '../theme'
 
-const Meta = () => {
+const Meta: React.FC = () => {
     return (
         <Head>
             <link

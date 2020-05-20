@@ -50,7 +50,7 @@ type ArrowKeysProps = {
     exportBtnClickHandler: () => void
 }
 
-const ArrowKeys = ({ dispatch, exportBtnClickHandler }: ArrowKeysProps) => {
+const ArrowKeys: React.FC<ArrowKeysProps> = ({ dispatch, exportBtnClickHandler }) => {
     const classes = useStyles()
     const theme = useTheme()
     const matches = useMediaQuery(theme.breakpoints.up('md'))

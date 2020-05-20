@@ -6,19 +6,19 @@ import { HSLColor, RGBColor } from 'react-color'
  * @param y end of the range
  * @param a interpolation value ∈ [0,1]
  */
-export function lerp(x: number, y: number, a: number) {
+export function lerp(x: number, y: number, a: number): number {
     return (1 - a) * x + a * y
 }
 
-export function clamp(n: number, min: number, max: number) {
+export function clamp(n: number, min: number, max: number): number {
     return Math.min(Math.max(n, min), max)
 }
 
-export function toHslaStr(color: HSLColor) {
+export function toHslaStr(color: HSLColor): string {
     return `hsla(${color.h},${Math.round(color.s * 100)}%,${Math.round(color.l * 100)}%,${color.a})`
 }
 
-export function toRGBAStr(color: RGBColor) {
+export function toRGBAStr(color: RGBColor): string {
     return `rgba(${color.r},${Math.round(color.g)},${Math.round(color.b)},${color.a})`
 }
 
@@ -57,7 +57,7 @@ export function genSeed(): number {
 }
 
 // https://stackoverflow.com/questions/2348597/why-doesnt-this-javascript-rgb-to-hsl-code-work/54071699#54071699
-export function rgbToHsl(r: number, g: number, b: number) {
+export function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
     r /= 255
     g /= 255
     b /= 255

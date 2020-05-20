@@ -54,17 +54,17 @@ type SettingsPanelProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const SettingsPanel = ({
+const SettingsPanel: React.FC<SettingsPanelProps> = ({
     isOpen,
     handleToggle,
     isBigScreen,
     state,
     dispatch,
-}: SettingsPanelProps) => {
+}) => {
     const classes = useStyles()
     const [tabIdx, setTabIdx] = React.useState(2)
 
-    const handleChange = (event: React.ChangeEvent<{}>, newIdx: number) => {
+    const handleChange = (event: React.ChangeEvent<unknown>, newIdx: number) => {
         setTabIdx(newIdx)
     }
 

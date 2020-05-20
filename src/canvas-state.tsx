@@ -10,11 +10,14 @@ import {
 } from './canvas-state-types'
 import { Noises2D } from './noises'
 
-export const makePaletteColors = (colors: RGBColor[], paletteId: number | string) => {
+export const makePaletteColors = (
+    colors: RGBColor[],
+    paletteId: number | string,
+): PaletteColorsArray => {
     return colors.map((rgb, index) => ({
         id: `${paletteId}-${index}`,
         rgb,
-    })) as PaletteColorsArray
+    }))
 }
 
 export const initialState: CanvasState = {

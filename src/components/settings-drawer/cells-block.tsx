@@ -25,10 +25,11 @@ const cellNames: Record<GridType, string> = {
     voronoi: 'Voronoi',
 }
 
-const CellSettingsBlock = ({ cellState, dispatch, isBigScreen, type }: CellProps) => {
+const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScreen, type }) => {
     const [hexSize, setHexSize] = useState(cellState.size)
     const [borderWidth, setBorderWidth] = useState(cellState.borderWidth)
     const [cellVariance, setCellVariance] = useState(cellState.variance)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const setCellOptsThrottled = useCallback(
         throttle((payload: Partial<CellSettings>) => {
             dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })

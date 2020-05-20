@@ -38,7 +38,7 @@ type NoiseProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const NoiseSettingBlock = ({ dispatch, noiseState }: NoiseProps) => {
+const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
     const classes = useStyles()
     const [n2Strength, setN2Strength] = useState<number>(noiseState.noise2Strength)
     const [zoom, setZoom] = useState<number>(noiseState.zoom)

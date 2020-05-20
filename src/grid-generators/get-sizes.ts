@@ -1,6 +1,15 @@
 import { CanvasSize, CellSettings, GridSettings } from '../canvas-state-types'
 
-export function getGridCellSizes(size: number, canvasSize: CanvasSize) {
+export function getGridCellSizes(
+    size: number,
+    canvasSize: CanvasSize,
+): {
+    cellSize: number
+    cellsNumW: number
+    cellsNumH: number
+    normalW: number
+    normalH: number
+} {
     const { width, height, aspect } = canvasSize
 
     const cellSize =
@@ -23,7 +32,15 @@ export function getHexCellSize(
     cellSettings: CellSettings,
     canvasSize: CanvasSize,
     gridSettings: GridSettings,
-) {
+): {
+    hexSize: number
+    widthStep: number
+    heightStep: number
+    cellsNumW: number
+    cellsNumH: number
+    normalW: number
+    normalH: number
+} {
     const { width, height, aspect } = canvasSize
     const { sparse } = gridSettings
 

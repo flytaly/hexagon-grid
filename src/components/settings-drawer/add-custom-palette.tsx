@@ -121,7 +121,7 @@ const SortableList = SortableContainer(({ items, changeColorHandler }: SortableL
     )
 })
 
-const CustomPaletteMaker = ({ handleClose, dispatch, colorState }: ColorModalProps) => {
+const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, colorState }) => {
     const classes = useStyles()
     const { colors } = colorState.palette
 

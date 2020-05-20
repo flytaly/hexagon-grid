@@ -9,7 +9,7 @@ function pointyHex(ctx: CanvasRenderingContext2D, cx: number, cy: number, size: 
     ctx.stroke()
 }
 
-const loadingPlaceholder = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+const loadingPlaceholder = (ctx: CanvasRenderingContext2D, width: number, height: number): void => {
     ctx.fillStyle = '#FFFFFF'
     ctx.fillRect(0, 0, width, height)
     ctx.fillStyle = 'rgba(100, 100, 100, 1)'

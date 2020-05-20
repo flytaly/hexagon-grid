@@ -17,10 +17,15 @@ import { clamp, rgbToHsl } from '../helpers'
 import { getNoises, NoiseFn, Noises2DFns } from '../noises'
 import { getGridCellSizes, getHexCellSize } from './get-sizes'
 
-// just to suppress ts errors
-interface HexWithCorrectSetDeclaration extends Omit<Honeycomb.BaseHex<{}>, 'set'> {
-    set(hex: { q: number; r: number; s: number }): Honeycomb.Hex<{}>
+type HexSetArgs = {
+    q: number
+    r: number
+    s: number
 }
+
+type OnCreateCallBack = Honeycomb.onCreateCallback<
+    Honeycomb.Hex<{ set: (args: HexSetArgs) => void }>
+>
 
 /** n - number ∈ [0,1] */
 type GetColorFromRange = (n: number) => RGBColor
@@ -114,7 +119,7 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Pol
     const Hex = Honeycomb.extendHex({ size: sizes.hexSize, orientation })
     const Grid = Honeycomb.defineGrid(Hex)
 
-    const onCreate = (hex: HexWithCorrectSetDeclaration) => {
+    const onCreate: OnCreateCallBack = (hex) => {
         hex.set({ q: hex.q * sparse, r: hex.r * sparse, s: hex.s * sparse })
     }
 

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const GridSettingBlock = ({ dispatch, gridState }: GridSettingsProps) => {
+const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) => {
     const classes = useStyles()
     const [sparse, setSparse] = useState<number>(gridState.sparse)
     const { signX, signY } = gridState

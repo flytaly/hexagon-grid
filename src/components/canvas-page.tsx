@@ -39,7 +39,7 @@ type CanvasPageProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
+const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
     const { width, height } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
     const [genGridWorker, setGenGridWorker] = useState<Worker | null>(null)
@@ -72,7 +72,7 @@ const CanvasPage = ({ state, dispatch }: CanvasPageProps) => {
         if (state.noise.baseNoise.id === 'image') return
         if (!context || !state.canvasSize.wasMeasured) return
         genGridWorker?.postMessage({ state, imgData: null })
-    }, [state, genGridWorker])
+    }, [state, genGridWorker, genGridWorker?.postMessage])
 
     useEffect(() => {
         const ctx = refCanv.current?.getContext('2d')

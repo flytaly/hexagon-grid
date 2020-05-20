@@ -31,7 +31,7 @@ export default function drawPolygons({
     closePath = false,
     fillBody = true,
     useBodyColor = false,
-}: DrawPolygonsProperties) {
+}: DrawPolygonsProperties): void {
     const { fillColors, vertices, type } = polygonData
     const verticesNum = vertsPerPolygon[type]
     const c = fillColors

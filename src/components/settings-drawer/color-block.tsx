@@ -65,7 +65,7 @@ type ColorProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const ColorBlock = ({ dispatch, colorState }: ColorProps) => {
+const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
     const [border, setBorder] = useState<RGBColor>(colorState.border)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
