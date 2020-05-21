@@ -1,5 +1,5 @@
 import { RGBColor } from 'react-color'
-import { clamp, genSeed } from './helpers'
+import { clamp, genSeed, mod } from './helpers'
 import { defaultPalettes, SavedColorPalette, fillGradient } from './palettes'
 import { mapUrlParamsToState } from './url-state'
 import {
@@ -139,6 +139,25 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                         colors: colorsWithId,
                     },
                     customPalettes: [newCustomPalette, ...colorState.customPalettes],
+                },
+            }
+        }
+        case ActionTypes.SELECT_NEXT_PALETTE: {
+            const inc = action.payload || 1
+            const currentPal = state.colors.palette
+
+            let id: number = currentPal.isCustom ? 0 : Number(currentPal.id)
+            if (Number.isNaN(id)) id = 0
+            id = mod(id + inc, defaultPalettes.length)
+            return {
+                ...state,
+                colors: {
+                    ...state.colors,
+                    palette: {
+                        isCustom: false,
+                        id,
+                        colors: makePaletteColors(defaultPalettes[id].colors, id),
+                    },
                 },
             }
         }

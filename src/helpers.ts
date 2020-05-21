@@ -14,6 +14,10 @@ export function clamp(n: number, min: number, max: number): number {
     return Math.min(Math.max(n, min), max)
 }
 
+export function mod(n: number, m: number): number {
+    return ((n % m) + m) % m
+}
+
 export function toHslaStr(color: HSLColor): string {
     return `hsla(${color.h},${Math.round(color.s * 100)}%,${Math.round(color.l * 100)}%,${color.a})`
 }

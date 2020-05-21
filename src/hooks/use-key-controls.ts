@@ -12,6 +12,9 @@ export default function useKeyControls(dispatch: React.Dispatch<CanvasStateActio
         const dispatchHexSize = (payload: number) => {
             dispatch({ type: ActionTypes.INC_CELL_SIZE, payload })
         }
+        const selectNextPalette = (payload: 1 | -1 = 1) => {
+            dispatch({ type: ActionTypes.SELECT_NEXT_PALETTE, payload })
+        }
         const cb = (e: KeyboardEvent) => {
             if (e.target === document.body) {
                 const shift = e.shiftKey ? 10 : 1
@@ -34,6 +37,15 @@ export default function useKeyControls(dispatch: React.Dispatch<CanvasStateActio
                         break
                     case '-':
                         dispatchHexSize(-1)
+                        break
+                    default:
+                }
+                switch (e.keyCode) {
+                    case 74: // j
+                        selectNextPalette()
+                        break
+                    case 75: // k
+                        selectNextPalette(-1)
                         break
                     default:
                 }

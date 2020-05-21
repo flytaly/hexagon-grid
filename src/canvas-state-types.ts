@@ -1,6 +1,6 @@
 import { RGBColor } from 'react-color'
 import { Noises2DFns } from './noises'
-import { PaletteId, SavedColorPalette } from './palettes'
+import { SavedColorPalette } from './palettes'
 
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
@@ -10,6 +10,7 @@ export enum ActionTypes {
     SET_COLOR_OPTIONS = 'SET_COLOR_OPTIONS',
     MERGE_STATE_FROM_QUERY = 'MERGE_STATE_FROM_QUERY',
     MODIFY_PALETTE = 'MODIFY_PALETTE',
+    SELECT_NEXT_PALETTE = 'SELECT_NEXT_PALETTE',
     SAVE_NEW_PALETTE = 'SAVE_NEW_PALETTE',
     INC_NOISE_OFFSET = 'INC_NOISE_OFFSET',
     INC_CELL_SIZE = 'INC_CELL_SIZE',
@@ -67,7 +68,7 @@ export type ColorsSettings = {
     isGradient: boolean
     palette: {
         isCustom: boolean
-        id: PaletteId | string | number
+        id: string | number
         colors: PaletteColorsArray
     }
     customPalettes: SavedColorPalette[]
@@ -93,6 +94,7 @@ export type CanvasStateAction =
     | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
     | { type: ActionTypes.MERGE_STATE_FROM_QUERY; payload: string }
     | { type: ActionTypes.MODIFY_PALETTE; payload: PaletteColorsArray }
+    | { type: ActionTypes.SELECT_NEXT_PALETTE; payload: 1 | -1 }
     | { type: ActionTypes.INC_NOISE_OFFSET; payload: { dx?: number; dy?: number } }
     | { type: ActionTypes.INC_CELL_SIZE; payload: number }
     | { type: ActionTypes.SAVE_NEW_PALETTE }

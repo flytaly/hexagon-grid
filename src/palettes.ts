@@ -4,14 +4,11 @@ import paletteList from './palettes-list.json'
 
 export type SavedColorPalette = {
     name?: string
-    id: PaletteId | string | number
+    id: number
     colors: RGBColor[]
     setBackground?: RGBColor
     gradient: string
 }
-
-const ids = ['b+y', 'grey', 'colorful', 'teal-green'] as const
-export type PaletteId = typeof ids[number]
 
 export const fillGradient = (colors: RGBColor[]): string => {
     const { length } = colors
@@ -31,7 +28,7 @@ export const defaultPalettes: SavedColorPalette[] = paletteList.map((p, idx) => 
         Array.isArray(c) ? toRGBaObj(c[0], c[1]) : toRGBaObj(c),
     )
     const palette: SavedColorPalette = {
-        id: `default_${idx}`,
+        id: idx,
         name: p.name,
         gradient: fillGradient(colors),
         colors,
