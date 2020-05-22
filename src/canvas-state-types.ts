@@ -8,6 +8,7 @@ export enum ActionTypes {
     SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
     SET_GRID_OPTIONS = 'SET_GRID_OPTIONS',
     SET_COLOR_OPTIONS = 'SET_COLOR_OPTIONS',
+    TOGGLE_GRADIENT = 'TOGGLE_GRADIENT',
     MERGE_STATE_FROM_QUERY = 'MERGE_STATE_FROM_QUERY',
     MODIFY_PALETTE = 'MODIFY_PALETTE',
     SELECT_NEXT_PALETTE = 'SELECT_NEXT_PALETTE',
@@ -92,6 +93,7 @@ export type CanvasStateAction =
     | { type: ActionTypes.SET_NOISE_OPTIONS; payload: RecursivePartial<NoiseSettings> }
     | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
     | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
+    | { type: ActionTypes.TOGGLE_GRADIENT }
     | { type: ActionTypes.MERGE_STATE_FROM_QUERY; payload: string }
     | { type: ActionTypes.MODIFY_PALETTE; payload: PaletteColorsArray }
     | { type: ActionTypes.SELECT_NEXT_PALETTE; payload: 1 | -1 }

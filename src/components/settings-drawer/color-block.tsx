@@ -91,8 +91,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
 
     const handleIsGradientChange = () => {
         dispatch({
-            type: ActionTypes.SET_COLOR_OPTIONS,
-            payload: { isGradient: !colorState.isGradient },
+            type: ActionTypes.TOGGLE_GRADIENT,
         })
     }
 
@@ -285,7 +284,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                             }}
                             startIcon={<Add />}
                         >
-                            add color palette
+                            edit color palette
                         </Button>
                     )}
                     {isModalOpen && (

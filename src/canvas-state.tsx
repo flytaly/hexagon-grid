@@ -78,6 +78,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             canvasSize.aspect = canvasSize.width / canvasSize.height
             return { ...state, canvasSize }
         }
+
         case ActionTypes.SET_CELL_OPTIONS: {
             const keys = Object.keys(action.payload)
             if (
@@ -89,8 +90,10 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             }
             return { ...state, cell: { ...state.cell, ...action.payload } }
         }
+
         case ActionTypes.SET_GRID_OPTIONS:
             return { ...state, grid: { ...state.grid, ...action.payload } }
+
         case ActionTypes.SET_NOISE_OPTIONS:
             return {
                 ...state,
@@ -103,8 +106,10 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                     },
                 },
             }
+
         case ActionTypes.SET_COLOR_OPTIONS:
             return { ...state, colors: { ...state.colors, ...action.payload } }
+
         case ActionTypes.MODIFY_PALETTE:
             return {
                 ...state,
@@ -112,11 +117,16 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                     ...state.colors,
                     palette: {
                         isCustom: true,
-                        id: state.colors.customPalettes.length,
+                        id: `custom-${state.colors.customPalettes.length}`,
                         colors: action.payload,
                     },
                 },
             }
+
+        case ActionTypes.TOGGLE_GRADIENT: {
+            return { ...state, colors: { ...state.colors, isGradient: !state.colors.isGradient } }
+        }
+
         case ActionTypes.SAVE_NEW_PALETTE: {
             const colorState = state.colors
             const customPaletteId = colorState.customPalettes.length
@@ -142,6 +152,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                 },
             }
         }
+
         case ActionTypes.SELECT_NEXT_PALETTE: {
             const inc = action.payload || 1
             const currentPal = state.colors.palette
@@ -161,6 +172,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                 },
             }
         }
+
         case ActionTypes.INC_NOISE_OFFSET: {
             const { dx = 0, dy = 0 } = action.payload
             return {
@@ -172,11 +184,13 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                 },
             }
         }
+
         case ActionTypes.INC_CELL_SIZE: {
             const size = clamp(state.cell.size + action.payload, 1, 20)
             if (size === state.cell.size) return state
             return { ...state, cell: { ...state.cell, size } }
         }
+
         case ActionTypes.MERGE_STATE_FROM_QUERY: {
             const params = {} as Record<string, string>
             for (const param of action.payload.split(';')) {
@@ -186,6 +200,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
 
             return mapUrlParamsToState(params, state)
         }
+
         default:
             throw new Error()
     }
