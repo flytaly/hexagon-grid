@@ -8,7 +8,7 @@ import {
     CanvasState,
     CanvasStateAction,
 } from './canvas-state-types'
-import { Noises2D } from './noises'
+import { Noises2D, Noises2DList } from './noises'
 
 export const makePaletteColors = (
     colors: RGBColor[],
@@ -106,6 +106,23 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                     },
                 },
             }
+
+        case ActionTypes.SELECT_NEXT_BASE_NOISE: {
+            const { id } = state.noise.baseNoise
+            const noises = Noises2DList.filter((n) => n !== 'image')
+            const index = noises.indexOf(id)
+            const nextId = noises[(noises.length + index + action.payload) % noises.length]
+            return {
+                ...state,
+                noise: {
+                    ...state.noise,
+                    baseNoise: {
+                        ...state.noise.baseNoise,
+                        id: nextId,
+                    },
+                },
+            }
+        }
 
         case ActionTypes.SET_COLOR_OPTIONS:
             return { ...state, colors: { ...state.colors, ...action.payload } }

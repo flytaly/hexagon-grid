@@ -6,6 +6,7 @@ export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
     SET_CELL_OPTIONS = 'SET_CELL_OPTIONS',
     SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
+    SELECT_NEXT_BASE_NOISE = 'SELECT_NEXT_BASE_NOISE',
     SET_GRID_OPTIONS = 'SET_GRID_OPTIONS',
     SET_COLOR_OPTIONS = 'SET_COLOR_OPTIONS',
     TOGGLE_GRADIENT = 'TOGGLE_GRADIENT',
@@ -91,6 +92,7 @@ export type CanvasStateAction =
     | { type: ActionTypes.SET_SIZE; payload: Partial<CanvasSize> }
     | { type: ActionTypes.SET_CELL_OPTIONS; payload: Partial<CellSettings> }
     | { type: ActionTypes.SET_NOISE_OPTIONS; payload: RecursivePartial<NoiseSettings> }
+    | { type: ActionTypes.SELECT_NEXT_BASE_NOISE; payload: 1 | -1 }
     | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
     | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
     | { type: ActionTypes.TOGGLE_GRADIENT }

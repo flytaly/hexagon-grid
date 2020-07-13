@@ -30,6 +30,10 @@ export default function useKeyControls(dispatch: React.Dispatch<CanvasStateActio
                 payload: colors,
             })
         }
+
+        const selectNextBaseNoise = (payload: 1 | -1 = 1) => {
+            dispatch({ type: ActionTypes.SELECT_NEXT_BASE_NOISE, payload })
+        }
         const cb = (e: KeyboardEvent) => {
             if (e.target === document.body) {
                 const shift = e.shiftKey ? 10 : 1
@@ -67,6 +71,9 @@ export default function useKeyControls(dispatch: React.Dispatch<CanvasStateActio
                         break
                     case 71: // g
                         dispatch({ type: ActionTypes.TOGGLE_GRADIENT })
+                        break
+                    case 78: // n
+                        selectNextBaseNoise(e.shiftKey ? -1 : 1)
                         break
                     default:
                 }
