@@ -1,6 +1,6 @@
 import { RGBColor } from 'react-color'
-import { Noises2DFns } from './noises'
-import { SavedColorPalette } from './palettes'
+import { Noises2DFns } from '../noises'
+import { SavedColorPalette } from '../palettes'
 
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',

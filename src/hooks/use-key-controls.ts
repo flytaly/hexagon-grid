@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import nicePalettes from 'nice-color-palettes/1000'
-import { CanvasStateAction, ActionTypes, PaletteColorsArray } from '../canvas-state-types'
+import { CanvasStateAction, ActionTypes, PaletteColorsArray } from '../state/canvas-state-types'
 import { toRGBaObj } from '../helpers'
 
 export default function useKeyControls(dispatch: React.Dispatch<CanvasStateAction>): void {

@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 import { Box, Grid, IconButton, Input, Slider, Typography } from '@material-ui/core'
 import { SwapHoriz, SwapVert } from '@material-ui/icons'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { CanvasStateAction, ActionTypes, GridSettings, GridType } from '../../canvas-state-types'
+import {
+    CanvasStateAction,
+    ActionTypes,
+    GridSettings,
+    GridType,
+} from '../../state/canvas-state-types'
 import HexIcon from '../../../assets/hex-grid.svg'
 import TriangleIcon from '../../../assets/triangle.svg'
 import VoronoiIcon from '../../../assets/voronoi.svg'

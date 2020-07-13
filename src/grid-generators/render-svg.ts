@@ -1,5 +1,5 @@
 import { SVG, Svg } from '@svgdotjs/svg.js'
-import { CanvasState } from '../canvas-state-types'
+import { CanvasState } from '../state/canvas-state-types'
 import { toRGBAStr } from '../helpers'
 import { PolygonData, vertsPerPolygon } from './draw-polygons'
 

@@ -9,7 +9,7 @@ import {
     CanvasStateAction,
     ActionTypes,
     PaletteColorsArray,
-} from '../../canvas-state-types'
+} from '../../state/canvas-state-types'
 import { toRGBaObj, toRGBAStr } from '../../helpers'
 
 type ColorModalProps = {

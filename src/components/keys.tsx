@@ -11,7 +11,7 @@ import {
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles'
 import { Box, IconButton, Fab, Grid } from '@material-ui/core'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import { CanvasStateAction, ActionTypes } from '../canvas-state-types'
+import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
 import useKeyControls from '../hooks/use-key-controls'
 
 const useStyles = makeStyles((theme: Theme) =>

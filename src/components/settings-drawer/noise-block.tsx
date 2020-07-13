@@ -17,7 +17,7 @@ import {
     NoiseSettings,
     CanvasStateAction,
     ActionTypes,
-} from '../../canvas-state-types'
+} from '../../state/canvas-state-types'
 import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
 import { genSeed } from '../../helpers'
 

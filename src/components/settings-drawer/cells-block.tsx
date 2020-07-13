@@ -10,7 +10,12 @@ import {
     Input,
 } from '@material-ui/core'
 import throttle from 'lodash.throttle'
-import { CanvasStateAction, ActionTypes, CellSettings, GridType } from '../../canvas-state-types'
+import {
+    CanvasStateAction,
+    ActionTypes,
+    CellSettings,
+    GridType,
+} from '../../state/canvas-state-types'
 
 type CellProps = {
     cellState: CellSettings

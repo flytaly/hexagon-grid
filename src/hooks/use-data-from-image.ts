@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { CanvasState } from '../canvas-state-types'
+import { CanvasState } from '../state/canvas-state-types'
 import { getGridCellSizes, getHexCellSize } from '../grid-generators/get-sizes'
 import { drawImageProp } from '../draw-image'
 

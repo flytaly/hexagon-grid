@@ -1,5 +1,5 @@
 import { stateObjectPropIds, mapStateToUrlParams, mapUrlParamsToState } from './url-state'
-import { testState, testParamsQuery, testParamsEntries } from './mocks/canvas-test-state'
+import { testState, testParamsQuery, testParamsEntries } from '../mocks/canvas-test-state'
 import { initialState } from './canvas-state'
 
 describe('state to url', () => {

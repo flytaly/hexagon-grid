@@ -1,4 +1,4 @@
-import { GridType } from '../canvas-state-types'
+import { GridType } from '../state/canvas-state-types'
 
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 export type PolygonData = {

@@ -15,13 +15,13 @@ import {
 import { SketchPicker, ColorResult, RGBColor } from 'react-color'
 import { CheckCircleRounded, Shuffle, Add } from '@material-ui/icons'
 import nicePalettes from 'nice-color-palettes/1000'
-import { makePaletteColors } from '../../canvas-state'
+import { makePaletteColors } from '../../state/canvas-state'
 import {
     ColorsSettings,
     CanvasStateAction,
     ActionTypes,
     PaletteColorsArray,
-} from '../../canvas-state-types'
+} from '../../state/canvas-state-types'
 import { toRGBAStr, toRGBaObj } from '../../helpers'
 import { defaultPalettes, SavedColorPalette } from '../../palettes'
 import { checkered } from '../../background'

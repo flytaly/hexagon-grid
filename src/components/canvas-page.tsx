@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Container, Typography } from '@material-ui/core'
-import { CanvasState, CanvasStateAction } from '../canvas-state-types'
+import { CanvasState, CanvasStateAction } from '../state/canvas-state-types'
 import { toRGBAStr } from '../helpers'
 import { checkered } from '../background'
 import Worker from '../grid-generators/generate-data.worker'

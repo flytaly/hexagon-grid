@@ -12,7 +12,7 @@ import {
     BaseNoise,
     NoiseSettings,
     PaletteColorsArray,
-} from '../canvas-state-types'
+} from '../state/canvas-state-types'
 import { clamp, rgbToHsl } from '../helpers'
 import { getNoises, NoiseFn, Noises2DFns } from '../noises'
 import { getGridCellSizes, getHexCellSize } from './get-sizes'

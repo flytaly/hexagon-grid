@@ -5,8 +5,9 @@ import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
-import { reducer, initialState } from '../canvas-state'
-import { ActionTypes } from '../canvas-state-types'
+import { initialState } from '../state/canvas-state'
+import { reducer } from '../state/reducer'
+import { ActionTypes } from '../state/canvas-state-types'
 import { toolbarHeight } from '../configs'
 
 const useStyles = makeStyles((theme: Theme) =>
