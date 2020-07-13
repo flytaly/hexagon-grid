@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) => {
 })
 
 interface TabPanelProps {
-    children?: React.ReactNode
+    children: React.ReactNode
     index: number
     value: number
 }

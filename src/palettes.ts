@@ -10,6 +10,12 @@ export type SavedColorPalette = {
     gradient: string
 }
 
+export type CustomColorPalette = {
+    id: number | string
+    colors: RGBColor[]
+    gradient: string
+}
+
 export const fillGradient = (colors: RGBColor[]): string => {
     const { length } = colors
     return colors.reduce((acc, color, idx) => {

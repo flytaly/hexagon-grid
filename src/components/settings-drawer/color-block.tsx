@@ -125,12 +125,12 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
         return st
     }
 
-    const paletteBtnClick = (p: SavedColorPalette) => {
+    const paletteBtnClick = (p: SavedColorPalette, isCustom = false) => {
         dispatch({
             type: ActionTypes.SET_COLOR_OPTIONS,
             payload: {
                 palette: {
-                    isCustom: false,
+                    isCustom,
                     id: p.id,
                     colors: makePaletteColors(p.colors, p.id),
                 },
@@ -317,7 +317,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                         key={p.id}
                         aria-label={`custom palette ${p.id}`}
                         disableRipple
-                        onClick={() => paletteBtnClick(p)}
+                        onClick={() => paletteBtnClick(p, true)}
                         style={getGradientBg(p)}
                     >
                         {colorState.palette.id === p.id ? <CheckCircleRounded /> : null}

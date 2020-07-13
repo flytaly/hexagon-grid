@@ -1,5 +1,5 @@
 import { clamp, mod } from '../helpers'
-import { defaultPalettes, SavedColorPalette, fillGradient } from '../palettes'
+import { defaultPalettes, fillGradient, CustomColorPalette } from '../palettes'
 import { mapUrlParamsToState } from './url-state'
 import { ActionTypes, CanvasState, CanvasStateAction } from './canvas-state-types'
 import { Noises2DList } from '../noises'
@@ -72,10 +72,10 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         }
         case ActionTypes.SAVE_NEW_PALETTE: {
             const colorState = state.colors
-            const customPaletteId = colorState.customPalettes.length
+            const customPaletteId = `custom_${Date.now()}`
             const hslArray = colorState.palette.colors.map((c) => c.rgb)
-            const colorsWithId = makePaletteColors(hslArray, `custom_${customPaletteId}`)
-            const newCustomPalette: SavedColorPalette = {
+            const colorsWithId = makePaletteColors(hslArray, customPaletteId)
+            const newCustomPalette: CustomColorPalette = {
                 id: customPaletteId,
                 colors: hslArray,
                 gradient: fillGradient(hslArray),
@@ -97,8 +97,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             const inc = action.payload || 1
             const currentPal = state.colors.palette
             let id: number = currentPal.isCustom ? 0 : Number(currentPal.id)
-            if (Number.isNaN(id)) id = 0
-            id = mod(id + inc, defaultPalettes.length)
+            id = Number.isNaN(id) ? 0 : mod(id + inc, defaultPalettes.length)
             return {
                 ...state,
                 colors: {
