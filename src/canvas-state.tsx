@@ -29,10 +29,10 @@ export const initialState: CanvasState = {
         wasMeasured: false,
     },
     cell: {
-        size: 4,
+        size: 2.5,
         orientation: 'pointy', // for hexagons only
         variance: 10,
-        borderWidth: 1,
+        borderWidth: 0,
     },
     noise: {
         seed: genSeed(),
@@ -47,7 +47,7 @@ export const initialState: CanvasState = {
             // id: 'custom',
             customFn: 'sin(x*2) + y*2',
         },
-        noise2Strength: 0.1,
+        noise2Strength: 0.2,
         imageDataString: '',
     },
     grid: {
@@ -57,7 +57,7 @@ export const initialState: CanvasState = {
         signY: 1,
     },
     colors: {
-        border: { r: 100, g: 100, b: 100, a: 0.1 },
+        border: { r: 100, g: 100, b: 100, a: 0.8 },
         useBodyColor: false,
         background: null,
         noFill: false,
