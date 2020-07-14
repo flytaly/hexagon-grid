@@ -58,6 +58,7 @@ export type GridSettings = {
     sparse: number
     signX: 1 | -1
     signY: 1 | -1
+    isXYSwapped: boolean
 }
 
 export type PaletteColorsArray = Array<{ rgb: RGBColor; id: string | number }>

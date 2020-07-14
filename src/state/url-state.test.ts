@@ -27,22 +27,28 @@ describe('state to url', () => {
         expect(mapStateToUrlParams(testState).toLowerCase()).toBe(testParamsQuery.toLowerCase())
     })
 
-    test('should not contain falsy boolean values', () => {
+    test('should omit falsy boolean values', () => {
         const noFillInitValue = testState.colors.noFill
         const useBodyColorInitValue = testState.colors.useBodyColor
+        const isXYSwappedInitValue = testState.grid.isXYSwapped
 
         testState.colors.noFill = true
         testState.colors.useBodyColor = true
+        testState.grid.isXYSwapped = true
         expect(mapStateToUrlParams(testState)).toMatch(/.*nf=y;.*/)
         expect(mapStateToUrlParams(testState)).toMatch(/.*cbb=y;.*/)
+        expect(mapStateToUrlParams(testState)).toMatch(/.*gxy=y;.*/)
 
         testState.colors.noFill = false
         testState.colors.useBodyColor = false
+        testState.grid.isXYSwapped = false
         expect(mapStateToUrlParams(testState)).not.toMatch(/.*nf=.*/)
         expect(mapStateToUrlParams(testState)).not.toMatch(/.*cbb=.*/)
+        expect(mapStateToUrlParams(testState)).not.toMatch(/.*gxy=.*/)
 
         testState.colors.noFill = noFillInitValue
         testState.colors.useBodyColor = useBodyColorInitValue
+        testState.grid.isXYSwapped = isXYSwappedInitValue
     })
 })
 

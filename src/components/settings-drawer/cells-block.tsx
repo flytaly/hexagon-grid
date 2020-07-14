@@ -64,7 +64,7 @@ const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScre
                 getAriaValueText={(value) => `${value}%`}
                 step={0.5}
                 marks
-                min={2}
+                min={1}
                 max={20}
                 valueLabelDisplay="auto"
                 onChange={(e, size) => {

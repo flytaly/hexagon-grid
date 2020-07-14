@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Box, Grid, IconButton, Input, Slider, Typography } from '@material-ui/core'
-import { SwapHoriz, SwapVert } from '@material-ui/icons'
+import { Box, Grid, IconButton, Input, Slider, Typography, Button } from '@material-ui/core'
+import { SwapHoriz, SwapVert, Rotate90DegreesCcw } from '@material-ui/icons'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
     CanvasStateAction,
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) => {
     const classes = useStyles()
     const [sparse, setSparse] = useState<number>(gridState.sparse)
-    const { signX, signY } = gridState
+    const { signX, signY, isXYSwapped } = gridState
 
     const dispatchOption = (payload: Partial<GridSettings>) =>
         dispatch({ type: ActionTypes.SET_GRID_OPTIONS, payload })
@@ -44,8 +44,9 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
     }
 
     const setGridType = (type: GridType) => dispatchOption({ type })
-    const swapXAxis = () => dispatchOption({ signX: signX === 1 ? -1 : 1 })
-    const swapYAxis = () => dispatchOption({ signY: signY === 1 ? -1 : 1 })
+    const mirrorXAxis = () => dispatchOption({ signX: signX === 1 ? -1 : 1 })
+    const mirrorYAxis = () => dispatchOption({ signY: signY === 1 ? -1 : 1 })
+    const swapXYAxes = () => dispatchOption({ isXYSwapped: !isXYSwapped })
 
     return (
         <Box component="form" m={2}>
@@ -54,13 +55,14 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
             </Typography>
             <Grid container spacing={2} alignItems="center">
                 <Grid item>
-                    <Typography>Mirror axes</Typography>
+                    <Typography>Axes</Typography>
                 </Grid>
                 <Grid item>
                     <IconButton
                         color={signX === -1 ? 'primary' : undefined}
-                        onClick={swapXAxis}
+                        onClick={mirrorXAxis}
                         aria-label="Mirror horizontal axis"
+                        title="Mirror horizontal axis"
                     >
                         <SwapHoriz />
                     </IconButton>
@@ -68,10 +70,21 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                 <Grid item>
                     <IconButton
                         color={signY === -1 ? 'primary' : undefined}
-                        onClick={swapYAxis}
+                        onClick={mirrorYAxis}
                         aria-label="Mirror vertical axis"
+                        title="Mirror vertical axis"
                     >
                         <SwapVert />
+                    </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton
+                        color={isXYSwapped ? 'primary' : undefined}
+                        onClick={swapXYAxes}
+                        aria-label="Swap axes"
+                        title="Swap axes"
+                    >
+                        <Rotate90DegreesCcw />
                     </IconButton>
                 </Grid>
             </Grid>

@@ -110,7 +110,7 @@ function setFillColorFromImg(
 function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): PolygonData {
     const { orientation } = state.cell
     const { zoom, baseNoise, noise2Strength } = state.noise
-    const { sparse, signX, signY } = state.grid
+    const { sparse, signX, signY, isXYSwapped } = state.grid
     const isImg = baseNoise.id === 'image' && Boolean(imgData)
 
     const [noises, random] = getNoises(String(state.noise.seed))
@@ -142,12 +142,11 @@ function genHexData(state: CanvasState, imgData?: Uint8ClampedArray | null): Pol
     const getColor = getColorPickerFn(palette, state.colors.isGradient)
 
     const getRandomNoiseVal = () => (noise2Strength ? random.rnd(noise2Strength) : 0)
-    const getNoiseVal = (cx: number, cy: number) =>
-        clamp(
-            noiseFn(signX * cx, signY * cy, sizes.normalW, sizes.normalH) + getRandomNoiseVal(),
-            -1,
-            1,
-        )
+    const getNoiseVal = (cx: number, cy: number) => {
+        const x = isXYSwapped ? signY * cy : signX * cx
+        const y = isXYSwapped ? signX * cx : signY * cy
+        return clamp(noiseFn(x, y, sizes.normalW, sizes.normalH) + getRandomNoiseVal(), -1, 1)
+    }
 
     grid.forEach((hexagon, idx) => {
         if (isImg) {
@@ -188,7 +187,7 @@ function genDelaunayData(
     const { width, height } = state.canvasSize
     const { zoom, baseNoise, noise2Strength } = state.noise
     const [noises, random] = getNoises(String(state.noise.seed))
-    const { signX, signY } = state.grid
+    const { signX, signY, isXYSwapped } = state.grid
     const isImg = baseNoise.id === 'image' && Boolean(imgData)
 
     const { cellSize, cellsNumW, cellsNumH, normalW, normalH } = getGridCellSizes(
@@ -235,7 +234,9 @@ function genDelaunayData(
     const getNoiseVal = (cx: number, cy: number) => {
         const x = (cx / cellSize - cellsNumW / 2 + state.noise.offsetX) / (zoom * 2)
         const y = (cy / cellSize - cellsNumH / 2 + state.noise.offsetY) / (zoom * 2)
-        const noiseValue = noiseFn(signX * x, signY * y, normalW, normalH) + getRandomNoiseVal()
+        const xx = isXYSwapped ? signY * y : signX * x
+        const yy = isXYSwapped ? signX * x : signY * y
+        const noiseValue = noiseFn(xx, yy, normalW, normalH) + getRandomNoiseVal()
         return clamp(noiseValue, -1, 1)
     }
 

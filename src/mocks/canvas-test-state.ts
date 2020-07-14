@@ -21,7 +21,13 @@ export const testState: CanvasState = {
         noise2Strength: 3,
         imageDataString: '',
     },
-    grid: { type: 'triangles', sparse: 2, signX: -1, signY: -1 },
+    grid: {
+        type: 'triangles',
+        sparse: 2,
+        signX: -1,
+        signY: -1,
+        isXYSwapped: true,
+    },
     colors: {
         border: { r: 7, g: 193, b: 239, a: 0.2 },
         background: null,
@@ -62,6 +68,7 @@ export const testParamsEntries = [
     ['gs', '2'],
     ['gx', '-1'],
     ['gy', '-1'],
+    ['gxy', 'y'],
     ['cb', '07C1EF,20'],
     ['cbb', 'y'],
     ['gr', 'y'],

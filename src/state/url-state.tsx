@@ -4,6 +4,7 @@ import clone from 'lodash.clonedeep'
 import { RGBColor } from 'react-color'
 import { CanvasState, PaletteColorsArray, GridType } from './canvas-state-types'
 import { toRGBaObj } from '../helpers'
+import { initialState } from './canvas-state'
 
 type ParamFn = (p: string | RGBColor | PaletteColorsArray | GridType) => string
 
@@ -61,6 +62,7 @@ export const stateObjectPropIds: ObjectPropToStrMap<CanvasState> = {
         sparse: 'gs',
         signX: 'gx',
         signY: 'gy',
+        isXYSwapped: (g) => (g ? 'gxy=y' : ''),
     },
     colors: {
         border: (c) => `cb=${rgbaToString(c as RGBColor)}`,
@@ -133,6 +135,7 @@ export const mapParamToState: MapParamToState = {
     gs: (p, s) => setNumberProp(s, 'grid.sparse', p),
     gx: (p, s) => setNumberProp(s, 'grid.signX', p),
     gy: (p, s) => setNumberProp(s, 'grid.signY', p),
+    gxy: (p, s) => set(s, 'grid.isXYSwapped', p === 'y' || false),
     cb: (p, s) => set(s, 'colors.border', paramToRGB(p)),
     cbb: (p, s) => set(s, 'colors.useBodyColor', p === 'y' || false),
     nf: (p, s) => set(s, 'colors.noFill', p === 'y' || false),
@@ -172,7 +175,8 @@ export function mapUrlParamsToState(
     params: Record<string, string>,
     oldState: CanvasState,
 ): CanvasState {
-    const state = clone(oldState)
+    const state = clone(initialState)
+    state.canvasSize = clone(oldState.canvasSize)
     const entries = Object.entries(params) as [keyof typeof mapParamToState, string][]
 
     for (const [key, value] of entries) {

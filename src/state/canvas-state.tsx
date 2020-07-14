@@ -49,6 +49,7 @@ export const initialState: CanvasState = {
         sparse: 1,
         signX: 1,
         signY: 1,
+        isXYSwapped: false,
     },
     colors: {
         border: { r: 100, g: 100, b: 100, a: 0.8 },

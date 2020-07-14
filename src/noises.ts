@@ -6,7 +6,6 @@ export type NoiseFn = (x: number, y: number, width?: number, height?: number) =>
 
 export type Noises2DFns = {
     line: NoiseFn
-    linesSum: NoiseFn
     diagonal: NoiseFn
     diagonal1: NoiseFn
     diagonal2: NoiseFn
@@ -40,10 +39,6 @@ export const Noises2D: NoisesInfoObj = {
     line: {
         id: 'line',
         name: 'Lines',
-    },
-    linesSum: {
-        id: 'linesSum',
-        name: 'Lines sum',
     },
     diagonal: {
         id: 'diagonal',
@@ -109,7 +104,6 @@ export function getNoises(seed: string): [Noises2DFns, NoisesRnd] {
 
     const noises: Noises2DFns = {
         line: (x) => n1D(x),
-        linesSum: (x, y) => n1D(x) + n1D(y),
         diagonal: (x, y) => clamp(x * Math.cos(Math.PI / 4) + y * Math.sin(Math.PI / 4), -1, 1),
         diagonal1: (x, y) => {
             // from center
