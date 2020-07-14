@@ -9,6 +9,7 @@ import { initialState } from '../state/canvas-state'
 import { reducer } from '../state/reducer'
 import { ActionTypes } from '../state/canvas-state-types'
 import { toolbarHeight } from '../configs'
+import HeaderLogo from '../../public/logo.svg'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,6 +24,14 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100%',
             maxHeight: `calc(100% - ${toolbarHeight}px)`,
             marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
+        },
+        toolbar: {
+            height: toolbarHeight,
+            paddingLeft: 0,
+        },
+        logo: {
+            fill: theme.palette.background.default,
+            height: toolbarHeight,
         },
     }),
 )
@@ -72,7 +81,8 @@ const Home: NextPage = () => {
     return (
         <>
             <AppBar position="static">
-                <Toolbar variant="dense" style={{ height: toolbarHeight }}>
+                <Toolbar variant="dense" className={classes.toolbar}>
+                    <HeaderLogo className={classes.logo} />
                     <Typography>Hexagons</Typography>
                 </Toolbar>
             </AppBar>
