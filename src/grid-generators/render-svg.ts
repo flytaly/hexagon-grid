@@ -44,10 +44,10 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
                     color: useBodyColor || !borderWidth ? fillColor : borderColor,
                     width: Math.max(1, borderWidth),
                 })
-
-            vertIdx += coordsNum
-            colIdx += 4
         }
+
+        vertIdx += coordsNum
+        colIdx += 4
     }
 
     return draw
