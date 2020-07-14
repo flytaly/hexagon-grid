@@ -1,6 +1,6 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Fab, useMediaQuery, AppBar, Toolbar, Typography } from '@material-ui/core'
+import { Fab, useMediaQuery } from '@material-ui/core'
 import { Settings } from '@material-ui/icons'
 import { NextPage } from 'next'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
@@ -9,7 +9,7 @@ import { initialState } from '../state/canvas-state'
 import { reducer } from '../state/reducer'
 import { ActionTypes } from '../state/canvas-state-types'
 import { toolbarHeight } from '../configs'
-import HeaderLogo from '../../public/logo.svg'
+import RouterAppbar from '../components/router-appbar'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,14 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100%',
             maxHeight: `calc(100% - ${toolbarHeight}px)`,
             marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
-        },
-        toolbar: {
-            height: toolbarHeight,
-            paddingLeft: 0,
-        },
-        logo: {
-            fill: theme.palette.background.default,
-            height: toolbarHeight,
         },
     }),
 )
@@ -80,12 +72,7 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <AppBar position="static">
-                <Toolbar variant="dense" className={classes.toolbar}>
-                    <HeaderLogo className={classes.logo} />
-                    <Typography>Hexagons</Typography>
-                </Toolbar>
-            </AppBar>
+            <RouterAppbar />
             <div className={classes.pageWrapper}>
                 <CanvasPage dispatch={dispatch} state={state} />
             </div>

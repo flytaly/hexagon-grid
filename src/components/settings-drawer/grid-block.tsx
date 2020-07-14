@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Grid, IconButton, Input, Slider, Typography, Button } from '@material-ui/core'
+import { Box, Grid, IconButton, Input, Slider, Typography } from '@material-ui/core'
 import { SwapHoriz, SwapVert, Rotate90DegreesCcw } from '@material-ui/icons'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
