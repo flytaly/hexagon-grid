@@ -54,8 +54,11 @@ describe('state to url', () => {
 
 describe('params to state', () => {
     test('should return state object from URL params', () => {
+        const dateNowFn = Date.now
+        Date.now = jest.fn(() => 0)
         expect(
             mapUrlParamsToState(Object.fromEntries(testParamsEntries), initialState),
         ).toMatchObject(testState)
+        Date.now = dateNowFn
     })
 })

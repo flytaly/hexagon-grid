@@ -36,7 +36,7 @@ export const testState: CanvasState = {
         isGradient: true,
         palette: {
             isCustom: true,
-            id: 0,
+            id: 'custom_0',
             colors: [
                 { id: 0, rgb: { r: 67, g: 193, b: 239, a: 1 } },
                 { id: 1, rgb: { r: 71, g: 220, b: 215, a: 1 } },
@@ -44,7 +44,19 @@ export const testState: CanvasState = {
                 { id: 3, rgb: { r: 243, g: 188, b: 98, a: 0.6 } },
             ],
         },
-        customPalettes: [],
+        customPalettes: [
+            {
+                id: 'custom_0',
+                gradient:
+                    'rgba(67,193,239,1) 25%,rgba(71,220,215,1) 25% 50%,rgba(165,207,175,0.88) 50% 75%,rgba(243,188,98,0.6) 75%',
+                colors: [
+                    { r: 67, g: 193, b: 239, a: 1 },
+                    { r: 71, g: 220, b: 215, a: 1 },
+                    { r: 165, g: 207, b: 175, a: 0.88 },
+                    { r: 243, g: 188, b: 98, a: 0.6 },
+                ],
+            },
+        ],
     },
 }
 
