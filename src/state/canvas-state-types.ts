@@ -1,6 +1,6 @@
 import { RGBColor } from 'react-color'
 import { Noises2DFns } from '../noises'
-import { CustomColorPalette } from '../palettes'
+import { ColorPalette } from '../palettes'
 
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
@@ -73,7 +73,7 @@ export type ColorsSettings = {
         id: string | number
         colors: PaletteColorsArray
     }
-    customPalettes: CustomColorPalette[]
+    customPalettes: ColorPalette[]
 }
 
 export type CanvasState = {

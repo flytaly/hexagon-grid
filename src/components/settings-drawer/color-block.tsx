@@ -23,7 +23,7 @@ import {
     PaletteColorsArray,
 } from '../../state/canvas-state-types'
 import { toRGBAStr, toRGBaObj } from '../../helpers'
-import { defaultPalettes, SavedColorPalette } from '../../palettes'
+import { defaultPalettes, ColorPalette } from '../../palettes'
 import { checkered } from '../../background'
 import CustomPaletteMaker from './add-custom-palette'
 
@@ -112,7 +112,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
         })
     }
 
-    const getGradientBg = (p: SavedColorPalette) => {
+    const getGradientBg = (p: ColorPalette) => {
         const st: CSSProperties = {}
         if (p.colors.length > 1) {
             const grad = !colorState.isGradient ? p.gradient : p.colors.map((c) => toRGBAStr(c))
@@ -125,7 +125,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
         return st
     }
 
-    const paletteBtnClick = (p: SavedColorPalette, isCustom = false) => {
+    const paletteBtnClick = (p: ColorPalette, isCustom = false) => {
         dispatch({
             type: ActionTypes.SET_COLOR_OPTIONS,
             payload: {

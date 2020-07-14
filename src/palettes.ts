@@ -2,17 +2,11 @@ import { RGBColor } from 'react-color'
 import { toRGBaObj, toRGBAStr } from './helpers'
 import paletteList from './palettes-list.json'
 
-export type SavedColorPalette = {
+export type ColorPalette = {
     name?: string
-    id: number
-    colors: RGBColor[]
-    setBackground?: RGBColor
-    gradient: string
-}
-
-export type CustomColorPalette = {
     id: number | string
     colors: RGBColor[]
+    setBackground?: RGBColor
     gradient: string
 }
 
@@ -29,11 +23,11 @@ export const fillGradient = (colors: RGBColor[]): string => {
     }, '')
 }
 
-export const defaultPalettes: SavedColorPalette[] = paletteList.map((p, idx) => {
+export const defaultPalettes: ColorPalette[] = paletteList.map((p, idx) => {
     const colors = (p.colors as Array<string | ['string', number]>).map((c) =>
         Array.isArray(c) ? toRGBaObj(c[0], c[1]) : toRGBaObj(c),
     )
-    const palette: SavedColorPalette = {
+    const palette: ColorPalette = {
         id: idx,
         name: p.name,
         gradient: fillGradient(colors),

@@ -1,5 +1,5 @@
 import { clamp, mod } from '../helpers'
-import { defaultPalettes, fillGradient, CustomColorPalette } from '../palettes'
+import { defaultPalettes, fillGradient, ColorPalette } from '../palettes'
 import { mapUrlParamsToState } from './url-state'
 import { ActionTypes, CanvasState, CanvasStateAction } from './canvas-state-types'
 import { Noises2DList } from '../noises'
@@ -75,7 +75,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             const customPaletteId = `custom_${Date.now()}`
             const hslArray = colorState.palette.colors.map((c) => c.rgb)
             const colorsWithId = makePaletteColors(hslArray, customPaletteId)
-            const newCustomPalette: CustomColorPalette = {
+            const newCustomPalette: ColorPalette = {
                 id: customPaletteId,
                 colors: hslArray,
                 gradient: fillGradient(hslArray),
