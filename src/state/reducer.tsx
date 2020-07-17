@@ -139,12 +139,21 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         }
 
         case ActionTypes.MERGE_STATE_FROM_QUERY: {
+            const { payload } = action
+            const hash = payload.hash.startsWith('#') ? payload.hash.slice(1) : payload.hash
             const params = {} as Record<string, string>
-            for (const param of action.payload.split(';')) {
+
+            for (const param of hash.split(';')) {
                 const [name, value] = param.split('=')
                 params[name] = value
             }
+
             const newState = mapUrlParamsToState(params, state)
+
+            if (payload.skipCanvasSize) {
+                newState.canvasSize = state.canvasSize
+            }
+
             return newState
         }
         default:

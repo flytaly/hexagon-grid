@@ -97,7 +97,10 @@ export type CanvasStateAction =
     | { type: ActionTypes.SET_GRID_OPTIONS; payload: Partial<GridSettings> }
     | { type: ActionTypes.SET_COLOR_OPTIONS; payload: Partial<ColorsSettings> }
     | { type: ActionTypes.TOGGLE_GRADIENT }
-    | { type: ActionTypes.MERGE_STATE_FROM_QUERY; payload: string }
+    | {
+          type: ActionTypes.MERGE_STATE_FROM_QUERY
+          payload: { hash: string; skipCanvasSize?: boolean }
+      }
     | { type: ActionTypes.MODIFY_PALETTE; payload: PaletteColorsArray }
     | { type: ActionTypes.SELECT_NEXT_PALETTE; payload: 1 | -1 }
     | { type: ActionTypes.INC_NOISE_OFFSET; payload: { dx?: number; dy?: number } }

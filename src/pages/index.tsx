@@ -10,6 +10,7 @@ import { reducer } from '../state/reducer'
 import { ActionTypes } from '../state/canvas-state-types'
 import { toolbarHeight } from '../configs'
 import RouterAppbar from '../components/router-appbar'
+import galleryList from '../gallery-data-hash.json'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -49,10 +50,10 @@ const Home: NextPage = () => {
     useEffect(() => {
         const onHashChange = () => {
             const { hash } = window.location
-            if (hash.length && hash.startsWith('#')) {
+            if (hash.length) {
                 dispatch({
                     type: ActionTypes.MERGE_STATE_FROM_QUERY,
-                    payload: hash.slice(1),
+                    payload: { hash },
                 })
             }
         }
@@ -62,9 +63,18 @@ const Home: NextPage = () => {
             height: Math.ceil(window.screen.height * window.devicePixelRatio),
             pixelRatio: window.devicePixelRatio,
         }
+
         dispatch({ type: ActionTypes.SET_SIZE, payload: size })
 
-        onHashChange()
+        if (window.location.hash.length) {
+            onHashChange()
+        } else {
+            const { hash } = galleryList[Math.ceil(Math.random() * galleryList.length)]
+            dispatch({
+                type: ActionTypes.MERGE_STATE_FROM_QUERY,
+                payload: { hash, skipCanvasSize: true },
+            })
+        }
 
         window.addEventListener('hashchange', onHashChange)
         return () => window.removeEventListener('hashchange', onHashChange)
