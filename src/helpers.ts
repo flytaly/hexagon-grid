@@ -94,3 +94,23 @@ export function rgbToHsl(r: number, g: number, b: number): [number, number, numb
 
     return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)]
 }
+
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+export function shuffle<T>(arr: [T]): [T] {
+    let currentIndex: number = arr.length
+    let temporaryValue: T
+    let randomIndex: number
+
+    while (currentIndex !== 0) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
+
+        // And swap it with the current element.
+        temporaryValue = arr[currentIndex]
+        arr[currentIndex] = arr[randomIndex]
+        arr[randomIndex] = temporaryValue
+    }
+
+    return arr
+}

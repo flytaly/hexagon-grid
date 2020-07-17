@@ -1,6 +1,6 @@
 import React from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
-import galleryData from '../gallery-data.json'
+import galleryData from '../gallery-data.js'
 
 type StyleProps = {
     gridWidth: string | number
@@ -69,7 +69,7 @@ const ImageGallery: React.FC = () => {
                             className={classes.gridElement}
                             key={tile.img}
                         >
-                            <a href="http://localhost:3000/" className={classes.imageLink}>
+                            <a href={`/${tile.hash}`} className={classes.imageLink}>
                                 <img src={tile.img} alt="hexagon grid example" />
                             </a>
                         </li>
