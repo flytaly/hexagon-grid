@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router'
 import galleryData from '../gallery-data'
@@ -50,14 +50,40 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const ImageGallery: React.FC = () => {
+type GalleryProps = {
+    cols?: number
+    cellHeight?: number
+    gridWidth?: number
+}
+
+const ImageGallery: React.FC<GalleryProps> = ({ cols = 3, cellHeight = 200, gridWidth = 960 }) => {
+    const [tilesShown, setTilesShown] = useState(10)
+    const pageEndRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
 
-    const COLS = 3
+    // Defer image loading
+    useEffect(() => {
+        /* eslint-disable consistent-return */
+        if (tilesShown >= galleryData.length) return
+        if (!pageEndRef.current) return
+        const options = {
+            rootMargin: `${cellHeight / 2}px`,
+        }
+        const cb: IntersectionObserverCallback = (entries) => {
+            if (entries[0].isIntersecting) {
+                setTilesShown(tilesShown + 10)
+            }
+        }
+        const observer = new IntersectionObserver(cb, options)
+        observer.observe(pageEndRef.current)
+        return () => {
+            observer.disconnect()
+        }
+    }, [cellHeight, tilesShown])
 
     const classes = useStyles({
-        cellHeight: '200px',
-        gridWidth: '960px',
+        cellHeight,
+        gridWidth,
     } as StyleProps)
 
     const clickHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -69,10 +95,10 @@ const ImageGallery: React.FC = () => {
         <>
             <div className={classes.root}>
                 <ul className={classes.gridList}>
-                    {galleryData.map((tile) => (
+                    {galleryData.slice(0, tilesShown).map((tile) => (
                         <li
                             style={{
-                                width: `${(100 / COLS) * tile.cols}%`,
+                                width: `${(100 / cols) * tile.cols}%`,
                             }}
                             className={classes.gridElement}
                             key={tile.img}
@@ -89,6 +115,7 @@ const ImageGallery: React.FC = () => {
                     ))}
                 </ul>
             </div>
+            <div ref={pageEndRef} />
         </>
     )
 }
