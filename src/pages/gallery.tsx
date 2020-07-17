@@ -8,8 +8,8 @@ import Gallery from '../components/image-gallery'
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         pageWrapper: {
-            height: '100%',
-            padding: theme.spacing(2, 2),
+            // height: '100%',
+            padding: theme.spacing(2, 3),
         },
         paper: {
             padding: theme.spacing(1),

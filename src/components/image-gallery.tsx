@@ -1,6 +1,7 @@
 import React from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
-import galleryData from '../gallery-data.js'
+import { useRouter } from 'next/router'
+import galleryData from '../gallery-data'
 
 type StyleProps = {
     gridWidth: string | number
@@ -50,12 +51,19 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 const ImageGallery: React.FC = () => {
+    const router = useRouter()
+
+    const COLS = 3
+
     const classes = useStyles({
         cellHeight: '200px',
         gridWidth: '960px',
     } as StyleProps)
 
-    const cols = 3
+    const clickHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault()
+        router.push(`/${e.currentTarget.dataset.hash}`)
+    }
 
     return (
         <>
@@ -64,12 +72,17 @@ const ImageGallery: React.FC = () => {
                     {galleryData.map((tile) => (
                         <li
                             style={{
-                                width: `${(100 / cols) * tile.cols}%`,
+                                width: `${(100 / COLS) * tile.cols}%`,
                             }}
                             className={classes.gridElement}
                             key={tile.img}
                         >
-                            <a href={`/${tile.hash}`} className={classes.imageLink}>
+                            <a
+                                onClick={clickHandler}
+                                href={`/${tile.hash}`}
+                                className={classes.imageLink}
+                                data-hash={tile.hash}
+                            >
                                 <img src={tile.img} alt="hexagon grid example" />
                             </a>
                         </li>
