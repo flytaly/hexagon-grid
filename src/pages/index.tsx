@@ -69,7 +69,7 @@ const Home: NextPage = () => {
         if (window.location.hash.length) {
             onHashChange()
         } else {
-            const { hash } = galleryList[Math.ceil(Math.random() * galleryList.length)]
+            const { hash } = galleryList[Math.floor(Math.random() * galleryList.length)]
             dispatch({
                 type: ActionTypes.MERGE_STATE_FROM_QUERY,
                 payload: { hash, skipCanvasSize: true },
