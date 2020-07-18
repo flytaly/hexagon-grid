@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import galleryData from '../gallery-data'
 
 type StyleProps = {
-    gridWidth: string | number
-    cellHeight: string | number
+    gridWidth: number
+    cellHeight: number
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,14 +18,14 @@ const useStyles = makeStyles((theme: Theme) =>
         gridList: {
             display: 'flex',
             flexWrap: 'wrap',
-            width: (props: StyleProps) => props.gridWidth,
+            width: (props: StyleProps) => `${props.gridWidth}px`,
             maxWidth: '100%',
             listStyle: 'none',
             padding: 0,
             margin: 0,
         },
         gridElement: {
-            height: (props: StyleProps) => props.cellHeight,
+            height: (props: StyleProps) => `${props.cellHeight}px`,
             maxWidth: '100%',
             padding: '2px',
             margin: 0,
@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: '100%',
                 objectFit: 'cover',
                 transition: 'transform .5s cubic-bezier(0.33, 1, 0.68, 1)',
+                backgroundColor: '#dfdfdf',
+                lineHeight: (props: StyleProps) => `${props.cellHeight}px`,
+                textAlign: 'center',
+                display: 'block',
             },
             '&:focus': {
                 outline: `3px solid ${theme.palette.primary.main}`,
