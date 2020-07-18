@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import dataHash from './gallery-data-hash.json'
 
 const prefix = 'https://res.cloudinary.com/flytaly/image/upload/v1594998717/hexagons/'

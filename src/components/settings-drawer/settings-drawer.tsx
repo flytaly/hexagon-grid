@@ -8,14 +8,12 @@ import NoiseSettingsBlock from './noise-block'
 import CanvasSizeBlock from './canvas-size-block'
 import GridBlock from './grid-block'
 import ColorBlock from './color-block'
-import { toolbarHeight } from '../../configs'
-
-const drawerWidth = 360
+import { TOOLBAR_HEIGHT, DRAWER_WIDTH } from '../../configs'
 
 const useStyles = makeStyles((theme: Theme) => {
     return createStyles({
         drawerPaper: {
-            width: drawerWidth,
+            width: DRAWER_WIDTH,
             maxWidth: '100%',
             backgroundColor: 'rgba(255, 255, 255, 0.88)',
         },
@@ -79,7 +77,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 <Toolbar
                     className={classes.drawerHeader}
                     variant="dense"
-                    style={{ height: toolbarHeight }}
+                    style={{ height: TOOLBAR_HEIGHT }}
                 >
                     <IconButton onClick={handleToggle}>
                         <ChevronRight />

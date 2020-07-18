@@ -8,22 +8,22 @@ import CanvasPage from '../components/canvas-page'
 import { initialState } from '../state/canvas-state'
 import { reducer } from '../state/reducer'
 import { ActionTypes } from '../state/canvas-state-types'
-import { toolbarHeight } from '../configs'
 import RouterAppbar from '../components/router-appbar'
 import galleryList from '../gallery-data-hash.json'
+import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '../configs'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         settingsBtn: {
             position: 'fixed',
-            top: `${toolbarHeight + theme.spacing(2)}px`,
+            top: `${TOOLBAR_HEIGHT + theme.spacing(2)}px`,
             right: 0,
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
         },
         pageWrapper: {
             height: '100%',
-            maxHeight: `calc(100% - ${toolbarHeight}px)`,
+            maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px)`,
             marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
         },
     }),
@@ -37,9 +37,9 @@ const Home: NextPage = () => {
 
     const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))
 
-    const classes = useStyles({
-        pageMarginR: isBigScreen && isDrawerOpen ? 360 : 0,
-    })
+    const getDrawerWidth = isBigScreen && isDrawerOpen ? DRAWER_WIDTH : 0
+
+    const classes = useStyles({ pageMarginR: getDrawerWidth })
 
     if (isInitValue && isBigScreen) {
         // open settings panel on big screen but only once
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <RouterAppbar />
+            <RouterAppbar paddingRight={getDrawerWidth} helpAsModal />
             <div className={classes.pageWrapper}>
                 <CanvasPage dispatch={dispatch} state={state} />
             </div>

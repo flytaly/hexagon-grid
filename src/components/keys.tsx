@@ -28,8 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             bottom: theme.spacing(2),
             right: theme.spacing(3),
-            // borderTopRightRadius: 0,
-            // borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+        },
+        helpBtn: {
+            position: 'absolute',
+            bottom: '100px',
+            right: theme.spacing(2),
         },
         extendedIcon: {
             marginRight: theme.spacing(1),

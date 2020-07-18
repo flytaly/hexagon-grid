@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router'
 import galleryData from '../gallery-data'
+import { GALLERY_COLS, GALLERY_CELL_HEIGHT, GALLERY_GRID_WIDTH } from '../configs'
 
 type StyleProps = {
     gridWidth: number
@@ -60,7 +61,11 @@ type GalleryProps = {
     gridWidth?: number
 }
 
-const ImageGallery: React.FC<GalleryProps> = ({ cols = 3, cellHeight = 200, gridWidth = 960 }) => {
+const ImageGallery: React.FC<GalleryProps> = ({
+    cols = GALLERY_COLS,
+    cellHeight = GALLERY_CELL_HEIGHT,
+    gridWidth = GALLERY_GRID_WIDTH,
+}) => {
     const [tilesShown, setTilesShown] = useState(10)
     const pageEndRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
