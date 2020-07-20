@@ -1,6 +1,6 @@
 import { SVG, Svg } from '@svgdotjs/svg.js'
 import { CanvasState } from '../state/canvas-state-types'
-import { toRGBAStr } from '../helpers'
+import { toRGBAStr, hslToRgb, toRGBHex } from '../helpers'
 import { PolygonData, vertsPerPolygon } from './draw-polygons'
 
 interface DrawPolygonsProperties {
@@ -13,12 +13,14 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
     const verticesNum = vertsPerPolygon[type]
     const { width, height } = state.canvasSize
     const { borderWidth } = state.cell
-    const borderColor = toRGBAStr(state.colors.border)
+    const rgbaBorder = state.colors.border
+    if (rgbaBorder.a === undefined) rgbaBorder.a = 1
     const fillBody = !state.colors.noFill
-    const useBodyColor = Boolean(state.colors.useBodyColor)
-
-    const draw = SVG().size(width, height)
-
+    const useBodyColor = Boolean(state.colors.useBodyColor || !borderWidth)
+    const draw = SVG().size(width, height).viewbox(0, 0, width, height)
+    if (state.colors.background) {
+        draw.attr({ style: `background-color: ${toRGBAStr(state.colors.background)}` })
+    }
     const c = fillColors
     const v = vertices
     let vertIdx = 0
@@ -29,9 +31,12 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
 
         // discard transparent polygons
         if (c[colIdx + 3] !== 0) {
-            const fillColor = `hsla(${c[colIdx]}, ${c[colIdx + 1]}%, ${c[colIdx + 2]}%, ${
-                c[colIdx + 3]
-            })`
+            const rgbFill = hslToRgb(c[colIdx] / 360, c[colIdx + 1] / 100, c[colIdx + 2] / 100)
+
+            const fillColor = toRGBHex(rgbFill)
+            const fillOpacity = c[colIdx + 3]
+            const borderColor = useBodyColor ? fillColor : toRGBHex(rgbaBorder)
+            const borderOpacity = useBodyColor ? fillOpacity : rgbaBorder.a
 
             const poly = [] as [number, number][]
             for (let i = 0; i < coordsNum; i += 2) {
@@ -41,8 +46,12 @@ export default function renderSVg({ state, polygonData }: DrawPolygonsProperties
             draw.polygon(poly.join(' '))
                 .fill(fillBody ? fillColor : 'none')
                 .stroke({
-                    color: useBodyColor || !borderWidth ? fillColor : borderColor,
+                    color: borderColor,
                     width: Math.max(1, borderWidth),
+                })
+                .attr({
+                    ...(fillOpacity < 1 ? { 'fill-opacity': fillOpacity } : {}),
+                    ...(borderOpacity < 1 ? { 'stroke-opacity': borderOpacity } : {}),
                 })
         }
 
