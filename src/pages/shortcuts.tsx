@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Paper, Box } from '@material-ui/core'
 import RouterAppbar from '../components/router-appbar'
-import HelpTabs from '../components/help-tabs'
+import HelpTabs from '../components/help/help-tabs'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         paper: {
             width: '1000px',
+            maxWidth: '100%',
             margin: '0 auto',
         },
     }),

@@ -1,10 +1,13 @@
 import React from 'react'
 import { Typography, AppBar, Tabs, Tab, Box } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import ShortcutsContent from './shortcuts-content'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            display: 'flex',
+            flexDirection: 'column',
             flexGrow: 1,
             backgroundColor: theme.palette.background.paper,
         },
@@ -88,7 +91,7 @@ const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0 }) => {
                 <Typography variant="h4">Help</Typography>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <Typography variant="h4">Keyboard shortcuts</Typography>
+                <ShortcutsContent />
             </TabPanel>
         </div>
     )

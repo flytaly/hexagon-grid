@@ -3,7 +3,10 @@ import nicePalettes from 'nice-color-palettes/1000'
 import { CanvasStateAction, ActionTypes, PaletteColorsArray } from '../state/canvas-state-types'
 import { toRGBaObj } from '../helpers'
 
-export default function useKeyControls(dispatch: React.Dispatch<CanvasStateAction>): void {
+export default function useKeyControls(
+    dispatch: React.Dispatch<CanvasStateAction>,
+    toggleShortcuts: () => void,
+): void {
     useEffect(() => {
         const dispatchOffset = (dx = 0, dy = 0) => {
             dispatch({
@@ -75,6 +78,11 @@ export default function useKeyControls(dispatch: React.Dispatch<CanvasStateActio
                     case 78: // n
                         selectNextBaseNoise(e.shiftKey ? -1 : 1)
                         break
+                    case 191: // ?
+                        if (e.shiftKey) {
+                            toggleShortcuts()
+                        }
+                        break
                     default:
                 }
             }
@@ -84,5 +92,5 @@ export default function useKeyControls(dispatch: React.Dispatch<CanvasStateActio
         return () => {
             document.body.removeEventListener('keydown', cb)
         }
-    }, [dispatch])
+    }, [dispatch, toggleShortcuts])
 }

@@ -11,6 +11,7 @@ import { ActionTypes } from '../state/canvas-state-types'
 import RouterAppbar from '../components/router-appbar'
 import galleryList from '../gallery-data-hash.json'
 import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '../configs'
+import useKeyControls from '../hooks/use-key-controls'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Home: NextPage = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [helpModal, setHelpModal] = useState(false)
     const [isInitValue, setIsInitValue] = useState(true)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
@@ -46,6 +48,10 @@ const Home: NextPage = () => {
         setIsInitValue(false)
         setIsDrawerOpen(true)
     }
+
+    const toggleHelpModal = () => setHelpModal((s) => !s)
+
+    useKeyControls(dispatch, toggleHelpModal)
 
     useEffect(() => {
         const onHashChange = () => {
@@ -82,7 +88,11 @@ const Home: NextPage = () => {
 
     return (
         <>
-            <RouterAppbar paddingRight={getDrawerWidth} helpAsModal />
+            <RouterAppbar
+                paddingRight={getDrawerWidth}
+                isModalOpened={helpModal}
+                toggleModalHandler={toggleHelpModal}
+            />
             <div className={classes.pageWrapper}>
                 <CanvasPage dispatch={dispatch} state={state} />
             </div>

@@ -1,16 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-import React, { useState } from 'react'
+import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core'
 import { useRouter } from 'next/router'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import { TOOLBAR_HEIGHT } from '../configs'
 import HeaderLogo from '../../public/logo.svg'
-import HelpModal from './help-modal'
+import HelpModal from './help/help-modal'
 
 type RouterAppBarProps = {
     paddingRight?: number
-    helpAsModal?: boolean
+    isModalOpened?: boolean
+    /** if toggleModalHandler callback is passed open help page as modal */
+    toggleModalHandler?: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,10 +32,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const RouterAppBar: React.FC<RouterAppBarProps> = ({ paddingRight = 0, helpAsModal = false }) => {
+const RouterAppBar: React.FC<RouterAppBarProps> = ({
+    paddingRight = 0,
+    isModalOpened = false,
+    toggleModalHandler,
+}) => {
     const router = useRouter()
     const classes = useStyles()
-    const [isModalOpen, setIsModalOpen] = useState(false)
     const makeClickHandler = (href: RootPage) => (
         e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     ) => {
@@ -67,8 +71,8 @@ const RouterAppBar: React.FC<RouterAppBarProps> = ({ paddingRight = 0, helpAsMod
                         href="/help"
                         onClick={(e) => {
                             e.preventDefault()
-                            if (helpAsModal) {
-                                setIsModalOpen((s) => !s)
+                            if (toggleModalHandler) {
+                                toggleModalHandler()
                             } else {
                                 router.push('/help')
                             }
@@ -78,7 +82,10 @@ const RouterAppBar: React.FC<RouterAppBarProps> = ({ paddingRight = 0, helpAsMod
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            <HelpModal isOpen={isModalOpen} handleClose={() => setIsModalOpen(false)} />
+            <HelpModal
+                isOpen={isModalOpened}
+                handleClose={() => toggleModalHandler && toggleModalHandler()}
+            />
         </>
     )
 }

@@ -12,7 +12,6 @@ import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/sty
 import { Box, IconButton, Fab, Grid } from '@material-ui/core'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
-import useKeyControls from '../hooks/use-key-controls'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -59,8 +58,6 @@ const ArrowKeys: React.FC<ArrowKeysProps> = ({ dispatch, exportBtnClickHandler }
     const classes = useStyles()
     const theme = useTheme()
     const matches = useMediaQuery(theme.breakpoints.up('md'))
-
-    useKeyControls(dispatch)
 
     const dispatchOffset = (dx = 0, dy = 0) => {
         dispatch({

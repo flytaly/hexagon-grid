@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal } from '@material-ui/core'
+import { Modal, Button } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import HelpTabs from './help-tabs'
 
@@ -7,15 +7,23 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         modal: {
             position: 'absolute',
-            width: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            width: '1000px',
             maxWidth: '90%',
-            height: 960,
+            height: '960px',
             maxHeight: '90%',
             backgroundColor: theme.palette.background.paper,
             // padding: theme.spacing(2, 3, 3),
             top: `50%`,
             left: `50%`,
             transform: `translate(-50%, -50%)`,
+        },
+        dismissBtn: {
+            marginTop: 'auto',
+            marginLeft: 'auto',
+        },
+        modalContent: {
             overflowY: 'scroll',
         },
     }),
@@ -31,7 +39,12 @@ const HelpModal: React.FC<ExportModalProps> = ({ isOpen, handleClose }) => {
     return (
         <Modal aria-label="help page modal" open={isOpen} onClose={handleClose}>
             <div className={classes.modal}>
-                <HelpTabs />
+                <div className={classes.modalContent}>
+                    <HelpTabs />
+                </div>
+                <Button onClick={handleClose} className={classes.dismissBtn}>
+                    Dismiss
+                </Button>
             </div>
         </Modal>
     )
