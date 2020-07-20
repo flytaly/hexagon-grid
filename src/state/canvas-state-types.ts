@@ -1,6 +1,6 @@
 import { RGBColor } from 'react-color'
 import { Noises2DFns } from '../noises'
-import { ColorPalette } from '../palettes'
+import { ColorPalette, PaletteColorsArray } from '../palettes'
 
 export enum ActionTypes {
     SET_SIZE = 'SET_SIZE',
@@ -60,8 +60,6 @@ export type GridSettings = {
     signY: 1 | -1
     isXYSwapped: boolean
 }
-
-export type PaletteColorsArray = Array<{ rgb: RGBColor; id: string | number }>
 
 export type ColorsSettings = {
     border: RGBColor

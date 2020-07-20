@@ -2,10 +2,10 @@
 import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
 import { RGBColor } from 'react-color'
-import { CanvasState, PaletteColorsArray, GridType } from './canvas-state-types'
+import { CanvasState, GridType } from './canvas-state-types'
 import { toRGBaObj } from '../helpers'
 import { initialState } from './canvas-state'
-import { fillGradient, ColorPalette } from '../palettes'
+import { fillGradient, ColorPalette, PaletteColorsArray } from '../palettes'
 
 type ParamFn = (p: string | RGBColor | PaletteColorsArray | GridType) => string
 

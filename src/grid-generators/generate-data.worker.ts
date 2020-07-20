@@ -6,13 +6,8 @@ import * as Honeycomb from 'honeycomb-grid'
 import { Parser } from 'expr-eval'
 import { RGBColor } from 'react-color'
 import { PolygonData } from './draw-polygons'
-import {
-    CanvasState,
-    GridType,
-    BaseNoise,
-    NoiseSettings,
-    PaletteColorsArray,
-} from '../state/canvas-state-types'
+import { CanvasState, GridType, BaseNoise, NoiseSettings } from '../state/canvas-state-types'
+import { PaletteColorsArray } from '../palettes'
 import { clamp, rgbToHsl } from '../helpers'
 import { getNoises, NoiseFn, Noises2DFns } from '../noises'
 import { getGridCellSizes, getHexCellSize } from './get-sizes'

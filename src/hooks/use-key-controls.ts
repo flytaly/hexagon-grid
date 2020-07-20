@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-import nicePalettes from 'nice-color-palettes/1000'
-import { CanvasStateAction, ActionTypes, PaletteColorsArray } from '../state/canvas-state-types'
-import { toRGBaObj } from '../helpers'
+import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
+import { getNicePalette } from '../palettes'
 
 export default function useKeyControls(
     dispatch: React.Dispatch<CanvasStateAction>,
@@ -21,16 +20,9 @@ export default function useKeyControls(
             dispatch({ type: ActionTypes.SELECT_NEXT_PALETTE, payload })
         }
         const generateColorPalette = () => {
-            const colors: PaletteColorsArray = nicePalettes[
-                Math.floor(Math.random() * nicePalettes.length)
-            ].map((c, idx) => ({
-                id: `${idx}_${Date.now()}`,
-                rgb: toRGBaObj(c),
-            }))
-
             dispatch({
                 type: ActionTypes.MODIFY_PALETTE,
-                payload: colors,
+                payload: getNicePalette(),
             })
         }
 

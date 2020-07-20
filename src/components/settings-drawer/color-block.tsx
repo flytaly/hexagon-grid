@@ -14,16 +14,11 @@ import {
 } from '@material-ui/core'
 import { SketchPicker, ColorResult, RGBColor } from 'react-color'
 import { CheckCircleRounded, Shuffle, Add } from '@material-ui/icons'
-import nicePalettes from 'nice-color-palettes/1000'
 import { makePaletteColors } from '../../state/canvas-state'
-import {
-    ColorsSettings,
-    CanvasStateAction,
-    ActionTypes,
-    PaletteColorsArray,
-} from '../../state/canvas-state-types'
-import { toRGBAStr, toRGBaObj } from '../../helpers'
-import { defaultPalettes, ColorPalette } from '../../palettes'
+import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
+
+import { toRGBAStr } from '../../helpers'
+import { defaultPalettes, ColorPalette, getNicePalette } from '../../palettes'
 import { checkered } from '../../background'
 import CustomPaletteMaker from './add-custom-palette'
 
@@ -99,16 +94,9 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
         if (!isModalOpen) {
             setIsModalOpen(true)
         }
-        const colors: PaletteColorsArray = nicePalettes[
-            Math.floor(Math.random() * nicePalettes.length)
-        ].map((c, idx) => ({
-            id: `${idx}_${Date.now()}`,
-            rgb: toRGBaObj(c),
-        }))
-
         dispatch({
             type: ActionTypes.MODIFY_PALETTE,
-            payload: colors,
+            payload: getNicePalette(),
         })
     }
 
@@ -331,6 +319,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                         disableRipple
                         onClick={() => paletteBtnClick(p)}
                         style={getGradientBg(p)}
+                        title={p.name}
                     >
                         {colorState.palette.id === p.id ? <CheckCircleRounded /> : null}
                     </PaletteButton>

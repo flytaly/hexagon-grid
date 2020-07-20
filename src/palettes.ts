@@ -1,4 +1,5 @@
 import { RGBColor } from 'react-color'
+import nicePalettes from 'nice-color-palettes/1000'
 import { toRGBaObj, toRGBAStr } from './helpers'
 import paletteList from './palettes-list.json'
 
@@ -9,6 +10,8 @@ export type ColorPalette = {
     setBackground?: RGBColor
     gradient: string
 }
+
+export type PaletteColorsArray = Array<{ rgb: RGBColor; id: string | number }>
 
 export const fillGradient = (colors: RGBColor[]): string => {
     const { length } = colors
@@ -36,3 +39,15 @@ export const defaultPalettes: ColorPalette[] = paletteList.map((p, idx) => {
     if (p.background) palette.setBackground = toRGBaObj(p.background)
     return palette
 })
+
+export function getNicePalette(): PaletteColorsArray {
+    let colors = nicePalettes[Math.floor(Math.random() * nicePalettes.length)]
+
+    // Duplicate first and last colors so they make background.
+    colors = [colors[0], ...colors, colors[colors.length - 1]]
+
+    return colors.map((c, idx) => ({
+        id: `${idx}_${Date.now()}`,
+        rgb: toRGBaObj(c),
+    }))
+}

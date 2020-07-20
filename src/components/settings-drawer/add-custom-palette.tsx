@@ -4,12 +4,8 @@ import { Add, Remove } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { SketchPicker, ColorResult, RGBColor } from 'react-color'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
-import {
-    ColorsSettings,
-    CanvasStateAction,
-    ActionTypes,
-    PaletteColorsArray,
-} from '../../state/canvas-state-types'
+import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
+import { PaletteColorsArray } from '../../palettes'
 import { toRGBaObj, toRGBAStr } from '../../helpers'
 
 type ColorModalProps = {
