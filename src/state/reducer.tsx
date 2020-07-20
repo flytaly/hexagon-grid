@@ -113,6 +113,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             const currentPal = state.colors.palette
             let id: number = currentPal.isCustom ? 0 : Number(currentPal.id)
             id = Number.isNaN(id) ? 0 : mod(id + inc, defaultPalettes.length)
+            const pal = defaultPalettes[id]
             return {
                 ...state,
                 colors: {
@@ -120,8 +121,9 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
                     palette: {
                         isCustom: false,
                         id,
-                        colors: makePaletteColors(defaultPalettes[id].colors, id),
+                        colors: makePaletteColors(pal.colors, id),
                     },
+                    ...(pal.setBackground && { background: pal.setBackground }),
                 },
             }
         }

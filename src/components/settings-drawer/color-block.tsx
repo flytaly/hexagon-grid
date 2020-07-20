@@ -1,4 +1,4 @@
-import React, { useState, useMemo, CSSProperties } from 'react'
+import React, { useEffect, useState, useMemo, CSSProperties } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import {
     Box,
@@ -65,13 +65,20 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [bordAnchorEl, setBordAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
-    const [bgColor, setBgColor] = useState<RGBColor | null>(colorState.background)
+    const [tempBgColor, setTempBgColor] = useState<RGBColor | null>(colorState.background)
+    const [pickingBgColor, setPickingBgColor] = useState(false)
     const [bgAnchorEl, setBgAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
     const paletteColors = useMemo(
         () => Array.from(new Set(colorState.palette.colors.map((c) => toRGBAStr(c.rgb)))),
         [colorState.palette.colors],
     )
+
+    useEffect(() => {
+        if (!pickingBgColor && colorState.background !== tempBgColor) {
+            setTempBgColor(colorState.background)
+        }
+    }, [colorState.background, pickingBgColor, tempBgColor])
 
     const handleNoFillChange = () => {
         dispatch({ type: ActionTypes.SET_COLOR_OPTIONS, payload: { noFill: !colorState.noFill } })
@@ -125,7 +132,7 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                 ...(p.setBackground && { background: p.setBackground }),
             },
         })
-        if (p.setBackground) setBgColor(p.setBackground)
+        if (p.setBackground) setTempBgColor(p.setBackground)
     }
 
     return (
@@ -146,7 +153,9 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                             disableRipple
                             style={{
                                 background:
-                                    bgColor && bgColor.a !== 0 ? toRGBAStr(bgColor) : checkered,
+                                    tempBgColor && tempBgColor.a !== 0
+                                        ? toRGBAStr(tempBgColor)
+                                        : checkered,
                             }}
                         />
                     </Grid>
@@ -162,15 +171,19 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
                     <SketchPicker
-                        color={bgColor || { h: 0, s: 0, l: 1, a: 0 }}
+                        color={tempBgColor || { h: 0, s: 0, l: 1, a: 0 }}
                         presetColors={paletteColors}
-                        onChange={(color) => setBgColor(color.rgb)}
-                        onChangeComplete={(color: ColorResult) =>
+                        onChange={(color) => {
+                            setTempBgColor(color.rgb)
+                            setPickingBgColor(true)
+                        }}
+                        onChangeComplete={(color: ColorResult) => {
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
                                 payload: { background: color.rgb },
                             })
-                        }
+                            setPickingBgColor(false)
+                        }}
                     />
                 </Popover>
 
