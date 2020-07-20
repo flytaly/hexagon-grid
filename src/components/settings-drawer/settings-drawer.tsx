@@ -1,8 +1,9 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Box, Divider, Drawer, IconButton, Toolbar, Tabs, Tab } from '@material-ui/core'
+import { Box, Button, Divider, Drawer, IconButton, Toolbar, Tabs, Tab } from '@material-ui/core'
 import { ChevronRight, Settings, GraphicEq, ColorLens } from '@material-ui/icons'
-import { CanvasState, CanvasStateAction } from '../../state/canvas-state-types'
+import ClearAllIcon from '@material-ui/icons/ClearAll'
+import { CanvasState, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
 import CellSettingsBlock from './cells-block'
 import NoiseSettingsBlock from './noise-block'
 import CanvasSizeBlock from './canvas-size-block'
@@ -115,6 +116,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     <ColorBlock dispatch={dispatch} colorState={state.colors} />
                     <Divider />
                 </TabPanel>
+                <Box style={{ width: '100%', textAlign: 'end' }}>
+                    <Button
+                        onClick={() => {
+                            dispatch({
+                                type: ActionTypes.RESET_SETTINGS,
+                            })
+                        }}
+                        endIcon={<ClearAllIcon />}
+                    >
+                        Reset settings
+                    </Button>
+                </Box>
             </Drawer>
         </>
     )

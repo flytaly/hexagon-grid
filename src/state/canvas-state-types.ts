@@ -3,6 +3,7 @@ import { Noises2DFns } from '../noises'
 import { ColorPalette, PaletteColorsArray } from '../palettes'
 
 export enum ActionTypes {
+    RESET_SETTINGS = 'RESET_SETTINGS',
     SET_SIZE = 'SET_SIZE',
     SET_CELL_OPTIONS = 'SET_CELL_OPTIONS',
     SET_NOISE_OPTIONS = 'SET_NOISE_OPTIONS',
@@ -88,6 +89,7 @@ export type RecursivePartial<T> = {
 }
 
 export type CanvasStateAction =
+    | { type: ActionTypes.RESET_SETTINGS }
     | { type: ActionTypes.SET_SIZE; payload: Partial<CanvasSize> }
     | { type: ActionTypes.SET_CELL_OPTIONS; payload: Partial<CellSettings> }
     | { type: ActionTypes.SET_NOISE_OPTIONS; payload: RecursivePartial<NoiseSettings> }

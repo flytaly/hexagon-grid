@@ -3,10 +3,16 @@ import { defaultPalettes, fillGradient, ColorPalette } from '../palettes'
 import { mapUrlParamsToState } from './url-state'
 import { ActionTypes, CanvasState, CanvasStateAction } from './canvas-state-types'
 import { Noises2DList } from '../noises'
-import { makePaletteColors } from './canvas-state'
+import { makePaletteColors, initialState } from './canvas-state'
 
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
     switch (action.type) {
+        case ActionTypes.RESET_SETTINGS: {
+            const newState = { ...initialState }
+            newState.canvasSize = state.canvasSize
+            return newState
+        }
+
         case ActionTypes.SET_SIZE: {
             const canvasSize = { ...state.canvasSize, wasMeasured: true, ...action.payload }
             canvasSize.aspect = canvasSize.width / canvasSize.height
