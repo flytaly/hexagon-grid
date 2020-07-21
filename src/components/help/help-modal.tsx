@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             width: '1000px',
             maxWidth: '90%',
-            height: '960px',
             maxHeight: '90%',
             backgroundColor: theme.palette.background.paper,
             // padding: theme.spacing(2, 3, 3),
