@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
 import { getNicePalette } from '../palettes'
+import galleryList from '../gallery-data'
 
 export default function useKeyControls(
     dispatch: React.Dispatch<CanvasStateAction>,
@@ -73,6 +74,19 @@ export default function useKeyControls(
                     case 191: // ?
                         if (e.shiftKey) {
                             toggleShortcuts()
+                        }
+                        break
+                    case 82: // r (r - reset setting, shift+R - random from gallery)
+                        if (e.shiftKey) {
+                            const { hash } = galleryList[
+                                Math.floor(Math.random() * galleryList.length)
+                            ]
+                            dispatch({
+                                type: ActionTypes.MERGE_STATE_FROM_QUERY,
+                                payload: { hash, skipCanvasSize: true },
+                            })
+                        } else {
+                            dispatch({ type: ActionTypes.RESET_SETTINGS })
                         }
                         break
                     default:

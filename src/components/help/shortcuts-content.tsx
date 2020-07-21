@@ -33,6 +33,8 @@ const tableRows = [
     { name: 'Select previous base noise', keys: 'shift + n' },
     { name: "Increase cell's size", keys: '+, =' },
     { name: "Decrease cell's size", keys: '-' },
+    { name: 'Reset settings', keys: 'r' },
+    { name: 'Load random pattern from gallery', keys: 'shift + r' },
 ]
 
 const ShortcutsContent: React.FC = () => {
