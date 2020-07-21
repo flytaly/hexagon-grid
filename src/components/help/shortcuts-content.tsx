@@ -43,7 +43,9 @@ const ShortcutsContent: React.FC = () => {
     const tables = [tableRows.slice(0, mid), tableRows.slice(mid)]
     return (
         <div>
-            <Typography variant="h4">Keyboard shortcuts</Typography>
+            <Typography variant="h4" component="h2">
+                Keyboard shortcuts
+            </Typography>
             <TableContainer className={classes.container}>
                 {tables.map((rows, idx) => (
                     // eslint-disable-next-line react/no-array-index-key

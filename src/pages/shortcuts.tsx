@@ -4,6 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Paper, Box } from '@material-ui/core'
 import RouterAppbar from '../components/router-appbar'
 import HelpTabs from '../components/help/help-tabs'
+import Footer from '../components/footer'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,6 +30,7 @@ const HelpShortcutsPage: NextPage = () => {
                     <HelpTabs initTab={1} />
                 </Paper>
             </Box>
+            <Footer />
         </>
     )
 }

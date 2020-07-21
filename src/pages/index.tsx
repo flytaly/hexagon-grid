@@ -12,6 +12,7 @@ import RouterAppbar from '../components/router-appbar'
 import galleryList from '../gallery-data-hash.json'
 import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '../configs'
 import useKeyControls from '../hooks/use-key-controls'
+import Footer from '../components/footer'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -112,6 +113,7 @@ const Home: NextPage = () => {
                 handleToggle={handleDrawerToggle}
                 isBigScreen={isBigScreen}
             />
+            <Footer />
         </>
     )
 }

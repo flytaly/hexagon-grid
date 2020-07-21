@@ -4,6 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { Paper, Box, Typography } from '@material-ui/core'
 import RouterAppbar from '../components/router-appbar'
 import Gallery from '../components/image-gallery'
+import Footer from '../components/footer'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,6 +33,7 @@ const GalleryPage: NextPage = () => {
                     </Box>
                 </Paper>
             </Box>
+            <Footer />
         </>
     )
 }

@@ -20,14 +20,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const HelpPage: NextPage = () => {
+const HelpShortcutsPage: NextPage = () => {
     const classes = useStyles()
     return (
         <>
             <RouterAppbar />
             <Box className={classes.pageWrapper}>
                 <Paper className={classes.paper}>
-                    <HelpTabs initTab={0} />
+                    <HelpTabs initTab={2} />
                 </Paper>
             </Box>
             <Footer />
@@ -35,4 +35,4 @@ const HelpPage: NextPage = () => {
     )
 }
 
-export default HelpPage
+export default HelpShortcutsPage

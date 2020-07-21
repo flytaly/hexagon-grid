@@ -4,4 +4,4 @@ declare module 'nice-color-palettes/1000' {
     export default colors
 }
 
-declare type RootPage = '/' | '/gallery' | '/help' | '/shortcuts'
+declare type RootPage = '/' | '/gallery' | '/help' | '/shortcuts' | '/contacts'

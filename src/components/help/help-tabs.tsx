@@ -1,7 +1,14 @@
 import React from 'react'
 import { Typography, AppBar, Tabs, Tab, Box } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+
 import ShortcutsContent from './shortcuts-content'
+import HelpPageContent from './help-content'
+import Contacts from './contacts'
+
+type StyleProps = {
+    withBackground?: boolean
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -10,11 +17,13 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             flexGrow: 1,
             backgroundColor: theme.palette.background.paper,
+            background: (props: StyleProps) =>
+                props.withBackground ? 'no-repeat url(/hex_bg.png) left bottom' : '',
         },
     }),
 )
 
-interface TabPanelProps {
+type TabPanelProps = {
     children: React.ReactNode
     index: number
     value: number
@@ -66,8 +75,10 @@ type HelpTabsProps = {
 }
 
 const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0 }) => {
-    const classes = useStyles()
     const [value, setValue] = React.useState(initTab)
+    const classes = useStyles({
+        withBackground: value === 2,
+    })
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -85,13 +96,17 @@ const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0 }) => {
                 >
                     <LinkTab label="Help" href="/help" {...a11yProps(0)} />
                     <LinkTab label="Shortcuts" href="/shortcuts" {...a11yProps(1)} />
+                    <LinkTab label="Contacts" href="/contacts" {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <Typography variant="h4">Help</Typography>
+                <HelpPageContent />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <ShortcutsContent />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+                <Contacts />
             </TabPanel>
         </div>
     )
