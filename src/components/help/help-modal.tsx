@@ -28,18 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-type ExportModalProps = {
+type HelpModalProps = {
     isOpen: boolean
+    initTab?: number
     handleClose: () => void
 }
 
-const HelpModal: React.FC<ExportModalProps> = ({ isOpen, handleClose }) => {
+const HelpModal: React.FC<HelpModalProps> = ({ isOpen, handleClose, initTab = 0 }) => {
     const classes = useStyles()
     return (
         <Modal aria-label="help page modal" open={isOpen} onClose={handleClose}>
             <div className={classes.modal}>
                 <div className={classes.modalContent}>
-                    <HelpTabs isModal />
+                    <HelpTabs initTab={initTab} isModal />
                 </div>
                 <Button onClick={handleClose} className={classes.dismissBtn}>
                     Dismiss
