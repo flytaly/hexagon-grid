@@ -1,5 +1,7 @@
 # Hexagonal grid patterns editor ![Logo](https://github.com/flytaly/hexagon-grid/blob/master/public/icons/apple-icon-72x72.png) 
 
+[hexagons.now.sh](https://hexagons.now.sh)
+
 Create beautiful hexagonal grids wallpapers, backgrounds, e.t.c. You can also make triangular (trianglify like) and voronoi grids.
 
 ## Examples 
