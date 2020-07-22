@@ -4,6 +4,8 @@
 
 Create beautiful hexagonal grids wallpapers, backgrounds, e.t.c. You can also make triangular (trianglify like) and voronoi grids.
 
+[![screenshot](https://res.cloudinary.com/flytaly/image/upload/w_450,c_scale/v1595443866/hexagon_grid_editor_screenshot.png)](https://hexagons.now.sh/#w=1920;h=1080;s=3;or=f;v=10;b=0;seed=6189237;nz=33;nh=0;ns=0;nl=12;nx=0;ny=0;nid=line;n2=0.15;gt=h;gs=1.15;gx=1;gy=1;cb=646464,10;cbg=1f5aa8;pal=1f5aa8,0:1f5aa8:1f5aa8:f8a116:1f5aa8:1f5aa8:1f5aa8,0)
+
 ## Examples 
 
 [![example1](https://res.cloudinary.com/flytaly/image/upload/w_350,c_scale/v1594998717/hexagons/hex_026_540p.png)](https://hexagons.now.sh/#w=1920;h=1080;s=3;or=f;v=10;b=0;seed=5418455;nz=20;nh=0;ns=0;nl=3;nx=-21;ny=0;nid=line;n2=0.3;gt=h;gs=1.15;gx=1;gy=1;cb=646464,10;cbg=1f5aa8;pal=f8a116:1f5aa8)
