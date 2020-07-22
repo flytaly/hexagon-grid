@@ -12,7 +12,6 @@ import RouterAppbar from '../components/router-appbar'
 import galleryList from '../gallery-data-hash.json'
 import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '../configs'
 import useKeyControls from '../hooks/use-key-controls'
-import Footer from '../components/footer'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         pageWrapper: {
             height: '100%',
-            maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px)`,
+            maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px - 2rem)`,
             marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
         },
     }),
@@ -113,7 +112,6 @@ const Home: NextPage = () => {
                 handleToggle={handleDrawerToggle}
                 isBigScreen={isBigScreen}
             />
-            <Footer />
         </>
     )
 }

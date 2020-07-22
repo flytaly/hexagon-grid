@@ -1,6 +1,7 @@
 import React from 'react'
 import { Typography, AppBar, Tabs, Tab, Box } from '@material-ui/core'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { useRouter } from 'next/router'
 
 import ShortcutsContent from './shortcuts-content'
 import HelpPageContent from './help-content'
@@ -72,13 +73,34 @@ function LinkTab(props: LinkTabProps) {
 
 type HelpTabsProps = {
     initTab?: number
+    isModal?: boolean
 }
 
-const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0 }) => {
+const tabData = [
+    {
+        label: 'Help',
+        route: '/help',
+    },
+    {
+        label: 'Shortcuts',
+        route: '/shortcuts',
+    },
+    {
+        label: 'Contacts',
+        route: '/contacts',
+    },
+]
+
+const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => {
     const [value, setValue] = React.useState(initTab)
+    const router = useRouter()
     const classes = useStyles({
         withBackground: value === 2,
     })
+
+    if (!isModal && router.route !== tabData[value].route) {
+        router.push(tabData[value].route)
+    }
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -89,14 +111,14 @@ const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0 }) => {
         <div className={classes.root}>
             <AppBar position="static" color="transparent">
                 <Tabs
-                    // variant="fullWidth"
+                    variant="fullWidth"
                     value={value}
                     onChange={handleChange}
                     aria-label="Help tabs"
                 >
-                    <LinkTab label="Help" href="/help" {...a11yProps(0)} />
-                    <LinkTab label="Shortcuts" href="/shortcuts" {...a11yProps(1)} />
-                    <LinkTab label="Contacts" href="/contacts" {...a11yProps(2)} />
+                    {tabData.map(({ label, route }, idx) => (
+                        <LinkTab key={label} label={label} href={route} {...a11yProps(idx)} />
+                    ))}
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>

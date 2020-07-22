@@ -33,7 +33,6 @@ const GalleryPage: NextPage = () => {
                     </Box>
                 </Paper>
             </Box>
-            <Footer />
         </>
     )
 }

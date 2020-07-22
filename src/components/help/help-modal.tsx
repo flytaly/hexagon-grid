@@ -39,7 +39,7 @@ const HelpModal: React.FC<ExportModalProps> = ({ isOpen, handleClose }) => {
         <Modal aria-label="help page modal" open={isOpen} onClose={handleClose}>
             <div className={classes.modal}>
                 <div className={classes.modalContent}>
-                    <HelpTabs />
+                    <HelpTabs isModal />
                 </div>
                 <Button onClick={handleClose} className={classes.dismissBtn}>
                     Dismiss
