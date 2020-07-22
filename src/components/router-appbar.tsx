@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: 0,
         },
         logo: {
-            fill: theme.palette.background.default,
+            fill: theme.palette.secondary.main,
             height: TOOLBAR_HEIGHT,
         },
         rightButton: {

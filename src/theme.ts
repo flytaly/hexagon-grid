@@ -1,14 +1,15 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-import { red, teal, grey, pink } from '@material-ui/core/colors'
+import { red, grey, lightBlue, amber } from '@material-ui/core/colors'
 
 // Create a theme instance.
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: pink[800],
+            // main: pink[800],
+            main: lightBlue[900],
         },
         secondary: {
-            main: teal.A700,
+            main: amber.A700,
         },
         error: {
             main: red.A400,
