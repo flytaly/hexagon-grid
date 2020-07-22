@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
             bottom: theme.spacing(1),
             left: theme.spacing(1),
             '&:hover $key': {
-                background: 'rgba(255, 255, 255, 0.7)',
+                background: 'rgba(255, 255, 255, 0.8)',
             },
         },
         exportBtn: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginRight: theme.spacing(1),
         },
         key: {
-            background: 'rgba(255, 255, 255, 0.35)',
+            background: 'rgba(255, 255, 255, 0.5)',
             borderRadius: '5px',
             margin: '2px',
             '&:active': {
