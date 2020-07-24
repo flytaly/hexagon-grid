@@ -178,5 +178,79 @@
     {
         "hash": "#w=1920;h=1080;s=3.5;or=p;v=10;b=1;seed=7065211;nz=29;nh=2;ns=16;nl=85;nx=0;ny=0;nid=diagonal1;n2=0.3;gt=h;gs=1;gx=1;gy=1;cb=0d3131;cbg=000000;pal=000000,0:000000,0:000000:2b9fa1:2b9fa1:adcc33:adcc33:000000,0:000000,0",
         "id": "044"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=p;v=10;b=0;seed=5632321;nz=31;nh=0;ns=0;nl=8;nx=0;ny=0;nid=line;n2=0.1;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbg=465a65;pal=051e3e:251e3e:451e3e:651e3e:851e3e",
+        "id": "045"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=p;v=10;b=1;seed=9922250;nz=35;nh=0;ns=0;nl=16;nx=0;ny=0;nid=simplex;n2=0.1;gt=h;gs=1;gx=1;gy=1;cb=34344e;cbg=465a65;pal=cbdad5:89a7b1:566981:3a415a:34344e",
+        "id": "046"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=p;v=10;b=0;seed=213510;nz=44;nh=0;ns=0;nl=6;nx=0;ny=0;nid=simplex;n2=0.1;gt=h;gs=1;gx=1;gy=1;cb=473334;cbg=523334;pal=6e7f80:536872:708090:536878:36454f",
+        "id": "047"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=1.5;or=p;v=10;b=0;seed=3626333;nz=70;nh=0;ns=0;nl=6;nx=-11;ny=0;nid=line;n2=0.25;gt=h;gs=1.35;gx=1;gy=1;cb=ececec,0;cbg=2f4956;pal=d2d2d2,0:d2d2d2,0:d2d2d2,0:ececec,0:d2d2d2,0:04a6f7:f5e746:8ec44d:ececec,0:d2d2d2,0:d2d2d2,0:d2d2d2,0:d2d2d2,0",
+        "id": "048"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2.5;or=p;v=10;b=0;seed=1012302;nz=20;nh=0;ns=0;nl=0;nx=0;ny=0;nid=sin;n2=0.3;gt=h;gs=1.15;gx=1;gy=-1;gxy=y;cb=124445;cbg=465a65;pal=465a65,0:465a65:80c783:ff8b66:ffecb2:465a65:465a65,0",
+        "id": "049"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=p;v=10;b=4;seed=1435229;nz=34;nh=0;ns=0;nl=18;nx=0;ny=-25;nid=sinCos;n2=0.05;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbb=y;cbg=000000;gr=y;pal=465a65:465a65:80c783:ff8b66:ffecb2:465a65:465a65",
+        "id": "050"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=p;v=10;b=4;seed=1435229;nz=34;nh=0;ns=0;nl=65;nx=0;ny=-15;nid=sinCos;n2=0.05;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbb=y;cbg=000000;gr=y;pal=009688:35a79c:54b2a9:65c3ba:83d0c9",
+        "id": "051"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=p;v=10;b=4;seed=1435229;nz=34;nh=0;ns=0;nl=65;nx=0;ny=-15;nid=sinCos;n2=0.05;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbb=y;cbg=000000;gr=y;pal=1f4e70:2f6992:5d90b1:ddd2bb:ddd2bb:5d90b1:2f6992:1f4e70",
+        "id": "052"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=1;or=p;v=10;b=0;seed=6376617;nz=16;nh=0;ns=0;nl=1;nx=-10;ny=0;nid=cubic;n2=0.15;gt=h;gs=1;gx=1;gy=1;cb=646464,10;pal=e3d9ca:e3d9ca:95a792:596c68:403f48:403f48",
+        "id": "053"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=f;v=10;b=0;seed=2434705;nz=12;nh=0;ns=0;nl=5;nx=-10;ny=0;nid=cubic;n2=0.2;gt=h;gs=1;gx=1;gy=1;gxy=y;cb=646464,10;cbg=000000;pal=99b898:99b898:feceab:ff847c:e84a5f:2a363b:2a363b",
+        "id": "054"
+    },
+    { "hash": "#w=1920;h=1080;s=2;or=f;v=10;b=0;seed=8068795;nz=22;nh=0;ns=0;nl=0;nx=0;ny=0;nid=line;n2=0.2;gt=h;gs=1;gx=-1;gy=-1;cb=646464,10;cbg=000000;gr=y;pal=3499ff:3a3985", "id": "055" },
+    {
+        "hash": "#w=1920;h=1080;s=2.5;or=p;v=10;b=0;seed=4621831;nz=38;nh=2;ns=2;nl=4;nx=0;ny=0;nid=simplex;n2=0.2;gt=h;gs=1;gx=1;gy=1;cb=646464,80;pal=f8f4c4:f8f4c4:d5e0b5:a5c3a7:6d8b89:47667b:47667b",
+        "id": "056"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2.5;or=p;v=10;b=0;seed=4621831;nz=15;nh=2;ns=0;nl=9;nx=0;ny=0;nid=diagonal;n2=0.1;gt=h;gs=1;gx=1;gy=1;cb=646464,80;gr=y;pal=e6626f:e6626f:efae78:f5e19c:a2ca8e:66af91:66af91",
+        "id": "057"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2.5;or=p;v=10;b=0;seed=6684535;nz=15;nh=2;ns=3;nl=2;nx=0;ny=0;nid=quadratic;n2=0.1;gt=h;gs=1;gx=-1;gy=1;gxy=y;cb=646464,80;gr=y;pal=4d3b3b:4d3b3b:de6262:ffb88c:ffd0b3:f5e0d3:f5e0d3",
+        "id": "058"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2.5;or=p;v=10;b=0;seed=6684535;nz=15;nh=2;ns=3;nl=2;nx=0;ny=0;nid=quadratic;n2=0.1;gt=h;gs=1;gx=-1;gy=1;gxy=y;cb=646464,80;gr=y;pal=ffd0b3:ffb88c:de6262:4d3b3b:4d3b3b",
+        "id": "059"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=3;or=p;v=10;b=0;seed=830676;nz=20;nh=2;ns=3;nl=3;nx=0;ny=0;nid=cubic;n2=0.05;gt=h;gs=1;gx=-1;gy=1;gxy=y;cb=646464,80;gr=y;pal=4d3b3b:4d3b3b:de6262:ffb88c:ffd0b3",
+        "id": "060"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=f;v=10;b=0;seed=4621831;nz=24;nh=0;ns=0;nl=6;nx=0;ny=0;nid=sin;n2=0.15;gt=h;gs=1;gx=-1;gy=-1;cb=646464,80;gr=y;pal=efd9b4:efd9b4:d6a692:a39081:4d6160:292522:292522",
+        "id": "061"
+    },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=f;v=10;b=0;seed=6849771;nz=44;nh=0;ns=0;nl=0;nx=-10;ny=0;nid=sin;n2=0.2;gt=h;gs=1;gx=1;gy=1;gxy=y;cb=646464,80;gr=y;pal=1f192f:1f192f:2d6073:65b8a6:b5e8c3:f0f7da:f0f7da",
+        "id": "062"
+    },
+    { "hash": "#w=1920;h=1080;s=3;or=p;v=10;b=0;seed=2094519;nz=39;nh=0;ns=0;nl=46;nx=0;ny=0;nid=simplex;n2=0.1;gt=h;gs=1;gx=1;gy=1;cb=646464,80;gr=y;pal=2a848a:065666", "id": "063" },
+    {
+        "hash": "#w=1920;h=1080;s=2;or=f;v=10;b=0;seed=2916584;nz=28;nh=0;ns=0;nl=13;nx=0;ny=0;nid=sin;n2=0.15;gt=h;gs=1.15;gx=1;gy=1;cb=646464,10;cbg=1f5aa8;pal=1f5aa8,0:1f5aa8:1f5aa8:f8a116:1f5aa8:1f5aa8:1f5aa8,0",
+        "id": "064"
     }
 ]
