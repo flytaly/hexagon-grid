@@ -20,6 +20,7 @@ import {
 } from '../../state/canvas-state-types'
 import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
 import { genSeed } from '../../helpers'
+import useProxyState from '../../hooks/use-proxy-state'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,11 +41,11 @@ type NoiseProps = {
 
 const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
     const classes = useStyles()
-    const [n2Strength, setN2Strength] = useState<number>(noiseState.noise2Strength)
-    const [zoom, setZoom] = useState<number>(noiseState.zoom)
-    const [hue, setHue] = useState<number>(noiseState.hue)
-    const [saturation, setSaturation] = useState<number>(noiseState.saturation)
-    const [lightness, setLightness] = useState<number>(noiseState.lightness)
+    const [n2Strength, setN2Strength] = useProxyState<number>(noiseState.noise2Strength)
+    const [zoom, setZoom] = useProxyState<number>(noiseState.zoom)
+    const [hue, setHue] = useProxyState<number>(noiseState.hue)
+    const [saturation, setSaturation] = useProxyState<number>(noiseState.saturation)
+    const [lightness, setLightness] = useProxyState<number>(noiseState.lightness)
 
     const dispatchOption = (payload: RecursivePartial<NoiseSettings>) =>
         dispatch({ type: ActionTypes.SET_NOISE_OPTIONS, payload })

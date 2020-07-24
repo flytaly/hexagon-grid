@@ -11,6 +11,7 @@ import {
 import HexIcon from '../../../assets/hex-grid.svg'
 import TriangleIcon from '../../../assets/triangle.svg'
 import VoronoiIcon from '../../../assets/voronoi.svg'
+import useProxyState from '../../hooks/use-proxy-state'
 
 type GridSettingsProps = {
     gridState: GridSettings
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) => {
     const classes = useStyles()
-    const [sparse, setSparse] = useState<number>(gridState.sparse)
+    const [sparse, setSparse] = useProxyState<number>(gridState.sparse)
     const { signX, signY, isXYSwapped } = gridState
 
     const dispatchOption = (payload: Partial<GridSettings>) =>

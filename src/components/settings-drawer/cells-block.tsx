@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
     Box,
     FormControlLabel,
@@ -17,6 +17,8 @@ import {
     GridType,
 } from '../../state/canvas-state-types'
 
+import useProxyState from '../../hooks/use-proxy-state'
+
 type CellProps = {
     cellState: CellSettings
     dispatch: React.Dispatch<CanvasStateAction>
@@ -31,22 +33,18 @@ const cellNames: Record<GridType, string> = {
 }
 
 const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScreen, type }) => {
-    const [hexSize, setHexSize] = useState(cellState.size)
-    const [borderWidth, setBorderWidth] = useState(cellState.borderWidth)
-    const [cellVariance, setCellVariance] = useState(cellState.variance)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const setCellOptsThrottled = useCallback(
-        throttle((payload: Partial<CellSettings>) => {
-            dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
-        }, 100),
-        [],
+    const [hexSize, setHexSize] = useProxyState(cellState.size)
+    const [borderWidth, setBorderWidth] = useProxyState(cellState.borderWidth)
+    const [cellVariance, setCellVariance] = useProxyState(cellState.variance)
+
+    const setCellOptsThrottled = useMemo(
+        () =>
+            throttle((payload: Partial<CellSettings>) => {
+                dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
+            }, 100),
+        [dispatch],
     )
-    React.useMemo(() => {
-        if (cellState.size !== hexSize) {
-            setHexSize(cellState.size)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cellState.size])
+
     const dispatchOption = (payload: Partial<CellSettings>) =>
         dispatch({ type: ActionTypes.SET_CELL_OPTIONS, payload })
 
