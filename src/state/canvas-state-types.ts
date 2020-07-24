@@ -16,6 +16,7 @@ export enum ActionTypes {
     SELECT_NEXT_PALETTE = 'SELECT_NEXT_PALETTE',
     SAVE_NEW_PALETTE = 'SAVE_NEW_PALETTE',
     INC_NOISE_OFFSET = 'INC_NOISE_OFFSET',
+    INC_NOISE_ZOOM = 'INC_NOISE_ZOOM',
     INC_CELL_SIZE = 'INC_CELL_SIZE',
 }
 
@@ -104,5 +105,6 @@ export type CanvasStateAction =
     | { type: ActionTypes.MODIFY_PALETTE; payload: PaletteColorsArray }
     | { type: ActionTypes.SELECT_NEXT_PALETTE; payload: 1 | -1 }
     | { type: ActionTypes.INC_NOISE_OFFSET; payload: { dx?: number; dy?: number } }
+    | { type: ActionTypes.INC_NOISE_ZOOM; payload: number }
     | { type: ActionTypes.INC_CELL_SIZE; payload: number }
     | { type: ActionTypes.SAVE_NEW_PALETTE }

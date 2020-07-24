@@ -89,6 +89,12 @@ export default function useKeyControls(
                             dispatch({ type: ActionTypes.RESET_SETTINGS })
                         }
                         break
+                    case 219: // [
+                        dispatch({ type: ActionTypes.INC_NOISE_ZOOM, payload: -1 * shift })
+                        break
+                    case 221: // ]
+                        dispatch({ type: ActionTypes.INC_NOISE_ZOOM, payload: 1 * shift })
+                        break
                     default:
                 }
             }

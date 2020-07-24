@@ -189,7 +189,7 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                                 value={zoom}
                                 aria-labelledby="zoom-factor"
                                 min={1}
-                                max={70}
+                                max={100}
                                 onChange={(e, val) => setZoom(Number(val))}
                                 onChangeCommitted={(e, val) =>
                                     dispatchOption({ zoom: Number(val) })

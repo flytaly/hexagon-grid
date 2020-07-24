@@ -29,12 +29,15 @@ const tableRows = [
     { name: 'Toggle gradient on/off', keys: 'g' },
     { name: 'Open help page', keys: 'shift + ?' },
     { name: 'Move noise pattern (left, right, top, bottom)', keys: '← → ↑ ↓' },
+    { name: 'Move noise pattern x10 faster', keys: 'shift + arrows' },
     { name: 'Select next base noise', keys: 'n' },
     { name: 'Select previous base noise', keys: 'shift + n' },
-    { name: "Increase cell's size", keys: '+, =' },
-    { name: "Decrease cell's size", keys: '-' },
+    { name: 'Increase cell size', keys: '+, =' },
+    { name: 'Decrease cell size', keys: '-' },
     { name: 'Reset settings', keys: 'r' },
     { name: 'Load random pattern from gallery', keys: 'shift + r' },
+    { name: 'Increase noise zoom factor', keys: ']' },
+    { name: 'Decrease noise zoom factor', keys: '[' },
 ]
 
 const ShortcutsContent: React.FC = () => {

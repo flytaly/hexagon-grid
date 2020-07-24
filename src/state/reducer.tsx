@@ -140,6 +140,13 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             }
         }
 
+        case ActionTypes.INC_NOISE_ZOOM: {
+            const inc = action.payload || 1
+            const zoom = clamp(state.noise.zoom + inc, 1, 100)
+            if (zoom === state.noise.zoom) return state
+            return { ...state, noise: { ...state.noise, zoom } }
+        }
+
         case ActionTypes.INC_CELL_SIZE: {
             const size = clamp(state.cell.size + action.payload, 1, 20)
             if (size === state.cell.size) return state
