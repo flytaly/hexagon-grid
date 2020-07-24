@@ -90,9 +90,13 @@ const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
             ctx.restore()
         }
 
+        // Normalize border's width for consistency.
+        // 1 is 1 pixel if minimal side is 1080, if not then scale proportionally
+        const borderWidth = (state.cell.borderWidth / 1080) * Math.min(width, height)
+
         drawPolygons({
             borderColor: toRGBAStr(state.colors.border),
-            borderWidth: state.cell.borderWidth,
+            borderWidth,
             closePath: polygonData.type === 'hexagons',
             ctx,
             polygonData,
