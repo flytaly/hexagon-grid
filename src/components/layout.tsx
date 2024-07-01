@@ -1,15 +1,16 @@
 import React from 'react'
-import Meta from './meta'
+import useSetTitle from '../hooks/use-set-title'
 import Footer from './footer'
 
 type PageProps = {
     children: React.ReactNode
 }
 
-const PageLayout: React.FC<PageProps> = ({ children }) => {
+function PageLayout({ children }: PageProps) {
+    useSetTitle('/')
+
     return (
         <>
-            <Meta />
             <div
                 style={{
                     display: 'flex',

@@ -1,6 +1,8 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import GitHubIcon from '@material-ui/icons/GitHub'
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import GitHubIcon from '@mui/icons-material/GitHub'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

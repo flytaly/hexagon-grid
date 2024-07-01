@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-restricted-globals */
 import { Delaunay } from 'd3-delaunay'
 import chroma from 'chroma-js'
 import * as Honeycomb from 'honeycomb-grid'
@@ -272,7 +270,7 @@ function genDelaunayData(
                 setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, i)
             }
 
-            ;[vertices[i * 6], vertices[i * 6 + 1]] = v1
+            [vertices[i * 6], vertices[i * 6 + 1]] = v1
             ;[vertices[i * 6 + 2], vertices[i * 6 + 3]] = v2
             ;[vertices[i * 6 + 4], vertices[i * 6 + 5]] = v3
         }
@@ -315,6 +313,8 @@ function genDelaunayData(
 }
 
 self.addEventListener('message', (event) => {
+    if (!event.data?.state) return
+
     const { state, imgData } = event.data as {
         state: CanvasState
         imgData: Uint8ClampedArray | null

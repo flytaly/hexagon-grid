@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+ 
 import { HSLColor, RGBColor } from 'react-color'
 
 /**
@@ -79,7 +79,7 @@ export function rgbToHsl(r: number, g: number, b: number): [number, number, numb
     const l = (max + min) / 2
 
     if (max === min) {
-        ;[h, s] = [0, 0] // achromatic
+        [h, s] = [0, 0] // achromatic
     } else {
         const d = max - min
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
@@ -114,7 +114,7 @@ export function hslToRgb(h: number, s: number, l: number): RGBColor {
     let b: number
 
     if (s === 0) {
-        // eslint-disable-next-line no-multi-assign
+         
         r = g = b = l // achromatic
     } else {
         const hue2rgb = function hue2rgb(p: number, q: number, t: number) {

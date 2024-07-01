@@ -7,10 +7,12 @@ import {
     Remove,
     Add,
     Share,
-} from '@material-ui/icons'
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles'
-import { Box, IconButton, Fab, Grid } from '@material-ui/core'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
+} from '@mui/icons-material'
+import { Theme, useTheme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Box, IconButton, Fab, Grid } from '@mui/material'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
 
 const useStyles = makeStyles((theme: Theme) =>

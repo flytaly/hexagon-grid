@@ -1,9 +1,11 @@
 import React from 'react'
-import { NextPage } from 'next'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Paper, Box, Typography } from '@material-ui/core'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Paper, Box, Typography } from '@mui/material'
 import RouterAppbar from '../components/router-appbar'
 import Gallery from '../components/image-gallery'
+import Layout from '../components/layout'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -17,10 +19,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const GalleryPage: NextPage = () => {
+const GalleryPage = () => {
     const classes = useStyles()
     return (
-        <>
+        <Layout>
             <RouterAppbar />
             <Box className={classes.pageWrapper}>
                 <Paper className={classes.paper}>
@@ -32,7 +34,7 @@ const GalleryPage: NextPage = () => {
                     </Box>
                 </Paper>
             </Box>
-        </>
+        </Layout>
     )
 }
 

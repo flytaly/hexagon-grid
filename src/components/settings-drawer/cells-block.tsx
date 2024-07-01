@@ -1,18 +1,18 @@
-import React, { useState, useMemo } from 'react'
 import {
     Box,
     FormControlLabel,
     Grid,
+    Input,
     Radio,
     RadioGroup,
     Slider,
     Typography,
-    Input,
-} from '@material-ui/core'
+} from '@mui/material'
 import throttle from 'lodash.throttle'
+import React, { useMemo } from 'react'
 import {
-    CanvasStateAction,
     ActionTypes,
+    CanvasStateAction,
     CellSettings,
     GridType,
 } from '../../state/canvas-state-types'

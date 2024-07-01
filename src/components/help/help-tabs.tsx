@@ -1,11 +1,12 @@
+import { AppBar, Box, Tab, Tabs, Typography } from '@mui/material'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
-import { Typography, AppBar, Tabs, Tab, Box } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { useRouter } from 'next/router'
-
-import ShortcutsContent from './shortcuts-content'
-import HelpPageContent from './help-content'
+import { useNavigate } from 'react-router-dom'
 import Contacts from './contacts'
+import HelpPageContent from './help-content'
+import ShortcutsContent from './shortcuts-content'
 
 type StyleProps = {
     withBackground?: boolean
@@ -93,18 +94,15 @@ const tabData = [
 
 const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => {
     const [value, setValue] = React.useState(initTab)
-    const router = useRouter()
     const classes = useStyles({
         withBackground: value === 2,
     })
 
-    if (!isModal && router.route !== tabData[value].route) {
-        router.push(tabData[value].route)
-    }
+    const navigate = useNavigate()
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
+        if (!isModal) navigate(tabData[newValue].route)
     }
 
     return (

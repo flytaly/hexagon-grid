@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
-import { useRouter } from 'next/router'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import React, { useEffect, useRef, useState } from 'react'
+import { GALLERY_CELL_HEIGHT, GALLERY_COLS, GALLERY_GRID_WIDTH } from '../configs'
 import galleryData from '../gallery-data'
-import { GALLERY_COLS, GALLERY_CELL_HEIGHT, GALLERY_GRID_WIDTH } from '../configs'
+import { Link } from '@mui/material'
 
 type StyleProps = {
     gridWidth: number
@@ -68,11 +70,9 @@ const ImageGallery: React.FC<GalleryProps> = ({
 }) => {
     const [tilesShown, setTilesShown] = useState(10)
     const pageEndRef = useRef<HTMLDivElement>(null)
-    const router = useRouter()
 
     // Defer image loading
     useEffect(() => {
-        /* eslint-disable consistent-return */
         if (tilesShown >= galleryData.length) return
         if (!pageEndRef.current) return
         const options = {
@@ -95,11 +95,6 @@ const ImageGallery: React.FC<GalleryProps> = ({
         gridWidth,
     } as StyleProps)
 
-    const clickHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault()
-        router.push(`/${e.currentTarget.dataset.hash}`)
-    }
-
     return (
         <>
             <div className={classes.root}>
@@ -112,14 +107,13 @@ const ImageGallery: React.FC<GalleryProps> = ({
                             className={classes.gridElement}
                             key={tile.img}
                         >
-                            <a
-                                onClick={clickHandler}
+                            <Link
                                 href={`/${tile.hash}`}
                                 className={classes.imageLink}
                                 data-hash={tile.hash}
                             >
                                 <img src={tile.img} alt="hexagon grid example" />
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>

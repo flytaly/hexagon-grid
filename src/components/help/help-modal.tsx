@@ -1,6 +1,8 @@
 import React from 'react'
-import { Modal, Button } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { Modal, Button } from '@mui/material'
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
 import HelpTabs from './help-tabs'
 
 const useStyles = makeStyles((theme: Theme) =>

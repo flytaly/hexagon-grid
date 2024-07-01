@@ -1,7 +1,9 @@
 import React, { RefObject, useState, useRef } from 'react'
-import { Modal, Button, IconButton, Popover, TextField, InputAdornment } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { Image, FileCopy } from '@material-ui/icons'
+import { Modal, Button, IconButton, Popover, TextField, InputAdornment } from '@mui/material'
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import { Image, FileCopy } from '@mui/icons-material'
 import { CanvasState } from '../state/canvas-state-types'
 import { mapStateToUrlParams } from '../state/url-state'
 import renderSVG from '../grid-generators/render-svg'

@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
-import { Box, Grid, IconButton, Input, Slider, Typography } from '@material-ui/core'
-import { SwapHoriz, SwapVert, Rotate90DegreesCcw } from '@material-ui/icons'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Rotate90DegreesCcw, SwapHoriz, SwapVert } from '@mui/icons-material'
+import { Box, Grid, IconButton, Input, Slider, Typography } from '@mui/material'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import React from 'react'
+import HexIcon from '../../assets/hex-grid.svg?react'
+import TriangleIcon from '../../assets/triangle.svg?react'
+import VoronoiIcon from '../../assets/voronoi.svg?react'
+import useProxyState from '../../hooks/use-proxy-state'
 import {
-    CanvasStateAction,
     ActionTypes,
+    CanvasStateAction,
     GridSettings,
     GridType,
 } from '../../state/canvas-state-types'
-import HexIcon from '../../../assets/hex-grid.svg'
-import TriangleIcon from '../../../assets/triangle.svg'
-import VoronoiIcon from '../../../assets/voronoi.svg'
-import useProxyState from '../../hooks/use-proxy-state'
 
 type GridSettingsProps = {
     gridState: GridSettings
@@ -64,6 +66,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                         onClick={mirrorXAxis}
                         aria-label="Mirror horizontal axis"
                         title="Mirror horizontal axis"
+                        size="large"
                     >
                         <SwapHoriz />
                     </IconButton>
@@ -74,6 +77,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                         onClick={mirrorYAxis}
                         aria-label="Mirror vertical axis"
                         title="Mirror vertical axis"
+                        size="large"
                     >
                         <SwapVert />
                     </IconButton>
@@ -84,6 +88,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                         onClick={swapXYAxes}
                         aria-label="Swap axes"
                         title="Swap axes"
+                        size="large"
                     >
                         <Rotate90DegreesCcw />
                     </IconButton>
@@ -100,6 +105,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                             setGridType('hexagons')
                         }}
                         aria-label="Hexagon grid"
+                        size="large"
                     >
                         <HexIcon className={classes.icon} title="hexagons" />
                     </IconButton>
@@ -111,6 +117,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                             setGridType('triangles')
                         }}
                         aria-label="Triangle grid"
+                        size="large"
                     >
                         <TriangleIcon className={classes.icon} title="triangles" />
                     </IconButton>
@@ -122,6 +129,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                             setGridType('voronoi')
                         }}
                         aria-label="Voronoi grid"
+                        size="large"
                     >
                         <VoronoiIcon className={classes.icon} title="Voronoi" />
                     </IconButton>

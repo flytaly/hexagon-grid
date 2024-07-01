@@ -1,27 +1,27 @@
-import React, { useEffect, useState, useMemo, CSSProperties } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { Add, CheckCircleRounded, Shuffle } from '@mui/icons-material'
 import {
     Box,
     Button,
-    IconButton,
-    Grid,
-    Typography,
-    Popover,
     Divider,
-    FormGroup,
     FormControlLabel,
+    FormGroup,
+    Grid,
+    IconButton,
+    Popover,
     Switch,
-} from '@material-ui/core'
-import { SketchPicker, ColorResult, RGBColor } from 'react-color'
-import { CheckCircleRounded, Shuffle, Add } from '@material-ui/icons'
+    Typography,
+} from '@mui/material'
+import withStyles from '@mui/styles/withStyles'
+import React, { CSSProperties, useMemo, useState } from 'react'
+import { ColorResult, RGBColor, SketchPicker } from 'react-color'
 import { makePaletteColors } from '../../state/canvas-state'
-import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
+import { ActionTypes, CanvasStateAction, ColorsSettings } from '../../state/canvas-state-types'
 
-import { toRGBAStr } from '../../helpers'
-import { defaultPalettes, ColorPalette, getNicePalette } from '../../palettes'
 import { checkered } from '../../background'
-import CustomPaletteMaker from './add-custom-palette'
+import { toRGBAStr } from '../../helpers'
 import useProxyState from '../../hooks/use-proxy-state'
+import { ColorPalette, defaultPalettes, getNicePalette } from '../../palettes'
+import CustomPaletteMaker from './add-custom-palette'
 
 const ColorButton = withStyles(({ palette }) => ({
     root: {

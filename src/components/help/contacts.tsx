@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import EmailIcon from '@material-ui/icons/Email'
-import GitHubIcon from '@material-ui/icons/GitHub'
+import { Button } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import EmailIcon from '@mui/icons-material/Email'
+import GitHubIcon from '@mui/icons-material/GitHub'
 
 const useStyles = makeStyles(() =>
     createStyles({

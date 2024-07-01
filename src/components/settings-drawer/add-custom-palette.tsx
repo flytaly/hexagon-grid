@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Grid, Button, IconButton, Popover, Typography } from '@material-ui/core'
-import { Add, Remove } from '@material-ui/icons'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { Grid, Button, IconButton, Popover, Typography } from '@mui/material'
+import { Add, Remove } from '@mui/icons-material'
+import { Theme } from '@mui/material/styles'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
 import { SketchPicker, ColorResult, RGBColor } from 'react-color'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
@@ -61,7 +63,6 @@ const SortableItem = SortableElement(({ value, id, changeColorHandler }: Sortabl
     return (
         <>
             <li
-                // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
                 role="button"
                 tabIndex={0}
                 aria-label="select color"
@@ -181,6 +182,7 @@ const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, 
                         disableRipple
                         onClick={removeColorHandler}
                         aria-label="Remove color"
+                        size="large"
                     >
                         <Remove />
                     </IconButton>
@@ -189,6 +191,7 @@ const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, 
                         disableRipple
                         onClick={addColorHandler}
                         aria-label="Add color"
+                        size="large"
                     >
                         <Add />
                     </IconButton>

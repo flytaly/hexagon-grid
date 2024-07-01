@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+ 
 import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
 import { RGBColor } from 'react-color'

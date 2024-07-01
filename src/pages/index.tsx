@@ -1,8 +1,9 @@
 import React, { useState, useReducer, useEffect } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Fab, useMediaQuery } from '@material-ui/core'
-import { Settings } from '@material-ui/icons'
-import { NextPage } from 'next'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Fab, useMediaQuery } from '@mui/material'
+import { Settings } from '@mui/icons-material'
 import SettingsPanel from '../components/settings-drawer/settings-drawer'
 import CanvasPage from '../components/canvas-page'
 import { initialState } from '../state/canvas-state'
@@ -12,12 +13,13 @@ import RouterAppbar from '../components/router-appbar'
 import galleryList from '../gallery-data-hash.json'
 import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '../configs'
 import useKeyControls from '../hooks/use-key-controls'
+import Layout from '../components/layout'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         settingsBtn: {
             position: 'fixed',
-            top: `${TOOLBAR_HEIGHT + theme.spacing(2)}px`,
+            top: `${TOOLBAR_HEIGHT + theme.spacing(2)}`,
             right: 0,
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 )
 
-const Home: NextPage = () => {
+const Home = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
     const [helpModal, setHelpModal] = useState(false)
     const [isInitValue, setIsInitValue] = useState(true)
@@ -87,7 +89,7 @@ const Home: NextPage = () => {
     }, [dispatch])
 
     return (
-        <>
+        <Layout>
             <RouterAppbar
                 paddingRight={getDrawerWidth}
                 isModalOpened={helpModal}
@@ -98,7 +100,7 @@ const Home: NextPage = () => {
             </div>
             <Fab
                 className={classes.settingsBtn}
-                variant="round"
+                variant="circular"
                 color="primary"
                 aria-label="Settings"
                 onClick={handleDrawerToggle}
@@ -112,7 +114,7 @@ const Home: NextPage = () => {
                 handleToggle={handleDrawerToggle}
                 isBigScreen={isBigScreen}
             />
-        </>
+        </Layout>
     )
 }
 

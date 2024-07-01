@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Container, Typography } from '@material-ui/core'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import { Container, Typography } from '@mui/material'
 import { CanvasState, CanvasStateAction } from '../state/canvas-state-types'
 import { toRGBAStr } from '../helpers'
 import { checkered } from '../background'
-import Worker from '../grid-generators/generate-data.worker'
+import Worker from '../grid-generators/worker?worker'
 import drawPolygons, { PolygonData } from '../grid-generators/draw-polygons'
 import Keys from './keys'
 import ExportModal from './export-modal'
@@ -66,7 +68,7 @@ const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
     }, [])
 
     useDataFromImageEffect(state, genGridWorker)
-
+    //
     useEffect(() => {
         const context = refCanv.current?.getContext('2d')
         if (state.noise.baseNoise.id === 'image') return

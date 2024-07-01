@@ -1,8 +1,6 @@
-/* eslint-disable react/jsx-no-target-blank */
+import { Box, Link, Typography } from '@mui/material'
+import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
-import { Box, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-import { useRouter } from 'next/router'
 
 const useStyles = makeStyles({
     root: {
@@ -21,18 +19,11 @@ const useStyles = makeStyles({
 })
 
 const gridLinks = {
-    sine:
-        '/#w=300;h=200;s=5;or=p;v=10;b=0;seed=858582;nz=5;nh=0;ns=0;nl=49;nx=0;ny=0;nid=sin;n2=0.15;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbg=2d4059,0;pal=2d4059,0:af1262:af1262:af1262:2d4059,0',
+    sine: '/#w=300;h=200;s=5;or=p;v=10;b=0;seed=858582;nz=5;nh=0;ns=0;nl=49;nx=0;ny=0;nid=sin;n2=0.15;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbg=2d4059,0;pal=2d4059,0:af1262:af1262:af1262:2d4059,0',
 }
 
 const HelpPageContent: React.FC = () => {
     const classes = useStyles()
-    const router = useRouter()
-
-    const pushRoute = (route: string) => (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault()
-        router.push(route)
-    }
 
     return (
         <div className={classes.root}>
@@ -41,10 +32,8 @@ const HelpPageContent: React.FC = () => {
             </Typography>
             <Typography>
                 This is a tool for creating hexagonal grids. Look at{' '}
-                <a href="/gallery" onClick={pushRoute('/gallery')}>
-                    examples in gallery
-                </a>
-                . There is also an option to make triangular (trianglify like) and voronoi grids.
+                <Link href="/gallery">examples in gallery</Link>. There is also an option to make
+                triangular (trianglify like) and voronoi grids.
             </Typography>
             <br />
             <Typography variant="h5" component="h3">
@@ -59,9 +48,12 @@ const HelpPageContent: React.FC = () => {
             </a>
             <Typography>
                 You can also pass your own arbitrary mathematical expression (
-                <a href="https://github.com/silentmatt/expr-eval#unary-operators" target="_blank">
+                <Link
+                    href="https://github.com/silentmatt/expr-eval#unary-operators"
+                    target="_blank"
+                >
                     allowed functions
-                </a>
+                </Link>
                 ). The coordinates of the cell x, y are passed to the noise function and it should
                 return the value approximately in the range [-1; 1]. Basically the resulting image
                 is a 2D contour plot.

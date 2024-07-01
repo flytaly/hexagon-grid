@@ -1,11 +1,12 @@
+import { AppBar, Button, IconButton, Toolbar, Typography } from '@mui/material'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
 import React, { useState } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@material-ui/core'
-import { useRouter } from 'next/router'
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
-import KeyboardIcon from '@material-ui/icons/Keyboard'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import KeyboardIcon from '@mui/icons-material/Keyboard'
+import HeaderLogo from '../assets/logo.svg?react'
 import { TOOLBAR_HEIGHT } from '../configs'
-import HeaderLogo from '../../public/logo.svg'
 import HelpModal from './help/help-modal'
 
 type RouterAppBarProps = {
@@ -39,26 +40,16 @@ const RouterAppBar: React.FC<RouterAppBarProps> = ({
     isModalOpened = false,
     toggleModalHandler,
 }) => {
-    const router = useRouter()
     const classes = useStyles()
     const [helpTabIdx, setHelpTabIdx] = useState(0)
 
-    const makeClickHandler = (href: RootPage) => (
-        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    ) => {
-        e.preventDefault()
-        router.push(href)
-    }
-
     const onHelpModalClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault()
+        if (!toggleModalHandler) return
+
         const route = e.currentTarget.getAttribute('href') as RootPage
-        if (toggleModalHandler) {
-            toggleModalHandler()
-            setHelpTabIdx(route === '/shortcuts' ? 1 : 0)
-        } else {
-            router.push(route)
-        }
+        toggleModalHandler()
+        setHelpTabIdx(route === '/shortcuts' ? 1 : 0)
+        e.preventDefault()
     }
 
     return (
@@ -67,15 +58,13 @@ const RouterAppBar: React.FC<RouterAppBarProps> = ({
                 <Toolbar
                     variant="dense"
                     className={classes.toolbar}
-                    style={{
-                        paddingRight: `${paddingRight}px`,
-                    }}
+                    style={{ paddingRight: `${paddingRight}px` }}
                 >
                     <HeaderLogo className={classes.logo} />
-                    <Button color="inherit" onClick={makeClickHandler('/')} href="/">
+                    <Button color="inherit" href="/">
                         <Typography>Editor</Typography>
                     </Button>
-                    <Button color="inherit" href="/gallery" onClick={makeClickHandler('/gallery')}>
+                    <Button color="inherit" href="/gallery">
                         <Typography>Gallery</Typography>
                     </Button>
                     <div style={{ flexGrow: 1 }} />

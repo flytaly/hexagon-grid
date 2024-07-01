@@ -1,26 +1,28 @@
-import React, { useState } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import {
     Box,
     Button,
+    FormControl,
     Grid,
     Input,
+    InputLabel,
+    MenuItem,
+    Select,
     Slider,
     Typography,
-    InputLabel,
-    Select,
-    FormControl,
-    MenuItem,
-} from '@material-ui/core'
-import {
-    RecursivePartial,
-    NoiseSettings,
-    CanvasStateAction,
-    ActionTypes,
-} from '../../state/canvas-state-types'
-import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
+} from '@mui/material'
+import { Theme } from '@mui/material/styles'
+import createStyles from '@mui/styles/createStyles'
+import makeStyles from '@mui/styles/makeStyles'
+import React from 'react'
 import { genSeed } from '../../helpers'
 import useProxyState from '../../hooks/use-proxy-state'
+import { Noises2D, Noises2DFns, Noises2DList } from '../../noises'
+import {
+    ActionTypes,
+    CanvasStateAction,
+    NoiseSettings,
+    RecursivePartial,
+} from '../../state/canvas-state-types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

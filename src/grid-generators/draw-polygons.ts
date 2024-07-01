@@ -1,6 +1,6 @@
 import { GridType } from '../state/canvas-state-types'
 
-/* eslint-disable @typescript-eslint/no-unused-expressions */
+ 
 export type PolygonData = {
     vertices: Float32Array | number[]
     fillColors: Float32Array | number[]
