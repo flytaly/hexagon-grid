@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { Box, Grid, IconButton, TextField } from '@mui/material'
 import { Rotate90DegreesCcw } from '@mui/icons-material'
-import { CanvasSize, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
+import { Box, Grid, IconButton, TextField } from '@mui/material'
+import React, { useState } from 'react'
+
+import { ActionTypes, CanvasSize, CanvasStateAction } from '#/state/canvas-state-types'
 
 type CanvasProps = {
     canvasSize: CanvasSize
@@ -82,14 +83,15 @@ const CanvasSizeBlock: React.FC<CanvasProps> = ({ canvasSize, dispatch }) => {
                             setWidth(height)
                             setHeight(width)
                         }}
-                        size="large">
+                        size="large"
+                    >
                         <Rotate90DegreesCcw />
                     </IconButton>
                 </Grid>
             </Grid>
             <input type="submit" style={{ display: 'none' }} />
         </Box>
-    );
+    )
 }
 
 export default CanvasSizeBlock

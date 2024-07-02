@@ -1,9 +1,9 @@
 import { RGBColor } from 'react-color'
-import { genSeed } from '../helpers'
-import { defaultPalettes, PaletteColorsArray } from '../palettes'
-import { CanvasState } from './canvas-state-types'
 
-import { Noises2D } from '../noises'
+import { genSeed } from '#/helpers'
+import { Noises2D } from '#/noises'
+import { defaultPalettes, PaletteColorsArray } from '#/palettes'
+import { CanvasState } from './canvas-state-types'
 
 export const makePaletteColors = (
     colors: RGBColor[],

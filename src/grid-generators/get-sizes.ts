@@ -1,4 +1,4 @@
-import { CanvasSize, CellSettings, GridSettings } from '../state/canvas-state-types'
+import { CanvasSize, CellSettings, GridSettings } from '#/state/canvas-state-types'
 
 export function getGridCellSizes(
     size: number,

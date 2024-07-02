@@ -1,6 +1,7 @@
 import { amber, grey, lightBlue, red } from '@mui/material/colors'
 import { LinkProps } from '@mui/material/Link'
 import { createTheme } from '@mui/material/styles'
+
 import LinkBehavior from './components/link-behavior'
 
 const theme = createTheme({

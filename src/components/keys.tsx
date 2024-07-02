@@ -1,19 +1,20 @@
-import React from 'react'
 import {
-    ArrowLeft,
-    ArrowRight,
+    Add,
     ArrowDropDown,
     ArrowDropUp,
+    ArrowLeft,
+    ArrowRight,
     Remove,
-    Add,
     Share,
 } from '@mui/icons-material'
+import { Box, Fab, Grid, IconButton } from '@mui/material'
 import { Theme, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
-import { Box, IconButton, Fab, Grid } from '@mui/material'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
+import React from 'react'
+
+import { ActionTypes, CanvasStateAction } from '#/state/canvas-state-types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

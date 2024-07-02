@@ -1,3 +1,12 @@
+import { genSeed } from '#/helpers'
+import useProxyState from '#/hooks/use-proxy-state'
+import { Noises2D, Noises2DFns, Noises2DList } from '#/noises'
+import {
+    ActionTypes,
+    CanvasStateAction,
+    NoiseSettings,
+    RecursivePartial,
+} from '#/state/canvas-state-types'
 import {
     Box,
     Button,
@@ -14,15 +23,6 @@ import { Theme } from '@mui/material/styles'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
-import { genSeed } from '../../helpers'
-import useProxyState from '../../hooks/use-proxy-state'
-import { Noises2D, Noises2DFns, Noises2DList } from '../../noises'
-import {
-    ActionTypes,
-    CanvasStateAction,
-    NoiseSettings,
-    RecursivePartial,
-} from '../../state/canvas-state-types'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

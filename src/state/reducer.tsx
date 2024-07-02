@@ -1,9 +1,9 @@
-import { clamp, mod } from '../helpers'
-import { defaultPalettes, fillGradient, ColorPalette } from '../palettes'
-import { mapUrlParamsToState } from './url-state'
+import { clamp, mod } from '#/helpers'
+import { Noises2DList } from '#/noises'
+import { ColorPalette, defaultPalettes, fillGradient } from '#/palettes'
+import { initialState, makePaletteColors } from './canvas-state'
 import { ActionTypes, CanvasState, CanvasStateAction } from './canvas-state-types'
-import { Noises2DList } from '../noises'
-import { makePaletteColors, initialState } from './canvas-state'
+import { mapUrlParamsToState } from './url-state'
 
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
     switch (action.type) {

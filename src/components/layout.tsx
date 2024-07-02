@@ -1,5 +1,6 @@
 import React from 'react'
-import useSetTitle from '../hooks/use-set-title'
+
+import useSetTitle from '#/hooks/use-set-title'
 import Footer from './footer'
 
 type PageProps = {

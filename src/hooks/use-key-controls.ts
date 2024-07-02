@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { CanvasStateAction, ActionTypes } from '../state/canvas-state-types'
-import { getNicePalette } from '../palettes'
-import galleryList from '../gallery-data'
+import { CanvasStateAction, ActionTypes } from '#/state/canvas-state-types'
+import { getNicePalette } from '#/palettes'
+import galleryList from '#/gallery-data'
 
 export default function useKeyControls(
     dispatch: React.Dispatch<CanvasStateAction>,
@@ -78,9 +78,8 @@ export default function useKeyControls(
                         break
                     case 82: // r (r - reset setting, shift+R - random from gallery)
                         if (e.shiftKey) {
-                            const { hash } = galleryList[
-                                Math.floor(Math.random() * galleryList.length)
-                            ]
+                            const { hash } =
+                                galleryList[Math.floor(Math.random() * galleryList.length)]
                             dispatch({
                                 type: ActionTypes.MERGE_STATE_FROM_QUERY,
                                 payload: { hash, skipCanvasSize: true },

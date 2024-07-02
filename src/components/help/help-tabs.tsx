@@ -4,6 +4,7 @@ import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import Contacts from './contacts'
 import HelpPageContent from './help-content'
 import ShortcutsContent from './shortcuts-content'

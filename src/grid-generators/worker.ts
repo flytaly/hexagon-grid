@@ -1,13 +1,14 @@
-import { Delaunay } from 'd3-delaunay'
 import chroma from 'chroma-js'
-import * as Honeycomb from 'honeycomb-grid'
+import { Delaunay } from 'd3-delaunay'
 import { Parser } from 'expr-eval'
+import * as Honeycomb from 'honeycomb-grid'
 import { RGBColor } from 'react-color'
+
+import { clamp, rgbToHsl } from '#/helpers'
+import { getNoises, NoiseFn, Noises2DFns } from '#/noises'
+import { PaletteColorsArray } from '#/palettes'
+import { BaseNoise, CanvasState, GridType, NoiseSettings } from '#/state/canvas-state-types'
 import { PolygonData } from './draw-polygons'
-import { CanvasState, GridType, BaseNoise, NoiseSettings } from '../state/canvas-state-types'
-import { PaletteColorsArray } from '../palettes'
-import { clamp, rgbToHsl } from '../helpers'
-import { getNoises, NoiseFn, Noises2DFns } from '../noises'
 import { getGridCellSizes, getHexCellSize } from './get-sizes'
 
 type HexSetArgs = {
@@ -270,7 +271,7 @@ function genDelaunayData(
                 setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, i)
             }
 
-            [vertices[i * 6], vertices[i * 6 + 1]] = v1
+            ;[vertices[i * 6], vertices[i * 6 + 1]] = v1
             ;[vertices[i * 6 + 2], vertices[i * 6 + 3]] = v2
             ;[vertices[i * 6 + 4], vertices[i * 6 + 5]] = v3
         }

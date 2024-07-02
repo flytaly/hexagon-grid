@@ -2,9 +2,10 @@ import { Theme } from '@mui/material/styles'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import React, { useEffect, useRef, useState } from 'react'
-import { GALLERY_CELL_HEIGHT, GALLERY_COLS, GALLERY_GRID_WIDTH } from '../configs'
-import galleryData from '../gallery-data'
 import { Link } from '@mui/material'
+
+import { GALLERY_CELL_HEIGHT, GALLERY_COLS, GALLERY_GRID_WIDTH } from '#/configs'
+import galleryData from '#/gallery-data'
 
 type StyleProps = {
     gridWidth: number

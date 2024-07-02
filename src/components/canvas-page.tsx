@@ -1,17 +1,18 @@
-import React, { useRef, useEffect, useState } from 'react'
+import { Container, Typography } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
-import { Container, Typography } from '@mui/material'
-import { CanvasState, CanvasStateAction } from '../state/canvas-state-types'
-import { toRGBAStr } from '../helpers'
-import { checkered } from '../background'
-import Worker from '../grid-generators/worker?worker'
-import drawPolygons, { PolygonData } from '../grid-generators/draw-polygons'
-import Keys from './keys'
+import React, { useEffect, useRef, useState } from 'react'
+
+import { checkered } from '#/background'
+import drawPolygons, { PolygonData } from '#/grid-generators/draw-polygons'
+import Worker from '#/grid-generators/worker?worker'
+import { toRGBAStr } from '#/helpers'
+import { useDataFromImageEffect } from '#/hooks/use-data-from-image'
+import loadingPlaceholder from '#/loading-placeholder'
+import { CanvasState, CanvasStateAction } from '#/state/canvas-state-types'
 import ExportModal from './export-modal'
-import { useDataFromImageEffect } from '../hooks/use-data-from-image'
-import loadingPlaceholder from '../loading-placeholder'
+import Keys from './keys'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

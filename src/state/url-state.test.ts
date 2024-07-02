@@ -1,5 +1,6 @@
-import { describe, expect, test, mock } from 'bun:test'
-import { testParamsEntries, testParamsQuery, testState } from '../mocks/canvas-test-state'
+import { describe, expect, mock, test } from 'bun:test'
+
+import { testParamsEntries, testParamsQuery, testState } from '#/mocks/canvas-test-state'
 import { initialState } from './canvas-state'
 import { mapStateToUrlParams, mapUrlParamsToState, stateObjectPropIds } from './url-state'
 

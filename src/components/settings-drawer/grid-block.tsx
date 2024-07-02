@@ -4,16 +4,12 @@ import { Theme } from '@mui/material/styles'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
-import HexIcon from '../../assets/hex-grid.svg?react'
-import TriangleIcon from '../../assets/triangle.svg?react'
-import VoronoiIcon from '../../assets/voronoi.svg?react'
-import useProxyState from '../../hooks/use-proxy-state'
-import {
-    ActionTypes,
-    CanvasStateAction,
-    GridSettings,
-    GridType,
-} from '../../state/canvas-state-types'
+
+import HexIcon from '#/assets/hex-grid.svg?react'
+import TriangleIcon from '#/assets/triangle.svg?react'
+import VoronoiIcon from '#/assets/voronoi.svg?react'
+import useProxyState from '#/hooks/use-proxy-state'
+import { ActionTypes, CanvasStateAction, GridSettings, GridType } from '#/state/canvas-state-types'
 
 type GridSettingsProps = {
     gridState: GridSettings

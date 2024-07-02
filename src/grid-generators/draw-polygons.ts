@@ -1,6 +1,5 @@
-import { GridType } from '../state/canvas-state-types'
+import { GridType } from '#/state/canvas-state-types'
 
- 
 export type PolygonData = {
     vertices: Float32Array | number[]
     fillColors: Float32Array | number[]

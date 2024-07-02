@@ -1,12 +1,13 @@
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import KeyboardIcon from '@mui/icons-material/Keyboard'
 import { AppBar, Button, IconButton, Toolbar, Typography } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
 import React, { useState } from 'react'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import KeyboardIcon from '@mui/icons-material/Keyboard'
-import HeaderLogo from '../assets/logo.svg?react'
-import { TOOLBAR_HEIGHT } from '../configs'
+
+import HeaderLogo from '#/assets/logo.svg?react'
+import { TOOLBAR_HEIGHT } from '#/configs'
 import HelpModal from './help/help-modal'
 
 type RouterAppBarProps = {

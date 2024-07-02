@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
-import { Grid, Button, IconButton, Popover, Typography } from '@mui/material'
 import { Add, Remove } from '@mui/icons-material'
+import { Button, Grid, IconButton, Popover, Typography } from '@mui/material'
 import { Theme } from '@mui/material/styles'
-import makeStyles from '@mui/styles/makeStyles'
 import createStyles from '@mui/styles/createStyles'
-import { SketchPicker, ColorResult, RGBColor } from 'react-color'
+import makeStyles from '@mui/styles/makeStyles'
+import React, { useState } from 'react'
+import { ColorResult, RGBColor, SketchPicker } from 'react-color'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
-import { ColorsSettings, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
-import { PaletteColorsArray } from '../../palettes'
-import { toRGBaObj, toRGBAStr } from '../../helpers'
+
+import { toRGBaObj, toRGBAStr } from '#/helpers'
+import { PaletteColorsArray } from '#/palettes'
+import { ActionTypes, CanvasStateAction, ColorsSettings } from '#/state/canvas-state-types'
 
 type ColorModalProps = {
     isOpen: boolean

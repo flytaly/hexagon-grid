@@ -14,13 +14,13 @@ import {
 import withStyles from '@mui/styles/withStyles'
 import React, { CSSProperties, useMemo, useState } from 'react'
 import { ColorResult, RGBColor, SketchPicker } from 'react-color'
-import { makePaletteColors } from '../../state/canvas-state'
-import { ActionTypes, CanvasStateAction, ColorsSettings } from '../../state/canvas-state-types'
 
-import { checkered } from '../../background'
-import { toRGBAStr } from '../../helpers'
-import useProxyState from '../../hooks/use-proxy-state'
-import { ColorPalette, defaultPalettes, getNicePalette } from '../../palettes'
+import { checkered } from '#/background'
+import { toRGBAStr } from '#/helpers'
+import useProxyState from '#/hooks/use-proxy-state'
+import { ColorPalette, defaultPalettes, getNicePalette } from '#/palettes'
+import { makePaletteColors } from '#/state/canvas-state'
+import { ActionTypes, CanvasStateAction, ColorsSettings } from '#/state/canvas-state-types'
 import CustomPaletteMaker from './add-custom-palette'
 
 const ColorButton = withStyles(({ palette }) => ({

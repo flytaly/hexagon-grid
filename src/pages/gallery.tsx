@@ -1,11 +1,11 @@
-import React from 'react'
+import { Box, Paper, Typography } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 import createStyles from '@mui/styles/createStyles'
 import makeStyles from '@mui/styles/makeStyles'
-import { Paper, Box, Typography } from '@mui/material'
-import RouterAppbar from '../components/router-appbar'
-import Gallery from '../components/image-gallery'
-import Layout from '../components/layout'
+
+import Gallery from '#/components/image-gallery'
+import Layout from '#/components/layout'
+import RouterAppbar from '#/components/router-appbar'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

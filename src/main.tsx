@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 import ContactsPage from './pages/contacts'
 import GalleryPage from './pages/gallery'
 import HelpPage from './pages/help'

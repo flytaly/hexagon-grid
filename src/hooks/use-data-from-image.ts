@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
-import { CanvasState } from '../state/canvas-state-types'
-import { getGridCellSizes, getHexCellSize } from '../grid-generators/get-sizes'
-import { drawImageProp } from '../draw-image'
+import { useEffect, useMemo, useState } from 'react'
+
+import { drawImageProp } from '#/draw-image'
+import { getGridCellSizes, getHexCellSize } from '#/grid-generators/get-sizes'
+import { CanvasState } from '#/state/canvas-state-types'
 
 type ImageInfo = {
     cellsNumW?: number | null

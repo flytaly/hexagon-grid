@@ -1,6 +1,7 @@
-import SimplexNoise from 'simplex-noise'
 import Alea from 'alea'
-import { clamp, lerp } from './helpers'
+import SimplexNoise from 'simplex-noise'
+
+import { clamp, lerp } from '#/helpers'
 
 export type NoiseFn = (x: number, y: number, width?: number, height?: number) => number
 
