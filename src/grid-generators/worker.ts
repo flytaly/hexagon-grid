@@ -271,9 +271,12 @@ function genDelaunayData(
                 setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, i)
             }
 
-            ;[vertices[i * 6], vertices[i * 6 + 1]] = v1
-            ;[vertices[i * 6 + 2], vertices[i * 6 + 3]] = v2
-            ;[vertices[i * 6 + 4], vertices[i * 6 + 5]] = v3
+            vertices[i * 6] = v1[0]
+            vertices[i * 6 + 1] = v1[1]
+            vertices[i * 6 + 2] = v2[0]
+            vertices[i * 6 + 3] = v2[1]
+            vertices[i * 6 + 4] = v3[0]
+            vertices[i * 6 + 5] = v3[1]
         }
         return { vertices, fillColors, type }
     }
