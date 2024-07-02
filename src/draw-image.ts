@@ -6,7 +6,16 @@
  *
  * If image and context are only arguments rectangle will equal canvas
  */
-export function drawImageProp(ctx, img, x, y, w, h, offsetX, offsetY) {
+export function drawImageProp(
+    ctx: CanvasRenderingContext2D,
+    img: HTMLImageElement,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    offsetX: number,
+    offsetY: number,
+) {
     if (arguments.length === 2) {
         x = y = 0
         w = ctx.canvas.width
