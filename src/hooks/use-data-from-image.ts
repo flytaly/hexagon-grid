@@ -17,8 +17,9 @@ const getImgData = (width: number, height: number, imgElem: HTMLImageElement) =>
     const ctx = canvas.getContext('2d')
     canvas.width = width
     canvas.height = height
+    if (!ctx) return
     drawImageProp(ctx, imgElem)
-    return ctx?.getImageData(0, 0, width, height).data
+    return ctx.getImageData(0, 0, width, height).data
 }
 
 export const useDataFromImageEffect = (state: CanvasState, genGridWorker: Worker | null): void => {

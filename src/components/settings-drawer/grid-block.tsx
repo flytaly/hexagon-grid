@@ -144,8 +144,8 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                                 step={0.05}
                                 min={1}
                                 max={3}
-                                onChange={(e, val) => setSparse(Number(val))}
-                                onChangeCommitted={(e, val) =>
+                                onChange={(_, val) => setSparse(Number(val))}
+                                onChangeCommitted={(_, val) =>
                                     dispatchOption({ sparse: Number(val) })
                                 }
                             />

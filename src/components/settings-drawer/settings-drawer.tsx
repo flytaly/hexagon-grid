@@ -66,7 +66,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     const classes = useStyles()
     const [tabIdx, setTabIdx] = React.useState(0)
 
-    const handleChange = (event: React.ChangeEvent<unknown>, newIdx: number) => {
+    const handleChange = (_event: React.ChangeEvent<unknown>, newIdx: number) => {
         setTabIdx(newIdx)
     }
 

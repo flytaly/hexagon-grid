@@ -57,67 +57,71 @@ type SortableItemProps = {
     changeColorHandler: ChangeColorAction
 }
 
-const SortableItem = SortableElement(({ value, id, changeColorHandler }: SortableItemProps) => {
-    const [anchorElem, setAnchorElem] = React.useState<HTMLLIElement | null>(null)
-    const classes = useStyles()
-    const [color, setColor] = useState<string>(value)
-    return (
-        <>
-            <li
-                role="button"
-                tabIndex={0}
-                aria-label="select color"
-                className={classes.button}
-                style={{ backgroundColor: color }}
-                onClick={(e) => setAnchorElem(e.currentTarget)}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                        setAnchorElem(e.currentTarget)
-                    }
-                }}
-            />
-            <Popover
-                id="border-color-picker"
-                open={Boolean(anchorElem)}
-                anchorEl={anchorElem}
-                onClose={() => setAnchorElem(null)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <SketchPicker
-                    color={color}
-                    onChange={(col) => setColor(toRGBAStr(col.rgb))}
-                    presetColors={[]}
-                    onChangeComplete={(colorRes: ColorResult) =>
-                        changeColorHandler(id, colorRes.rgb)
-                    }
+const SortableItem = SortableElement<SortableItemProps>(
+    ({ value, id, changeColorHandler }: SortableItemProps) => {
+        const [anchorElem, setAnchorElem] = React.useState<HTMLLIElement | null>(null)
+        const classes = useStyles()
+        const [color, setColor] = useState<string>(value)
+        return (
+            <>
+                <li
+                    role="button"
+                    tabIndex={0}
+                    aria-label="select color"
+                    className={classes.button}
+                    style={{ backgroundColor: color }}
+                    onClick={(e) => setAnchorElem(e.currentTarget)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            setAnchorElem(e.currentTarget)
+                        }
+                    }}
                 />
-            </Popover>
-        </>
-    )
-})
+                <Popover
+                    id="border-color-picker"
+                    open={Boolean(anchorElem)}
+                    anchorEl={anchorElem}
+                    onClose={() => setAnchorElem(null)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                    <SketchPicker
+                        color={color}
+                        onChange={(col) => setColor(toRGBAStr(col.rgb))}
+                        presetColors={[]}
+                        onChangeComplete={(colorRes: ColorResult) =>
+                            changeColorHandler(id, colorRes.rgb)
+                        }
+                    />
+                </Popover>
+            </>
+        )
+    },
+)
 
 type SortableListProps = {
     items: PaletteColorsArray
     changeColorHandler: ChangeColorAction
 }
 
-const SortableList = SortableContainer(({ items, changeColorHandler }: SortableListProps) => {
-    const classes = useStyles()
-    return (
-        <ul className={classes.ul}>
-            {items.map((value, index) => (
-                <SortableItem
-                    key={value.id}
-                    index={index}
-                    id={value.id}
-                    changeColorHandler={changeColorHandler}
-                    value={toRGBAStr(value.rgb)}
-                />
-            ))}
-        </ul>
-    )
-})
+const SortableList = SortableContainer<SortableListProps>(
+    ({ items, changeColorHandler }: SortableListProps) => {
+        const classes = useStyles()
+        return (
+            <ul className={classes.ul}>
+                {items.map((value, index) => (
+                    <SortableItem
+                        key={value.id}
+                        index={index}
+                        id={value.id}
+                        changeColorHandler={changeColorHandler}
+                        value={toRGBAStr(value.rgb)}
+                    />
+                ))}
+            </ul>
+        )
+    },
+)
 
 const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, colorState }) => {
     const classes = useStyles()

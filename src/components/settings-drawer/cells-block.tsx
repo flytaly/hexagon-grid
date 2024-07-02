@@ -60,12 +60,12 @@ const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScre
                 min={1}
                 max={20}
                 valueLabelDisplay="auto"
-                onChange={(e, size) => {
+                onChange={(_, size) => {
                     if (Array.isArray(size)) return
                     setHexSize(size)
                     if (isBigScreen) setCellOptsThrottled({ size })
                 }}
-                onChangeCommitted={(e, size) => {
+                onChangeCommitted={(_, size) => {
                     if (!isBigScreen && !Array.isArray(size))
                         setCellOptsThrottled({
                             size,
@@ -82,8 +82,8 @@ const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScre
                         aria-labelledby="border-width"
                         min={0}
                         max={100}
-                        onChange={(e, val) => setBorderWidth(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ borderWidth: Number(val) })}
+                        onChange={(_, val) => setBorderWidth(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ borderWidth: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -118,8 +118,8 @@ const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScre
                                 aria-labelledby="cell-variance"
                                 min={0}
                                 max={100}
-                                onChange={(e, val) => setCellVariance(Number(val))}
-                                onChangeCommitted={(e, val) =>
+                                onChange={(_, val) => setCellVariance(Number(val))}
+                                onChangeCommitted={(_, val) =>
                                     dispatchOption({ variance: Number(val) })
                                 }
                             />
@@ -153,7 +153,7 @@ const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScre
                         aria-label="orientation"
                         name="orientation"
                         value={cellState.orientation}
-                        onChange={(e, value) => {
+                        onChange={(_, value) => {
                             const orientation = value === 'flat' ? 'flat' : 'pointy'
                             dispatch({
                                 type: ActionTypes.SET_CELL_OPTIONS,

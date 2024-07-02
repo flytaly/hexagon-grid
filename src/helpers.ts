@@ -1,4 +1,3 @@
- 
 import { HSLColor, RGBColor } from 'react-color'
 
 /**
@@ -39,7 +38,7 @@ export function toHslaObj(hslStr: string, alpha = 1): HSLColor {
 export function toRGBaObj(rgbHexStr: string, alpha = 1): RGBColor {
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
-    const hex = rgbHexStr.replace(shorthandRegex, (m, r, g, b) => {
+    const hex = rgbHexStr.replace(shorthandRegex, (_m, r, g, b) => {
         return r + r + g + g + b + b
     })
 
@@ -79,7 +78,8 @@ export function rgbToHsl(r: number, g: number, b: number): [number, number, numb
     const l = (max + min) / 2
 
     if (max === min) {
-        [h, s] = [0, 0] // achromatic
+        // eslint-disable-next-line no-extra-semi
+        ;[h, s] = [0, 0] // achromatic
     } else {
         const d = max - min
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
@@ -114,7 +114,6 @@ export function hslToRgb(h: number, s: number, l: number): RGBColor {
     let b: number
 
     if (s === 0) {
-         
         r = g = b = l // achromatic
     } else {
         const hue2rgb = function hue2rgb(p: number, q: number, t: number) {

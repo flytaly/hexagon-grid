@@ -159,8 +159,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         step={0.05}
                         min={0}
                         max={1}
-                        onChange={(e, val) => setN2Strength(Number(val))}
-                        onChangeCommitted={(e, val) =>
+                        onChange={(_, val) => setN2Strength(Number(val))}
+                        onChangeCommitted={(_, val) =>
                             dispatchOption({ noise2Strength: Number(val) })
                         }
                     />
@@ -192,8 +192,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                                 aria-labelledby="zoom-factor"
                                 min={1}
                                 max={100}
-                                onChange={(e, val) => setZoom(Number(val))}
-                                onChangeCommitted={(e, val) =>
+                                onChange={(_, val) => setZoom(Number(val))}
+                                onChangeCommitted={(_, val) =>
                                     dispatchOption({ zoom: Number(val) })
                                 }
                             />
@@ -225,8 +225,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         aria-labelledby="hue-factor"
                         min={0}
                         max={360}
-                        onChange={(e, val) => setHue(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ hue: Number(val) })}
+                        onChange={(_, val) => setHue(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ hue: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -255,8 +255,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         aria-labelledby="saturation-factor"
                         min={0}
                         max={100}
-                        onChange={(e, val) => setSaturation(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ saturation: Number(val) })}
+                        onChange={(_, val) => setSaturation(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ saturation: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -285,8 +285,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         aria-labelledby="lightness-factor"
                         min={0}
                         max={100}
-                        onChange={(e, val) => setLightness(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ lightness: Number(val) })}
+                        onChange={(_, val) => setLightness(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ lightness: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>
