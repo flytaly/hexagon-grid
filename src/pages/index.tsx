@@ -1,8 +1,6 @@
 import { Settings } from '@mui/icons-material'
-import { Fab, useMediaQuery } from '@mui/material'
+import { Box, Fab, useMediaQuery } from '@mui/material'
 import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
 import { useEffect, useReducer, useState } from 'react'
 
 import CanvasPage from '#/components/canvas-page'
@@ -15,23 +13,6 @@ import useKeyControls from '#/hooks/use-key-controls'
 import { initialState } from '#/state/canvas-state'
 import { ActionTypes, CanvasStateAction } from '#/state/canvas-state-types'
 import { reducer } from '#/state/reducer'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        settingsBtn: {
-            position: 'fixed',
-            top: `${TOOLBAR_HEIGHT + theme.spacing(2)}`,
-            right: 0,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-        },
-        pageWrapper: {
-            height: '100%',
-            maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px - 2rem)`,
-            marginRight: (props: { pageMarginR: number }) => props.pageMarginR,
-        },
-    }),
-)
 
 type Dispatch = React.Dispatch<CanvasStateAction>
 
@@ -67,7 +48,7 @@ function mergeFromHash(dispatch: Dispatch) {
     })
 }
 
-const Home = () => {
+function Home() {
     const [state, dispatch] = useReducer(reducer, initialState)
     const [helpModal, setHelpModal] = useState(false)
     const [isInitValue, setIsInitValue] = useState(true)
@@ -76,9 +57,7 @@ const Home = () => {
 
     const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))
 
-    const getDrawerWidth = isBigScreen && isDrawerOpen ? DRAWER_WIDTH : 0
-
-    const classes = useStyles({ pageMarginR: getDrawerWidth })
+    const drawerWidth = isBigScreen && isDrawerOpen ? DRAWER_WIDTH : 0
 
     if (isInitValue && isBigScreen) {
         // open settings panel on big screen but only once
@@ -101,19 +80,31 @@ const Home = () => {
     return (
         <Layout>
             <RouterAppbar
-                paddingRight={getDrawerWidth}
+                paddingRight={drawerWidth}
                 isModalOpened={helpModal}
                 toggleModalHandler={toggleHelpModal}
             />
-            <div className={classes.pageWrapper}>
+            <Box
+                sx={{
+                    height: '100%',
+                    maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px - 2rem)`,
+                    marginRight: `${drawerWidth}px`,
+                }}
+            >
                 <CanvasPage dispatch={dispatch} state={state} />
-            </div>
+            </Box>
             <Fab
-                className={classes.settingsBtn}
                 variant="circular"
                 color="primary"
                 aria-label="Settings"
                 onClick={handleDrawerToggle}
+                sx={{
+                    top: TOOLBAR_HEIGHT + 16,
+                    right: 0,
+                    position: 'fixed',
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                }}
             >
                 <Settings />
             </Fab>

@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 import useSetTitle from '#/hooks/use-set-title'
@@ -12,17 +13,18 @@ function PageLayout({ children }: PageProps) {
 
     return (
         <>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
+            <Box
+                sx={{
                     height: '100vh',
+                    width: '100vw',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr',
+                    gridTemplateRows: '1fr auto',
                 }}
             >
-                {children}
-                <div style={{ flexGrow: 1 }} />
+                <Box>{children}</Box>
                 <Footer />
-            </div>
+            </Box>
         </>
     )
 }
