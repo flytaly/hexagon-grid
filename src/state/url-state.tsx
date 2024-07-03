@@ -188,7 +188,7 @@ export function mapUrlParamsToState(
     state.canvasSize.aspect = state.canvasSize.width / state.canvasSize.height
     state.colors.palette.isCustom = true
 
-    const customPaletteId = `custom_${Date.now()}`
+    const customPaletteId = `custom_${Date.now()}_${Math.random()}`
     state.colors.palette.id = customPaletteId
 
     const colorState = state.colors

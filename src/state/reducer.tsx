@@ -5,6 +5,7 @@ import { initialState, makePaletteColors } from './canvas-state'
 import { ActionTypes, CanvasState, CanvasStateAction } from './canvas-state-types'
 import { mapUrlParamsToState } from './url-state'
 
+let hashMemo = ''
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
     switch (action.type) {
         case ActionTypes.RESET_SETTINGS: {
@@ -158,6 +159,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             const hash = payload.hash.startsWith('#') ? payload.hash.slice(1) : payload.hash
             const params = {} as Record<string, string>
 
+            if (hash && hash === hashMemo) return state
+
             for (const param of hash.split(';')) {
                 const [name, value] = param.split('=')
                 params[name] = value
@@ -168,6 +171,8 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
             if (payload.skipCanvasSize) {
                 newState.canvasSize = state.canvasSize
             }
+
+            hashMemo = hash
 
             return newState
         }

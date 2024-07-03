@@ -13,7 +13,7 @@ import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '#/configs'
 import galleryList from '#/gallery-data-hash.json'
 import useKeyControls from '#/hooks/use-key-controls'
 import { initialState } from '#/state/canvas-state'
-import { ActionTypes } from '#/state/canvas-state-types'
+import { ActionTypes, CanvasStateAction } from '#/state/canvas-state-types'
 import { reducer } from '#/state/reducer'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,6 +32,40 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 )
+
+type Dispatch = React.Dispatch<CanvasStateAction>
+
+function useSetInitialState(dispatch: Dispatch) {
+    const [imageIndex] = useState(() => Math.floor(Math.random() * galleryList.length))
+
+    useEffect(() => {
+        const size = {
+            width: Math.ceil(window.screen.width * window.devicePixelRatio),
+            height: Math.ceil(window.screen.height * window.devicePixelRatio),
+            pixelRatio: window.devicePixelRatio,
+        }
+        dispatch({ type: ActionTypes.SET_SIZE, payload: size })
+
+        if (window.location.hash.length) {
+            mergeFromHash(dispatch)
+        } else {
+            const { hash } = galleryList[imageIndex]
+            dispatch({
+                type: ActionTypes.MERGE_STATE_FROM_QUERY,
+                payload: { hash, skipCanvasSize: true },
+            })
+        }
+    }, [dispatch, imageIndex])
+}
+
+function mergeFromHash(dispatch: Dispatch) {
+    const { hash } = window.location
+    if (!hash.length) return
+    dispatch({
+        type: ActionTypes.MERGE_STATE_FROM_QUERY,
+        payload: { hash },
+    })
+}
 
 const Home = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -56,35 +90,10 @@ const Home = () => {
 
     useKeyControls(dispatch, toggleHelpModal)
 
+    useSetInitialState(dispatch)
+
     useEffect(() => {
-        const onHashChange = () => {
-            const { hash } = window.location
-            if (hash.length) {
-                dispatch({
-                    type: ActionTypes.MERGE_STATE_FROM_QUERY,
-                    payload: { hash },
-                })
-            }
-        }
-
-        const size = {
-            width: Math.ceil(window.screen.width * window.devicePixelRatio),
-            height: Math.ceil(window.screen.height * window.devicePixelRatio),
-            pixelRatio: window.devicePixelRatio,
-        }
-
-        dispatch({ type: ActionTypes.SET_SIZE, payload: size })
-
-        if (window.location.hash.length) {
-            onHashChange()
-        } else {
-            const { hash } = galleryList[Math.floor(Math.random() * galleryList.length)]
-            dispatch({
-                type: ActionTypes.MERGE_STATE_FROM_QUERY,
-                payload: { hash, skipCanvasSize: true },
-            })
-        }
-
+        const onHashChange = () => mergeFromHash(dispatch)
         window.addEventListener('hashchange', onHashChange)
         return () => window.removeEventListener('hashchange', onHashChange)
     }, [dispatch])
