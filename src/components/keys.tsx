@@ -7,58 +7,28 @@ import {
     Remove,
     Share,
 } from '@mui/icons-material'
-import { Box, Fab, Grid, IconButton } from '@mui/material'
-import { Theme, useTheme } from '@mui/material/styles'
+import { Box, Fab, Grid, IconButton, IconButtonProps, Stack } from '@mui/material'
+import { styled, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
 
 import { ActionTypes, CanvasStateAction } from '#/state/canvas-state-types'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        keysContainer: {
-            position: 'absolute',
-            bottom: theme.spacing(1),
-            left: theme.spacing(1),
-            '&:hover $key': {
-                background: 'rgba(255, 255, 255, 0.8)',
-            },
-        },
-        exportBtn: {
-            position: 'absolute',
-            bottom: theme.spacing(2),
-            right: theme.spacing(3),
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-        },
-        helpBtn: {
-            position: 'absolute',
-            bottom: '100px',
-            right: theme.spacing(2),
-        },
-        extendedIcon: {
-            marginRight: theme.spacing(1),
-        },
-        key: {
-            background: 'rgba(255, 255, 255, 0.5)',
-            borderRadius: '5px',
-            margin: '2px',
-            '&:active': {
-                transform: 'translateY(2px)',
-            },
-        },
-    }),
-)
 
 type ArrowKeysProps = {
     dispatch: React.Dispatch<CanvasStateAction>
     exportBtnClickHandler: () => void
 }
 
-const ArrowKeys: React.FC<ArrowKeysProps> = ({ dispatch, exportBtnClickHandler }) => {
-    const classes = useStyles()
+const Key = styled(IconButton)<IconButtonProps>(() => ({
+    background: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: '5px',
+    margin: '2px',
+    '&:active': {
+        transform: 'translateY(2px)',
+    },
+}))
+
+function ArrowKeys({ dispatch, exportBtnClickHandler }: ArrowKeysProps) {
     const theme = useTheme()
     const matches = useMediaQuery(theme.breakpoints.up('md'))
 
@@ -75,75 +45,84 @@ const ArrowKeys: React.FC<ArrowKeysProps> = ({ dispatch, exportBtnClickHandler }
 
     return (
         <>
-            <Box className={classes.keysContainer}>
+            <Box
+                sx={{
+                    position: 'absolute',
+                    bottom: theme.spacing(1),
+                    left: theme.spacing(1),
+                    '&:hover .control-key': {
+                        background: 'rgba(255, 255, 255, 0.8)',
+                    },
+                }}
+            >
                 <Grid container direction="column" alignItems="flex-start">
                     <Grid item>
-                        <IconButton
+                        <Key
+                            className="control-key"
                             aria-label="Increase hexagons size"
                             title="Increase hexagons size"
-                            className={classes.key}
                             onClick={() => dispatchHexSize(0.5)}
                             size="small"
                             disableRipple
                         >
                             <Add />
-                        </IconButton>
+                        </Key>
                     </Grid>
                     <Grid item>
-                        <IconButton
+                        <Key
+                            className="control-key"
                             aria-label="Decrease hexagons size"
                             title="Decrease hexagons size"
-                            className={classes.key}
                             onClick={() => dispatchHexSize(-0.5)}
                             size="small"
                             disableRipple
                         >
                             <Remove />
-                        </IconButton>
+                        </Key>
                     </Grid>
                     <Grid item style={{ alignSelf: 'center' }}>
-                        <IconButton
+                        <Key
+                            className="control-key"
                             aria-label="Move Top"
                             title="Move Top"
-                            className={classes.key}
                             onClick={() => dispatchOffset(0, -1)}
                             size="small"
                             disableRipple
                         >
                             <ArrowDropUp />
-                        </IconButton>
+                        </Key>
                     </Grid>
                     <Grid item>
-                        <IconButton
+                        <Key
+                            className="control-key"
                             aria-label="Move Left"
                             title="Move Left"
-                            className={classes.key}
                             onClick={() => dispatchOffset(-1, 0)}
                             size="small"
                             disableRipple
                         >
                             <ArrowLeft />
-                        </IconButton>
-                        <IconButton
+                        </Key>
+                        <Key
+                            className="control-key"
                             aria-label="Move Down"
                             title="Move Down"
-                            className={classes.key}
                             onClick={() => dispatchOffset(0, 1)}
                             size="small"
                             disableRipple
                         >
                             <ArrowDropDown />
-                        </IconButton>
-                        <IconButton
+                        </Key>
+                        <Key
+                            className="control-key"
                             aria-label="Move Right"
                             title="Move top"
-                            className={classes.key}
                             onClick={() => dispatchOffset(1, 0)}
                             size="small"
                             disableRipple
                         >
                             <ArrowRight />
-                        </IconButton>
+                        </Key>
                     </Grid>
                 </Grid>
             </Box>
@@ -152,11 +131,17 @@ const ArrowKeys: React.FC<ArrowKeysProps> = ({ dispatch, exportBtnClickHandler }
                 size={matches ? 'medium' : 'small'}
                 color="primary"
                 aria-label="export image"
-                className={classes.exportBtn}
+                sx={{
+                    position: 'absolute',
+                    bottom: theme.spacing(2),
+                    right: theme.spacing(3),
+                }}
                 onClick={exportBtnClickHandler}
             >
-                <Share className={classes.extendedIcon} />
-                Export
+                <Stack direction="row" gap={1}>
+                    <Share />
+                    Export
+                </Stack>
             </Fab>
         </>
     )

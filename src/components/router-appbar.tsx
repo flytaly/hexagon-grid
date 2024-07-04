@@ -15,11 +15,11 @@ type RouterAppBarProps = {
     toggleModalHandler?: () => void
 }
 
-const RouterAppBar: React.FC<RouterAppBarProps> = ({
+function RouterAppBar({
     paddingRight = 0,
     isModalOpened = false,
     toggleModalHandler,
-}) => {
+}: RouterAppBarProps) {
     const [helpTabIdx, setHelpTabIdx] = useState(0)
 
     const onHelpModalClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
