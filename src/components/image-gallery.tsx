@@ -1,83 +1,45 @@
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
-import React, { useEffect, useRef, useState } from 'react'
-import { Link } from '@mui/material'
+import { Box, Container, Link } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { useEffect, useRef, useState } from 'react'
 
-import { GALLERY_CELL_HEIGHT, GALLERY_COLS, GALLERY_GRID_WIDTH } from '#/configs'
 import galleryData from '#/gallery-data'
 
-type StyleProps = {
-    gridWidth: number
-    cellHeight: number
-}
+const ZoomImgLink = styled(Link)(({ theme }) => ({
+    display: 'block',
+    overflow: 'hidden',
+    height: '100%',
+    '& > img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transition: 'transform .5s cubic-bezier(0.33, 1, 0.68, 1)',
+        backgroundColor: '#dfdfdf',
+        textAlign: 'center',
+        display: 'block',
+    },
+    '&:focus': {
+        outline: `3px solid ${theme.palette.primary.main}`,
+    },
+    '&:focus > img, &:hover > img': {
+        transform: 'scale3d(1.14, 1.14, 1)',
+    },
+}))
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-around',
-        },
-        gridList: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            width: (props: StyleProps) => `${props.gridWidth}px`,
-            maxWidth: '100%',
-            listStyle: 'none',
-            padding: 0,
-            margin: 0,
-        },
-        gridElement: {
-            height: (props: StyleProps) => `${props.cellHeight}px`,
-            maxWidth: '100%',
-            padding: '2px',
-            margin: 0,
-        },
-        imageLink: {
-            display: 'block',
-            overflow: 'hidden',
-            height: '100%',
-            '& > img': {
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'transform .5s cubic-bezier(0.33, 1, 0.68, 1)',
-                backgroundColor: '#dfdfdf',
-                lineHeight: (props: StyleProps) => `${props.cellHeight}px`,
-                textAlign: 'center',
-                display: 'block',
-            },
-            '&:focus': {
-                outline: `3px solid ${theme.palette.primary.main}`,
-            },
-            '&:focus > img, &:hover > img': {
-                transform: 'scale3d(1.14, 1.14, 1)',
-            },
-        },
-    }),
-)
+// map index into alternating pattern 1, 1, 2, 2, 1, 1, 2, 2...
+const alternate = (index: number) => (index % 4 < 2 ? 1 : 2)
 
-type GalleryProps = {
-    cols?: number
-    cellHeight?: number
-    gridWidth?: number
-}
-
-const ImageGallery: React.FC<GalleryProps> = ({
-    cols = GALLERY_COLS,
-    cellHeight = GALLERY_CELL_HEIGHT,
-    gridWidth = GALLERY_GRID_WIDTH,
-}) => {
-    const [tilesShown, setTilesShown] = useState(10)
+function ImageGallery() {
+    const [tilesShown, setTilesShown] = useState(14)
     const pageEndRef = useRef<HTMLDivElement>(null)
+
+    const cellHeight = 200
 
     // Defer image loading
     useEffect(() => {
         if (tilesShown >= galleryData.length) return
         if (!pageEndRef.current) return
         const options = {
-            rootMargin: `${cellHeight / 2}px`,
+            rootMargin: `${cellHeight}px`,
         }
         const cb: IntersectionObserverCallback = (entries) => {
             if (entries[0].isIntersecting) {
@@ -91,34 +53,37 @@ const ImageGallery: React.FC<GalleryProps> = ({
         }
     }, [cellHeight, tilesShown])
 
-    const classes = useStyles({
-        cellHeight,
-        gridWidth,
-    } as StyleProps)
-
     return (
         <>
-            <div className={classes.root}>
-                <ul className={classes.gridList}>
-                    {galleryData.slice(0, tilesShown).map((tile) => (
-                        <li
-                            style={{
-                                width: `${(100 / cols) * tile.cols}%`,
-                            }}
-                            className={classes.gridElement}
+            <Container maxWidth="lg">
+                <Box
+                    component="ul"
+                    sx={{
+                        listStyle: 'none',
+                        padding: 0,
+                        margin: 0,
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr',
+                        width: '100%',
+                        gap: (theme) => theme.spacing(1),
+                    }}
+                >
+                    {galleryData.slice(0, tilesShown).map((tile, index) => (
+                        <Box
+                            component="li"
                             key={tile.img}
+                            sx={{
+                                height: cellHeight + 'px',
+                                gridColumn: `span ${alternate(index + 3)}`,
+                            }}
                         >
-                            <Link
-                                href={`/${tile.hash}`}
-                                className={classes.imageLink}
-                                data-hash={tile.hash}
-                            >
+                            <ZoomImgLink href={`/${tile.hash}`} data-hash={tile.hash}>
                                 <img src={tile.img} alt="hexagon grid example" />
-                            </Link>
-                        </li>
+                            </ZoomImgLink>
+                        </Box>
                     ))}
-                </ul>
-            </div>
+                </Box>
+            </Container>
             <div ref={pageEndRef} />
         </>
     )
