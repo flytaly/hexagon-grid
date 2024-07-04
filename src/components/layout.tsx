@@ -17,6 +17,7 @@ function PageLayout({ children }: PageProps) {
                 sx={{
                     height: '100vh',
                     width: '100vw',
+                    maxWidth: '100%',
                     display: 'grid',
                     gridTemplateColumns: '1fr',
                     gridTemplateRows: '1fr auto',
