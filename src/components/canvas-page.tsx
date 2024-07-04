@@ -1,7 +1,4 @@
-import { Container, Typography } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
+import { Box, Typography, useTheme } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { checkered } from '#/background'
@@ -14,35 +11,12 @@ import { CanvasState, CanvasStateAction } from '#/state/canvas-state-types'
 import ExportModal from './export-modal'
 import Keys from './keys'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        canvasBox: {
-            position: 'relative',
-            display: 'flex',
-            padding: theme.spacing(2, 1),
-            height: '100%',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        canvas: {
-            display: 'block',
-            maxWidth: '100%',
-            maxHeight: '100%',
-            background: checkered,
-            boxShadow: theme.shadows[10],
-        },
-    }),
-)
-
 type CanvasPageProps = {
     state: CanvasState
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
+function CanvasPage({ state, dispatch }: CanvasPageProps) {
     const { width, height } = state.canvasSize
     const refCanv = useRef<HTMLCanvasElement>(null)
     const [genGridWorker, setGenGridWorker] = useState<Worker | null>(null)
@@ -53,7 +27,7 @@ const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
     })
     const [exportModalOpen, setExportModalOpen] = useState<boolean>(false)
 
-    const classes = useStyles()
+    const theme = useTheme()
 
     useEffect(() => {
         const worker = new Worker()
@@ -118,9 +92,49 @@ const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
     ])
 
     return (
-        <Container className={classes.canvasBox} maxWidth={false}>
-            <Typography variant="caption">{`${width}x${height}    offsets: (${state.noise.offsetX};${state.noise.offsetY})`}</Typography>
-            <canvas ref={refCanv} className={classes.canvas} width={width} height={height} />
+        <Box
+            sx={{
+                position: 'relative',
+                display: 'flex',
+                padding: theme.spacing(2, 1),
+                height: '100%',
+                maxWidth: '100%',
+                maxHeight: '100%',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
+            <Box
+                sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '1rem',
+                }}
+            >
+                <Typography variant="caption">
+                    {`${width}x${height}    offsets: (${state.noise.offsetX};${state.noise.offsetY})`}
+                </Typography>
+                <canvas
+                    style={{
+                        display: 'block',
+                        maxWidth: '100%',
+                        maxHeight: '100%',
+                        background: checkered,
+                        boxShadow: theme.shadows[10],
+                    }}
+                    ref={refCanv}
+                    width={width}
+                    height={height}
+                />
+            </Box>
             <Keys
                 dispatch={dispatch}
                 exportBtnClickHandler={() => {
@@ -136,7 +150,7 @@ const CanvasPage: React.FC<CanvasPageProps> = ({ state, dispatch }) => {
                     setExportModalOpen(false)
                 }}
             />
-        </Container>
+        </Box>
     )
 }
 

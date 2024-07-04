@@ -55,7 +55,7 @@ function Home() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const handleDrawerToggle = () => setIsDrawerOpen((_state) => !_state)
 
-    const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('sm'))
+    const isBigScreen = useMediaQuery((_theme: Theme) => _theme.breakpoints.up('md'))
 
     const drawerWidth = isBigScreen && isDrawerOpen ? DRAWER_WIDTH : 0
 
@@ -87,7 +87,7 @@ function Home() {
             <Box
                 sx={{
                     height: '100%',
-                    maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px - 2rem)`,
+                    maxHeight: `calc(100% - ${TOOLBAR_HEIGHT}px)`,
                     marginRight: `${drawerWidth}px`,
                 }}
             >
