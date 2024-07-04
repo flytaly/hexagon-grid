@@ -7,20 +7,6 @@ import {
     TableRow,
     Typography,
 } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
-import React from 'react'
-
-const useStyles = makeStyles({
-    table: {
-        width: '400px',
-        maxWidth: '100%',
-        margin: '0 auto',
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-})
 
 const tableRows = [
     { name: 'Select next color palette', keys: 'j' },
@@ -40,8 +26,7 @@ const tableRows = [
     { name: 'Decrease noise zoom factor', keys: '[' },
 ]
 
-const ShortcutsContent: React.FC = () => {
-    const classes = useStyles()
+function ShortcutsContent() {
     const mid = Math.floor(tableRows.length / 2)
     const tables = [tableRows.slice(0, mid), tableRows.slice(mid)]
     return (
@@ -49,9 +34,15 @@ const ShortcutsContent: React.FC = () => {
             <Typography variant="h4" component="h2">
                 Keyboard shortcuts
             </Typography>
-            <TableContainer className={classes.container}>
+            <TableContainer
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+                    gap: 6,
+                }}
+            >
                 {tables.map((rows, idx) => (
-                    <Table key={idx} className={classes.table} aria-label="Keyboard shortcuts">
+                    <Table key={idx} aria-label="Keyboard shortcuts">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Actions</TableCell>

@@ -1,30 +1,12 @@
-import { AppBar, Box, Tab, Tabs, Typography } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
+import { AppBar, Box, Stack, Tab, Tabs, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import hexBg from '#/assets/hex_bg.png'
+import theme from '#/theme'
 import Contacts from './contacts'
 import HelpPageContent from './help-content'
 import ShortcutsContent from './shortcuts-content'
-
-type StyleProps = {
-    withBackground?: boolean
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            backgroundColor: theme.palette.background.paper,
-            background: (props: StyleProps) =>
-                props.withBackground ? 'no-repeat url(/hex_bg.png) left bottom' : '',
-        },
-    }),
-)
 
 type TabPanelProps = {
     children: React.ReactNode
@@ -93,11 +75,8 @@ const tabData = [
     },
 ]
 
-const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => {
+function HelpTabs({ initTab = 0, isModal = false }: HelpTabsProps) {
     const [value, setValue] = React.useState(initTab)
-    const classes = useStyles({
-        withBackground: value === 2,
-    })
 
     const navigate = useNavigate()
 
@@ -106,8 +85,13 @@ const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => 
         if (!isModal) navigate(tabData[newValue].route)
     }
 
+    const background =
+        value === 2
+            ? `no-repeat url(${hexBg}) left bottom, ${theme.palette.background.paper}`
+            : `${theme.palette.background.paper}`
+
     return (
-        <div className={classes.root}>
+        <Stack flexGrow={1} sx={{ background }}>
             <AppBar position="static" color="transparent">
                 <Tabs
                     variant="fullWidth"
@@ -129,7 +113,7 @@ const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => 
             <TabPanel value={value} index={2}>
                 <Contacts />
             </TabPanel>
-        </div>
+        </Stack>
     )
 }
 

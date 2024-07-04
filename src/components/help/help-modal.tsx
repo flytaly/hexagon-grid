@@ -1,35 +1,7 @@
-import { Button, Modal } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
-import React from 'react'
+import { Box, Button, Modal } from '@mui/material'
 
+import theme from '#/theme'
 import HelpTabs from './help-tabs'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        modal: {
-            position: 'absolute',
-            display: 'flex',
-            flexDirection: 'column',
-            width: '1000px',
-            maxWidth: '90%',
-            maxHeight: '90%',
-            backgroundColor: theme.palette.background.paper,
-            // padding: theme.spacing(2, 3, 3),
-            top: `50%`,
-            left: `50%`,
-            transform: `translate(-50%, -50%)`,
-        },
-        dismissBtn: {
-            marginTop: 'auto',
-            marginLeft: 'auto',
-        },
-        modalContent: {
-            overflowY: 'scroll',
-        },
-    }),
-)
 
 type HelpModalProps = {
     isOpen: boolean
@@ -37,18 +9,39 @@ type HelpModalProps = {
     handleClose: () => void
 }
 
-const HelpModal: React.FC<HelpModalProps> = ({ isOpen, handleClose, initTab = 0 }) => {
-    const classes = useStyles()
+function HelpModal({ isOpen, handleClose, initTab = 0 }: HelpModalProps) {
     return (
         <Modal aria-label="help page modal" open={isOpen} onClose={handleClose}>
-            <div className={classes.modal}>
-                <div className={classes.modalContent}>
+            <Box
+                maxWidth="lg"
+                maxHeight={'80vh'}
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'absolute',
+                    width: `calc(100% - ${theme.spacing(4)})`,
+                    height: 'max-content',
+                    maxHeight: '80vh',
+                    inset: 0,
+                    margin: 'auto',
+                }}
+            >
+                <Box sx={{ overflowY: 'scroll' }} maxHeight="100%">
                     <HelpTabs initTab={initTab} isModal />
-                </div>
-                <Button onClick={handleClose} className={classes.dismissBtn}>
+                </Box>
+                <Button
+                    onClick={handleClose}
+                    sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        marginLeft: 'auto',
+                        marginRight: theme.spacing(2),
+                    }}
+                >
                     Dismiss
                 </Button>
-            </div>
+            </Box>
         </Modal>
     )
 }

@@ -1,32 +1,16 @@
 import { Box, Link, Typography } from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles'
-import React from 'react'
 
-const useStyles = makeStyles({
-    root: {
-        width: '800px',
-        maxWidth: '100%',
-        margin: '0 auto',
-        '& img': {
-            maxWidth: '100%',
-        },
-    },
-    centeredImg: {
-        display: 'block',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-})
+import parabola10 from '#/assets/parabola_zoom_10.svg'
+import parabola5 from '#/assets/parabola_zoom_5.svg'
+import sineImg from '#/assets/sine.svg'
 
 const gridLinks = {
     sine: '/#w=300;h=200;s=5;or=p;v=10;b=0;seed=858582;nz=5;nh=0;ns=0;nl=49;nx=0;ny=0;nid=sin;n2=0.15;gt=h;gs=1;gx=1;gy=1;cb=646464,10;cbg=2d4059,0;pal=2d4059,0:af1262:af1262:af1262:2d4059,0',
 }
 
-const HelpPageContent: React.FC = () => {
-    const classes = useStyles()
-
+function HelpPageContent() {
     return (
-        <div className={classes.root}>
+        <Box>
             <Typography variant="h5" component="h3">
                 About
             </Typography>
@@ -44,7 +28,7 @@ const HelpPageContent: React.FC = () => {
                 example, <b>sine wave noise</b> will paint as a sinusoid.
             </Typography>
             <a href={gridLinks.sine}>
-                <img className={classes.centeredImg} src="/sine.svg" alt="sinusoid" />
+                <Box component="img" display="block" marginX="auto" src={sineImg} alt="sinusoid" />
             </a>
             <Typography>
                 You can also pass your own arbitrary mathematical expression (
@@ -71,8 +55,8 @@ const HelpPageContent: React.FC = () => {
                     zoom factor 10.
                 </Typography>
                 <Box display="flex" justifyContent="center" m={1} flexWrap="wrap">
-                    <img src="/parabola_zoom_5.svg" alt="zoom factor 5" height="150" />
-                    <img src="/parabola_zoom_10.svg" alt="zoom factor 10" height="150" />
+                    <img src={parabola5} alt="zoom factor 5" height="150" />
+                    <img src={parabola10} alt="zoom factor 10" height="150" />
                 </Box>
                 <br />
                 <Typography variant="h6" component="h4">
@@ -91,7 +75,7 @@ const HelpPageContent: React.FC = () => {
                     isn’t affected by offsets.
                 </Typography>
             </Box>
-        </div>
+        </Box>
     )
 }
 
