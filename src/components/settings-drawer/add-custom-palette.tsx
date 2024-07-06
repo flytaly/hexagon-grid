@@ -1,8 +1,8 @@
 import { Add, Remove } from '@mui/icons-material'
-import { Button, Grid, IconButton, Popover, Typography } from '@mui/material'
+import { Box, Button, Grid, IconButton, Popover, styled, Typography } from '@mui/material'
 import { Theme } from '@mui/material/styles'
+import { makeStyles } from '@mui/styles'
 import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
 import React, { useState } from 'react'
 import { ColorResult, RGBColor, SketchPicker } from 'react-color'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
@@ -20,12 +20,6 @@ type ColorModalProps = {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        modalContent: {
-            width: '100%',
-            border: '1px solid #555555',
-            boxShadow: theme.shadows[10],
-            padding: theme.spacing(1),
-        },
         button: {
             width: '25px',
             height: '25px',
@@ -38,13 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 outline: `2px solid ${theme.palette.primary.main}`,
                 outlineOffset: '1px',
             },
-        },
-        ul: {
-            listStyle: 'none',
-            margin: theme.spacing(0, 0, 1, 0),
-            padding: 0,
-            display: 'flex',
-            flexWrap: 'wrap',
         },
     }),
 )
@@ -106,9 +93,17 @@ type SortableListProps = {
 
 const SortableList = SortableContainer<SortableListProps>(
     ({ items, changeColorHandler }: SortableListProps) => {
-        const classes = useStyles()
         return (
-            <ul className={classes.ul}>
+            <Box
+                component="ul"
+                sx={{
+                    listStyle: 'none',
+                    margin: (theme) => theme.spacing(0, 0, 1, 0),
+                    padding: 0,
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                }}
+            >
                 {items.map((value, index) => (
                     <SortableItem
                         key={value.id}
@@ -118,7 +113,7 @@ const SortableList = SortableContainer<SortableListProps>(
                         value={toRGBAStr(value.rgb)}
                     />
                 ))}
-            </ul>
+            </Box>
         )
     },
 )
@@ -169,7 +164,14 @@ const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, 
     }
 
     return (
-        <div className={classes.modalContent}>
+        <Box
+            sx={{
+                width: '100%',
+                border: '1px solid #555555',
+                boxShadow: (theme) => theme.shadows[10],
+                padding: (theme) => theme.spacing(1),
+            }}
+        >
             <Typography variant="subtitle1" gutterBottom>
                 Click to change color, drag to sort:
             </Typography>
@@ -228,7 +230,7 @@ const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, 
                     </Button>
                 </Grid>
             </Grid>
-        </div>
+        </Box>
     )
 }
 

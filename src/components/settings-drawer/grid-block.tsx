@@ -1,8 +1,5 @@
 import { Rotate90DegreesCcw, SwapHoriz, SwapVert } from '@mui/icons-material'
 import { Box, Grid, IconButton, Input, Slider, Typography } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
 
 import HexIcon from '#/assets/hex-grid.svg?react'
@@ -16,20 +13,7 @@ type GridSettingsProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        formControl: {
-            margin: theme.spacing(2, 0),
-            minWidth: '150px',
-        },
-        icon: {
-            height: '1em',
-        },
-    }),
-)
-
-const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) => {
-    const classes = useStyles()
+function GridSettingBlock({ dispatch, gridState }: GridSettingsProps) {
     const [sparse, setSparse] = useProxyState<number>(gridState.sparse)
     const { signX, signY, isXYSwapped } = gridState
 
@@ -103,7 +87,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                         aria-label="Hexagon grid"
                         size="large"
                     >
-                        <HexIcon className={classes.icon} title="hexagons" />
+                        <HexIcon height="1em" width="1em" title="hexagons" />
                     </IconButton>
                 </Grid>
                 <Grid item>
@@ -115,7 +99,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                         aria-label="Triangle grid"
                         size="large"
                     >
-                        <TriangleIcon className={classes.icon} title="triangles" />
+                        <TriangleIcon height="1em" width="1em" title="triangles" />
                     </IconButton>
                 </Grid>
                 <Grid item>
@@ -127,7 +111,7 @@ const GridSettingBlock: React.FC<GridSettingsProps> = ({ dispatch, gridState }) 
                         aria-label="Voronoi grid"
                         size="large"
                     >
-                        <VoronoiIcon className={classes.icon} title="Voronoi" />
+                        <VoronoiIcon height="1em" width="1em" title="Voronoi" />
                     </IconButton>
                 </Grid>
             </Grid>

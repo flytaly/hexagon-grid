@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { genSeed } from '#/helpers'
 import useProxyState from '#/hooks/use-proxy-state'
 import { Noises2D, Noises2DFns, Noises2DList } from '#/noises'
@@ -19,30 +21,13 @@ import {
     Slider,
     Typography,
 } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
-import React from 'react'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        formControl: {
-            margin: theme.spacing(2, 0),
-            minWidth: '150px',
-        },
-        selectEmpty: {
-            marginTop: theme.spacing(2),
-        },
-    }),
-)
 
 type NoiseProps = {
     noiseState: NoiseSettings
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
-    const classes = useStyles()
+function NoiseSettingBlock({ dispatch, noiseState }: NoiseProps) {
     const [n2Strength, setN2Strength] = useProxyState<number>(noiseState.noise2Strength)
     const [zoom, setZoom] = useProxyState<number>(noiseState.zoom)
     const [hue, setHue] = useProxyState<number>(noiseState.hue)
@@ -90,13 +75,14 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
 
     return (
         <Box component="form" m={2}>
-            <Typography component="div" gutterBottom>
-                <Box fontWeight="fontWeightBold">Noise settings</Box>
+            <Typography component="h3" fontWeight="fontWeightBold" sx={{ marginBottom: '1rem' }}>
+                Noise settings
             </Typography>
 
-            <FormControl className={classes.formControl}>
+            <FormControl fullWidth sx={{ marginBottom: '1em' }}>
                 <InputLabel id="base-noise-label">Base noise</InputLabel>
                 <Select
+                    label="Base noise"
                     labelId="base-noise-label"
                     value={noiseState.baseNoise.id}
                     onChange={(ev) => {
@@ -114,17 +100,18 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                     ))}
                 </Select>
             </FormControl>
-            {noiseState.baseNoise.id === 'custom' ? (
-                <Box display="flex" flexDirection="column" mb={2}>
+
+            {noiseState.baseNoise.id === 'custom' && (
+                <Box display="flex" flexDirection="column">
                     <Typography variant="caption">
                         Enter math expression. Allowed variables: x, y, w (width), h (height)
                     </Typography>
                     <Input value={noiseState.baseNoise.customFn} onChange={handleExpChange} />
                 </Box>
-            ) : null}
+            )}
 
-            {noiseState.baseNoise.id === 'image' ? (
-                <Box display="flex" flexDirection="column" mb={2}>
+            {noiseState.baseNoise.id === 'image' && (
+                <Box display="flex" flexDirection="column">
                     <Typography gutterBottom>Load image</Typography>
                     <input
                         type="file"
@@ -146,9 +133,9 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         }}
                     />
                 </Box>
-            ) : null}
+            )}
 
-            <Typography id="random-noise" gutterBottom>
+            <Typography id="random-noise" gutterBottom sx={{ marginTop: '1em' }}>
                 Second noise strength (0 = disable)
             </Typography>
             <Grid container spacing={2}>

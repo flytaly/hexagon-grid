@@ -11,7 +11,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import React, { RefObject, useRef, useState } from 'react'
+import { RefObject, useRef, useState } from 'react'
 
 import { PolygonData } from '#/grid-generators/draw-polygons'
 import renderSVG from '#/grid-generators/render-svg'

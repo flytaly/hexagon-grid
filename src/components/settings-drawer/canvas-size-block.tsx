@@ -14,7 +14,7 @@ type ErrorMessages = {
     height?: 'string'
 }
 
-const CanvasSizeBlock: React.FC<CanvasProps> = ({ canvasSize, dispatch }) => {
+function CanvasSizeBlock({ canvasSize, dispatch }: CanvasProps) {
     const [width, setWidth] = useState(canvasSize.width)
     const [height, setHeight] = useState(canvasSize.height)
     const [errors, setErrors] = useState<ErrorMessages>({})

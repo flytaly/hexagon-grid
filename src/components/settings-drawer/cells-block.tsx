@@ -11,8 +11,8 @@ import {
 import throttle from 'lodash.throttle'
 import React, { useMemo } from 'react'
 
-import { ActionTypes, CanvasStateAction, CellSettings, GridType } from '#/state/canvas-state-types'
 import useProxyState from '#/hooks/use-proxy-state'
+import { ActionTypes, CanvasStateAction, CellSettings, GridType } from '#/state/canvas-state-types'
 
 type CellProps = {
     cellState: CellSettings
@@ -27,7 +27,7 @@ const cellNames: Record<GridType, string> = {
     voronoi: 'Voronoi',
 }
 
-const CellSettingsBlock: React.FC<CellProps> = ({ cellState, dispatch, isBigScreen, type }) => {
+function CellSettingsBlock({ cellState, dispatch, isBigScreen, type }: CellProps) {
     const [hexSize, setHexSize] = useProxyState(cellState.size)
     const [borderWidth, setBorderWidth] = useProxyState(cellState.borderWidth)
     const [cellVariance, setCellVariance] = useProxyState(cellState.variance)

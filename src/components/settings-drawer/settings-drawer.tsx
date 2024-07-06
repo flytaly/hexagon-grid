@@ -1,9 +1,6 @@
 import { ChevronRight, ColorLens, GraphicEq, Settings } from '@mui/icons-material'
 import ClearAllIcon from '@mui/icons-material/ClearAll'
 import { Box, Button, Divider, Drawer, IconButton, Tab, Tabs, Toolbar } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import createStyles from '@mui/styles/createStyles'
-import makeStyles from '@mui/styles/makeStyles'
 import React from 'react'
 
 import { DRAWER_WIDTH, TOOLBAR_HEIGHT } from '#/configs'
@@ -13,24 +10,6 @@ import CellSettingsBlock from './cells-block'
 import ColorBlock from './color-block'
 import GridBlock from './grid-block'
 import NoiseSettingsBlock from './noise-block'
-
-const useStyles = makeStyles((theme: Theme) => {
-    return createStyles({
-        drawerPaper: {
-            width: DRAWER_WIDTH,
-            maxWidth: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.88)',
-        },
-        drawerHeader: {
-            display: 'flex',
-            padding: theme.spacing(0, 1),
-            justifyContent: 'flex-start',
-        },
-        tab: {
-            minWidth: 80,
-        },
-    })
-})
 
 interface TabPanelProps {
     children: React.ReactNode
@@ -56,14 +35,7 @@ type SettingsPanelProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({
-    isOpen,
-    handleToggle,
-    isBigScreen,
-    state,
-    dispatch,
-}) => {
-    const classes = useStyles()
+function SettingsPanel({ isOpen, handleToggle, isBigScreen, state, dispatch }: SettingsPanelProps) {
     const [tabIdx, setTabIdx] = React.useState(0)
 
     const handleChange = (_event: React.ChangeEvent<unknown>, newIdx: number) => {
@@ -72,64 +44,76 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
     return (
         <>
-            <Drawer
-                variant="persistent"
-                anchor="right"
-                open={isOpen}
-                classes={{ paper: classes.drawerPaper }}
-            >
-                <Toolbar
-                    className={classes.drawerHeader}
-                    variant="dense"
-                    style={{ height: TOOLBAR_HEIGHT }}
+            <Drawer variant="persistent" anchor="right" open={isOpen}>
+                <Box
+                    sx={{
+                        width: DRAWER_WIDTH,
+                        maxWidth: '100%',
+                        backgroundColor: 'rgba(255, 255, 255, 0.28)',
+                        height: '100%',
+                    }}
                 >
-                    <IconButton onClick={handleToggle} size="large">
-                        <ChevronRight />
-                    </IconButton>
-                    <Tabs value={tabIdx} onChange={handleChange} aria-label="settings-tabs">
-                        <Tab className={classes.tab} icon={<Settings />} aria-label="Settings" />
-                        <Tab
-                            className={classes.tab}
-                            icon={<GraphicEq />}
-                            aria-label="Noise Settings"
-                        />
-                        <Tab className={classes.tab} icon={<ColorLens />} aria-label="Colors" />
-                    </Tabs>
-                </Toolbar>
-                <Divider />
-                <TabPanel value={tabIdx} index={0}>
-                    {state.canvasSize.wasMeasured && (
-                        <CanvasSizeBlock canvasSize={state.canvasSize} dispatch={dispatch} />
-                    )}
-                    <Divider />
-                    <GridBlock dispatch={dispatch} gridState={state.grid} />
-                    <Divider />
-                    <CellSettingsBlock
-                        dispatch={dispatch}
-                        cellState={state.cell}
-                        isBigScreen={isBigScreen}
-                        type={state.grid.type}
-                    />
-                </TabPanel>
-                <TabPanel value={tabIdx} index={1}>
-                    <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
-                    <Divider />
-                </TabPanel>
-                <TabPanel value={tabIdx} index={2}>
-                    <ColorBlock dispatch={dispatch} colorState={state.colors} />
-                    <Divider />
-                </TabPanel>
-                <Box style={{ width: '100%', textAlign: 'end' }}>
-                    <Button
-                        onClick={() => {
-                            dispatch({
-                                type: ActionTypes.RESET_SETTINGS,
-                            })
+                    <Toolbar
+                        variant="dense"
+                        disableGutters
+                        sx={{
+                            height: TOOLBAR_HEIGHT,
+                            display: 'flex',
+                            justifyContent: 'flex-start',
                         }}
-                        endIcon={<ClearAllIcon />}
                     >
-                        Reset settings
-                    </Button>
+                        <IconButton onClick={handleToggle} size="large" aria-label="close settings">
+                            <ChevronRight />
+                        </IconButton>
+                        <Tabs value={tabIdx} onChange={handleChange} aria-label="settings-tabs">
+                            <Tab
+                                icon={<Settings />}
+                                aria-label="General settings"
+                                title="General settings"
+                            />
+                            <Tab
+                                icon={<GraphicEq />}
+                                aria-label="Noise & Patterns"
+                                title="Noise & Patterns"
+                            />
+                            <Tab icon={<ColorLens />} aria-label="Colors" title="Colors" />
+                        </Tabs>
+                    </Toolbar>
+                    <Divider />
+                    <TabPanel value={tabIdx} index={0}>
+                        {state.canvasSize.wasMeasured && (
+                            <CanvasSizeBlock canvasSize={state.canvasSize} dispatch={dispatch} />
+                        )}
+                        <Divider />
+                        <GridBlock dispatch={dispatch} gridState={state.grid} />
+                        <Divider />
+                        <CellSettingsBlock
+                            dispatch={dispatch}
+                            cellState={state.cell}
+                            isBigScreen={isBigScreen}
+                            type={state.grid.type}
+                        />
+                    </TabPanel>
+                    <TabPanel value={tabIdx} index={1}>
+                        <NoiseSettingsBlock dispatch={dispatch} noiseState={state.noise} />
+                        <Divider />
+                    </TabPanel>
+                    <TabPanel value={tabIdx} index={2}>
+                        <ColorBlock dispatch={dispatch} colorState={state.colors} />
+                        <Divider />
+                    </TabPanel>
+                    <Box style={{ width: '100%', textAlign: 'end' }}>
+                        <Button
+                            onClick={() => {
+                                dispatch({
+                                    type: ActionTypes.RESET_SETTINGS,
+                                })
+                            }}
+                            endIcon={<ClearAllIcon />}
+                        >
+                            Reset settings
+                        </Button>
+                    </Box>
                 </Box>
             </Drawer>
         </>

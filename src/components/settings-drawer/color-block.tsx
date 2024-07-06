@@ -7,11 +7,12 @@ import {
     FormGroup,
     Grid,
     IconButton,
+    IconButtonProps,
     Popover,
+    styled,
     Switch,
     Typography,
 } from '@mui/material'
-import withStyles from '@mui/styles/withStyles'
 import React, { CSSProperties, useMemo, useState } from 'react'
 import { ColorResult, RGBColor, SketchPicker } from 'react-color'
 
@@ -23,38 +24,34 @@ import { makePaletteColors } from '#/state/canvas-state'
 import { ActionTypes, CanvasStateAction, ColorsSettings } from '#/state/canvas-state-types'
 import CustomPaletteMaker from './add-custom-palette'
 
-const ColorButton = withStyles(({ palette }) => ({
-    root: {
-        border: '1px solid grey',
-        borderRadius: '3px',
-        height: '24px',
-        padding: 0,
-        width: '40px',
-        minWidth: '40px',
-        '&:hover, &:focus': { opacity: 0.6 },
-        '&:focus': {
-            outline: `2px solid ${palette.primary.main}`,
-            outlineOffset: '1px',
-        },
+const ColorButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
+    border: '1px solid grey',
+    borderRadius: '3px',
+    height: '24px',
+    padding: 0,
+    width: '40px',
+    minWidth: '40px',
+    '&:hover, &:focus': { opacity: 0.6 },
+    '&:focus': {
+        outline: `2px solid ${theme.palette.primary.main}`,
+        outlineOffset: '1px',
     },
-}))(IconButton)
+}))
 
-const PaletteButton = withStyles(({ palette, spacing }) => ({
-    root: {
-        position: 'relative',
-        border: '1px solid grey',
-        borderRadius: '5px',
-        height: '28px',
-        padding: 0,
-        width: '100%',
-        margin: spacing(0, 0, 1, 0),
-        '&:hover, &:focus': { opacity: 0.6 },
-        '&:focus': {
-            outline: `2px solid ${palette.primary.main}`,
-            outlineOffset: '1px',
-        },
+const PaletteButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
+    position: 'relative',
+    border: '1px solid grey',
+    borderRadius: '5px',
+    height: '28px',
+    padding: 0,
+    width: '100%',
+    margin: theme.spacing(0, 0, 1, 0),
+    '&:hover, &:focus': { opacity: 0.6 },
+    '&:focus': {
+        outline: `2px solid ${theme.palette.primary.main}`,
+        outlineOffset: '1px',
     },
-}))(IconButton)
+}))
 
 type ColorProps = {
     colorState: ColorsSettings
