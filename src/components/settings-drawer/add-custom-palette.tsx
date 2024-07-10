@@ -3,10 +3,10 @@ import { Box, Button, Grid, IconButton, Popover, Typography } from '@mui/materia
 import { Theme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import createStyles from '@mui/styles/createStyles'
-import React, { useState } from 'react'
-import { ColorResult, RGBColor, SketchPicker } from 'react-color'
+import React from 'react'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
+import ColorPicker from '#/components/color-picker'
 import { toRGBaObj, toRGBAStr } from '#/helpers'
 import { PaletteColorsArray } from '#/palettes'
 import { ActionTypes, CanvasStateAction, ColorsSettings } from '#/state/canvas-state-types'
@@ -48,7 +48,6 @@ const SortableItem = SortableElement<SortableItemProps>(
     ({ value, id, changeColorHandler }: SortableItemProps) => {
         const [anchorElem, setAnchorElem] = React.useState<HTMLLIElement | null>(null)
         const classes = useStyles()
-        const [color, setColor] = useState<string>(value)
         return (
             <>
                 <li
@@ -56,7 +55,7 @@ const SortableItem = SortableElement<SortableItemProps>(
                     tabIndex={0}
                     aria-label="select color"
                     className={classes.button}
-                    style={{ backgroundColor: color }}
+                    style={{ backgroundColor: value }}
                     onClick={(e) => setAnchorElem(e.currentTarget)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -72,13 +71,12 @@ const SortableItem = SortableElement<SortableItemProps>(
                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                    <SketchPicker
-                        color={color}
-                        onChange={(col) => setColor(toRGBAStr(col.rgb))}
+                    <ColorPicker
+                        color={value}
+                        onChange={(col) => {
+                            changeColorHandler(id, col)
+                        }}
                         presetColors={[]}
-                        onChangeComplete={(colorRes: ColorResult) =>
-                            changeColorHandler(id, colorRes.rgb)
-                        }
                     />
                 </Popover>
             </>

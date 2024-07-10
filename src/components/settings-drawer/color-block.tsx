@@ -14,29 +14,14 @@ import {
     Typography,
 } from '@mui/material'
 import React, { CSSProperties, useMemo, useState } from 'react'
-import { ColorResult, RGBColor, SketchPicker } from 'react-color'
 
 import { checkered } from '#/background'
+import ColorPicker, { ColorButton } from '#/components/color-picker'
 import { toRGBAStr } from '#/helpers'
-import useProxyState from '#/hooks/use-proxy-state'
 import { ColorPalette, defaultPalettes, getNicePalette } from '#/palettes'
 import { makePaletteColors } from '#/state/canvas-state'
 import { ActionTypes, CanvasStateAction, ColorsSettings } from '#/state/canvas-state-types'
 import CustomPaletteMaker from './add-custom-palette'
-
-const ColorButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
-    border: '1px solid grey',
-    borderRadius: '3px',
-    height: '24px',
-    padding: 0,
-    width: '40px',
-    minWidth: '40px',
-    '&:hover, &:focus': { opacity: 0.6 },
-    '&:focus': {
-        outline: `2px solid ${theme.palette.primary.main}`,
-        outlineOffset: '1px',
-    },
-}))
 
 const PaletteButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
     position: 'relative',
@@ -58,10 +43,7 @@ type ColorProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
-    const [border, setBorder] = useProxyState<RGBColor>(colorState.border)
-    const [background, setBackground] = useProxyState<RGBColor | null>(colorState.background)
-
+function ColorBlock({ dispatch, colorState }: ColorProps) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [bordAnchorEl, setBordAnchorEl] = useState<HTMLButtonElement | null>(null)
     const [bgAnchorEl, setBgAnchorEl] = React.useState<HTMLButtonElement | null>(null)
@@ -122,7 +104,6 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                 ...(p.setBackground && { background: p.setBackground }),
             },
         })
-        if (p.setBackground) setBackground(p.setBackground)
     }
 
     return (
@@ -139,14 +120,9 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                         <ColorButton
                             onClick={(e) => setBgAnchorEl(e.currentTarget)}
                             aria-label="Background color"
-                            size="small"
                             disableRipple
-                            style={{
-                                background:
-                                    background && background.a !== 0
-                                        ? toRGBAStr(background)
-                                        : checkered,
-                            }}
+                            bgcolor={toRGBAStr(colorState.background || { r: 0, g: 0, b: 0, a: 1 })}
+                            sx={{ width: '2.5rem', height: '1.5rem' }}
                         />
                     </Grid>
                 </Grid>
@@ -159,19 +135,17 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                     }}
                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    sx={{ background: 'none', backgroundColor: 'none' }}
                 >
-                    <SketchPicker
-                        color={background || { h: 0, s: 0, l: 1, a: 0 }}
-                        presetColors={paletteColors}
-                        onChange={(color) => {
-                            setBackground(color.rgb)
-                        }}
-                        onChangeComplete={(color: ColorResult) => {
+                    <ColorPicker
+                        color={colorState.background || { r: 0, g: 0, b: 0, a: 1 }}
+                        onChange={(background) => {
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: { background: color.rgb },
+                                payload: { background },
                             })
                         }}
+                        presetColors={paletteColors}
                     />
                 </Popover>
 
@@ -197,14 +171,12 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                             <ColorButton
                                 onClick={(e) => setBordAnchorEl(e.currentTarget)}
                                 aria-label="Hexagon border color"
-                                size="small"
                                 disableRipple
-                                style={{
-                                    background: border.a ? toRGBAStr(border) : checkered,
-                                }}
-                            >
-                                <div />
-                            </ColorButton>
+                                bgcolor={
+                                    colorState.border.a ? toRGBAStr(colorState.border) : checkered
+                                }
+                                sx={{ width: '2.5rem', height: '1.5rem' }}
+                            />
                         </Grid>
                     </Grid>
                 )}
@@ -218,16 +190,15 @@ const ColorBlock: React.FC<ColorProps> = ({ dispatch, colorState }) => {
                     anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
-                    <SketchPicker
-                        color={border}
-                        onChange={(color) => setBorder(color.rgb)}
-                        presetColors={paletteColors}
-                        onChangeComplete={(color: ColorResult) =>
+                    <ColorPicker
+                        color={colorState.border}
+                        onChange={(border) => {
                             dispatch({
                                 type: ActionTypes.SET_COLOR_OPTIONS,
-                                payload: { border: color.rgb },
+                                payload: { border },
                             })
-                        }
+                        }}
+                        presetColors={paletteColors}
                     />
                 </Popover>
                 <FormGroup row>

@@ -1,6 +1,5 @@
 import clone from 'lodash.clonedeep'
 import set from 'lodash.set'
-import { RGBColor } from 'react-color'
 
 import { toRGBaObj } from '#/helpers'
 import { ColorPalette, fillGradient, PaletteColorsArray } from '#/palettes'

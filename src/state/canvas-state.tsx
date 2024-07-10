@@ -1,5 +1,3 @@
-import { RGBColor } from 'react-color'
-
 import { genSeed } from '#/helpers'
 import { Noises2D } from '#/noises'
 import { defaultPalettes, PaletteColorsArray } from '#/palettes'

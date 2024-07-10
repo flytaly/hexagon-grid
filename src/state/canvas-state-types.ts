@@ -1,5 +1,3 @@
-import { RGBColor } from 'react-color'
-
 import { Noises2DFns } from '#/noises'
 import { ColorPalette, PaletteColorsArray } from '#/palettes'
 

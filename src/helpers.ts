@@ -1,5 +1,3 @@
-import { HSLColor, RGBColor } from 'react-color'
-
 /**
  * @param x start of the range
  * @param y end of the range

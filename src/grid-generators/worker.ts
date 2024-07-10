@@ -2,7 +2,6 @@ import chroma from 'chroma-js'
 import { Delaunay } from 'd3-delaunay'
 import { Parser } from 'expr-eval'
 import * as Honeycomb from 'honeycomb-grid'
-import { RGBColor } from 'react-color'
 
 import { clamp, rgbToHsl } from '#/helpers'
 import { getNoises, NoiseFn, Noises2DFns } from '#/noises'
