@@ -192,15 +192,16 @@ function genDelaunayData(
     // the grid's cells are square and adding bounding points is not only
     // unnecessary but also adds distortion
     const points = state.cell.variance
-        ? [
-              [0, 0],
-              [width, 0],
-              [width, height],
-              [0, height],
+        ? // prettier-ignore
+          [
+              0, 0,
+              width, 0,
+              width, height,
+              0, height,
           ]
         : []
 
-    // add rest points
+    // add the rest of the points
     for (let i = 0; i <= cellsNumW; i += 1) {
         for (let j = 0; j <= cellsNumH; j += 1) {
             const rndW = random.rnd(state.cell.variance)
@@ -208,12 +209,12 @@ function genDelaunayData(
             const x = (i + rndW) * cellSize
             const y = (j + rndH) * cellSize
             if (x < width + cellSize && y < height + cellSize && x > -cellSize && y > -cellSize) {
-                points.push([x, y])
+                points.push(x, y)
             }
         }
     }
 
-    const delaunay = Delaunay.from(points)
+    const delaunay = new Delaunay(points)
     const palette = state.colors.palette.colors
     const noiseFn = getNoiseFn(noises, baseNoise)
 
@@ -239,18 +240,13 @@ function genDelaunayData(
         const vertices = new Float32Array(len * 6)
         const fillColors = new Float32Array(len * 4)
         for (let i = 0; i < len; i += 1) {
-            const v1 = [
-                points[delaunay.triangles[i * 3]][0], //
-                points[delaunay.triangles[i * 3]][1],
-            ]
-            const v2 = [
-                points[delaunay.triangles[i * 3 + 1]][0],
-                points[delaunay.triangles[i * 3 + 1]][1],
-            ]
-            const v3 = [
-                points[delaunay.triangles[i * 3 + 2]][0],
-                points[delaunay.triangles[i * 3 + 2]][1],
-            ]
+            const { points, triangles } = delaunay
+            const t0 = triangles[i * 3 + 0]
+            const t1 = triangles[i * 3 + 1]
+            const t2 = triangles[i * 3 + 2]
+            const v1 = [points[t0 * 2], points[t0 * 2 + 1]]
+            const v2 = [points[t1 * 2], points[t1 * 2 + 1]]
+            const v3 = [points[t2 * 2], points[t2 * 2 + 1]]
             const cx = (v1[0] + v2[0] + v3[0]) / 3
             const cy = (v1[1] + v2[1] + v3[1]) / 3
 
@@ -270,12 +266,9 @@ function genDelaunayData(
                 setFillColor(getNoiseVal(cx, cy), state.noise, getColor, fillColors, i)
             }
 
-            vertices[i * 6] = v1[0]
-            vertices[i * 6 + 1] = v1[1]
-            vertices[i * 6 + 2] = v2[0]
-            vertices[i * 6 + 3] = v2[1]
-            vertices[i * 6 + 4] = v3[0]
-            vertices[i * 6 + 5] = v3[1]
+            vertices.set(v1, i * 6)
+            vertices.set(v2, i * 6 + 2)
+            vertices.set(v3, i * 6 + 4)
         }
         return { vertices, fillColors, type }
     }
