@@ -1,12 +1,21 @@
+import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { Add, Remove } from '@mui/icons-material'
-import { Box, Button, Grid, IconButton, Popover, Typography } from '@mui/material'
-import { Theme } from '@mui/material/styles'
-import { makeStyles } from '@mui/styles'
-import createStyles from '@mui/styles/createStyles'
-import React from 'react'
-import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import { Box, Button, Grid, Popover, Stack, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import {
+    closestCenter,
+    DndContext,
+    DragEndEvent,
+    PointerSensor,
+    useDndMonitor,
+    useDroppable,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core'
 
-import ColorPicker from '#/components/color-picker'
+import ColorPicker, { ColorButton } from '#/components/color-picker'
 import { toRGBaObj, toRGBAStr } from '#/helpers'
 import { PaletteColorsArray } from '#/palettes'
 import { ActionTypes, CanvasStateAction, ColorsSettings } from '#/state/canvas-state-types'
@@ -18,24 +27,6 @@ type ColorModalProps = {
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        button: {
-            width: '25px',
-            height: '25px',
-            minWidth: '25px',
-            margin: '2px',
-            padding: 0,
-            borderRadius: '4px',
-            border: '1px solid grey',
-            '&:focus': {
-                outline: `2px solid ${theme.palette.primary.main}`,
-                outlineOffset: '1px',
-            },
-        },
-    }),
-)
-
 type ChangeColorAction = (id: number | string, newColor: RGBColor) => void
 
 type SortableItemProps = {
@@ -44,90 +35,148 @@ type SortableItemProps = {
     changeColorHandler: ChangeColorAction
 }
 
-const SortableItem = SortableElement<SortableItemProps>(
-    ({ value, id, changeColorHandler }: SortableItemProps) => {
-        const [anchorElem, setAnchorElem] = React.useState<HTMLLIElement | null>(null)
-        const classes = useStyles()
-        return (
-            <>
-                <li
-                    role="button"
-                    tabIndex={0}
-                    aria-label="select color"
-                    className={classes.button}
-                    style={{ backgroundColor: value }}
-                    onClick={(e) => setAnchorElem(e.currentTarget)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            setAnchorElem(e.currentTarget)
-                        }
+const SortableItem = ({ value, id, changeColorHandler }: SortableItemProps) => {
+    const [anchorElem, setAnchorElem] = React.useState<HTMLElement | null>(null)
+
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+        id,
+        data: { type: 'color' },
+    })
+
+    return (
+        <>
+            <ColorButton
+                component="li"
+                disableRipple
+                sx={{
+                    width: '1.5rem',
+                    height: '1.5rem',
+                    transform: CSS.Transform.toString(transform),
+                    transition,
+                    ':focus': { outline: '2px solid #1976d2' },
+                }}
+                bgcolor={value}
+                onClick={(e) => setAnchorElem(e.currentTarget)}
+                ref={setNodeRef}
+                {...attributes}
+                {...listeners}
+            />
+            <Popover
+                id="border-color-picker"
+                open={Boolean(anchorElem)}
+                anchorEl={anchorElem}
+                onClose={() => setAnchorElem(null)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <ColorPicker
+                    color={value}
+                    onChange={(col) => {
+                        changeColorHandler(id, col)
                     }}
+                    presetColors={[]}
                 />
-                <Popover
-                    id="border-color-picker"
-                    open={Boolean(anchorElem)}
-                    anchorEl={anchorElem}
-                    onClose={() => setAnchorElem(null)}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                    <ColorPicker
-                        color={value}
-                        onChange={(col) => {
-                            changeColorHandler(id, col)
-                        }}
-                        presetColors={[]}
-                    />
-                </Popover>
-            </>
-        )
-    },
-)
+            </Popover>
+        </>
+    )
+}
 
 type SortableListProps = {
     items: PaletteColorsArray
     changeColorHandler: ChangeColorAction
+    onSortEnd: (event: DragEndEvent) => void
 }
 
-const SortableList = SortableContainer<SortableListProps>(
-    ({ items, changeColorHandler }: SortableListProps) => {
-        return (
-            <Box
-                component="ul"
-                sx={{
-                    listStyle: 'none',
-                    margin: (theme) => theme.spacing(0, 0, 1, 0),
-                    padding: 0,
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                }}
-            >
-                {items.map((value, index) => (
-                    <SortableItem
-                        key={value.id}
-                        index={index}
-                        id={value.id}
-                        changeColorHandler={changeColorHandler}
-                        value={toRGBAStr(value.rgb)}
-                    />
-                ))}
-            </Box>
-        )
-    },
-)
+function Trash() {
+    const { setNodeRef, isOver } = useDroppable({
+        id: 'trash',
+        data: {
+            type: 'trash',
+            accept: 'color',
+        },
+    })
 
-const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, colorState }) => {
-    const classes = useStyles()
+    const [isDragging, setIsDragging] = useState(false)
+
+    useDndMonitor({
+        onDragStart: () => setIsDragging(true),
+        onDragEnd: () => setIsDragging(false),
+    })
+
+    return (
+        <Box
+            ref={setNodeRef}
+            sx={{
+                width: '1.5rem',
+                height: '1.5rem',
+                opacity: isDragging ? 1 : 0,
+            }}
+        >
+            <DeleteOutlineIcon color={isOver ? 'warning' : 'action'} />
+        </Box>
+    )
+}
+
+const SortableList = ({ items, changeColorHandler, onSortEnd }: SortableListProps) => {
+    const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 10 } }))
+
+    return (
+        <DndContext
+            onDragStart={() => {}}
+            onDragEnd={onSortEnd}
+            collisionDetection={closestCenter}
+            sensors={sensors}
+        >
+            <SortableContext items={items}>
+                <Box
+                    component="ul"
+                    sx={{
+                        listStyle: 'none',
+                        margin: (theme) => theme.spacing(0, 0, 1, 0),
+                        padding: 0,
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.25rem',
+                        width: '100%',
+                    }}
+                >
+                    {items.map((value) => (
+                        <SortableItem
+                            key={value.id}
+                            id={value.id}
+                            changeColorHandler={changeColorHandler}
+                            value={toRGBAStr(value.rgb)}
+                        />
+                    ))}
+                    <Box sx={{ marginLeft: 'auto' }}>
+                        <Trash />
+                    </Box>
+                </Box>
+            </SortableContext>
+        </DndContext>
+    )
+}
+
+function CustomPaletteMaker({ handleClose, dispatch, colorState }: ColorModalProps) {
     const { colors } = colorState.palette
 
-    const sortEndHandle = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
-        if (oldIndex === newIndex) return
-        const newColors = [...colors]
-        const elem = newColors.splice(oldIndex, 1)[0]
-        newColors.splice(newIndex, 0, elem)
+    const sortEndHandle = (event: DragEndEvent) => {
+        const { active, over } = event
+        if (!over || active.id === over.id) return
+
+        if (over.id === 'trash') {
+            dispatch({
+                type: ActionTypes.MODIFY_PALETTE,
+                payload: colors.filter((c) => c.id !== active.id),
+            })
+            return
+        }
+
+        const oldIndex = colors.findIndex((i) => i.id === active.id)
+        const newIndex = colors.findIndex((i) => i.id === over.id)
         dispatch({
             type: ActionTypes.MODIFY_PALETTE,
-            payload: newColors,
+            payload: arrayMove(colors, oldIndex, newIndex),
         })
     }
 
@@ -176,30 +225,28 @@ const CustomPaletteMaker: React.FC<ColorModalProps> = ({ handleClose, dispatch, 
             <SortableList
                 changeColorHandler={changeColorHandler}
                 items={colors}
-                axis="xy"
                 onSortEnd={sortEndHandle}
-                distance={1}
             />
             <Grid container alignItems="center" spacing={2}>
                 <Grid item>
-                    <IconButton
-                        className={classes.button}
-                        disableRipple
-                        onClick={removeColorHandler}
-                        aria-label="Remove color"
-                        size="large"
-                    >
-                        <Remove />
-                    </IconButton>
-                    <IconButton
-                        className={classes.button}
-                        disableRipple
-                        onClick={addColorHandler}
-                        aria-label="Add color"
-                        size="large"
-                    >
-                        <Add />
-                    </IconButton>
+                    <Stack direction="row" gap="0.25rem">
+                        <ColorButton
+                            disableRipple
+                            onClick={removeColorHandler}
+                            aria-label="Remove color"
+                            sx={{ width: '1.5rem', height: '1.5rem' }}
+                        >
+                            <Remove />
+                        </ColorButton>
+                        <ColorButton
+                            disableRipple
+                            onClick={addColorHandler}
+                            aria-label="Add color"
+                            sx={{ width: '1.5rem', height: '1.5rem' }}
+                        >
+                            <Add />
+                        </ColorButton>
+                    </Stack>
                 </Grid>
                 <Grid item style={{ marginLeft: 'auto' }}>
                     <Button

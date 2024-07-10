@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { HexAlphaColorPicker } from 'react-colorful'
 import { useDebouncyEffect } from 'use-debouncy'
 
-export const ColorButton = styled(IconButton)<IconButtonProps & { bgcolor: string }>(
+export const ColorButton = styled(IconButton)<IconButtonProps & { bgcolor?: string }>(
     ({ theme, bgcolor: bgcolor }) => ({
         border: '1px solid grey',
         borderRadius: '3px',
         padding: 0,
         height: '1rem',
         width: '1rem',
-        backgroundColor: bgcolor,
+        backgroundColor: bgcolor || 'transparent',
         '&:hover, &:focus': { opacity: 0.6 },
         '&:focus': {
             outline: `2px solid ${theme.palette.primary.main}`,
