@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
-import { CanvasState } from '../state/canvas-state-types'
-import { getGridCellSizes, getHexCellSize } from '../grid-generators/get-sizes'
-import { drawImageProp } from '../draw-image'
+import { useEffect, useMemo, useState } from 'react'
+
+import { drawImageProp } from '#/draw-image'
+import { getGridCellSizes, getHexCellSize } from '#/grid-generators/get-sizes'
+import { CanvasState } from '#/state/canvas-state-types'
 
 type ImageInfo = {
     cellsNumW?: number | null
@@ -16,8 +17,9 @@ const getImgData = (width: number, height: number, imgElem: HTMLImageElement) =>
     const ctx = canvas.getContext('2d')
     canvas.width = width
     canvas.height = height
+    if (!ctx) return
     drawImageProp(ctx, imgElem)
-    return ctx?.getImageData(0, 0, width, height).data
+    return ctx.getImageData(0, 0, width, height).data
 }
 
 export const useDataFromImageEffect = (state: CanvasState, genGridWorker: Worker | null): void => {

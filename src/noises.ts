@@ -1,6 +1,7 @@
-import SimplexNoise from 'simplex-noise'
 import Alea from 'alea'
-import { clamp, lerp } from './helpers'
+import { createNoise2D, NoiseFunction2D } from 'simplex-noise'
+
+import { clamp, lerp } from '#/helpers'
 
 export type NoiseFn = (x: number, y: number, width?: number, height?: number) => number
 
@@ -89,16 +90,16 @@ export const Noises2D: NoisesInfoObj = {
 export const Noises2DList = Object.keys(Noises2D) as Array<keyof typeof Noises2D>
 
 let prevSeed: string | null = null
-let simplex: SimplexNoise
+let noise2D: NoiseFunction2D
 
 export function getNoises(seed: string): [Noises2DFns, NoisesRnd] {
-    if (prevSeed !== seed || !simplex) {
-        simplex = new SimplexNoise(String(seed))
+    if (prevSeed !== seed || !noise2D) {
+        noise2D = createNoise2D(Alea(seed))
         prevSeed = seed
     }
 
     const prng = Alea(seed)
-    const n1D = (v: number) => simplex.noise2D(v, 0)
+    const n1D = (v: number) => noise2D(v, 0)
 
     const rndValue = lerp(0.1, 2, prng())
 
@@ -116,7 +117,7 @@ export function getNoises(seed: string): [Noises2DFns, NoisesRnd] {
             return val * -2 + 1
         },
 
-        simplex: (x, y) => simplex.noise2D(x, y),
+        simplex: (x, y) => noise2D(x, y),
         circle: (x, y, w = 1, h = 1) => Math.sqrt((x / w) ** 2 + (y / h) ** 2) - 0.5,
 
         // shapes

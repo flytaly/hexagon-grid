@@ -1,6 +1,7 @@
 import { SVG, Svg } from '@svgdotjs/svg.js'
-import { CanvasState } from '../state/canvas-state-types'
-import { toRGBAStr, hslToRgb, toRGBHex } from '../helpers'
+
+import { hslToRgb, toRGBAStr, toRGBHex } from '#/helpers'
+import { CanvasState } from '#/state/canvas-state-types'
 import { PolygonData, vertsPerPolygon } from './draw-polygons'
 
 interface DrawPolygonsProperties {

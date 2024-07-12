@@ -1,28 +1,12 @@
+import { AppBar, Box, Stack, Tab, Tabs, Typography } from '@mui/material'
 import React from 'react'
-import { Typography, AppBar, Tabs, Tab, Box } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { useRouter } from 'next/router'
+import { useNavigate } from 'react-router-dom'
 
-import ShortcutsContent from './shortcuts-content'
-import HelpPageContent from './help-content'
+import hexBg from '#/assets/hex_bg.png'
+import theme from '#/theme'
 import Contacts from './contacts'
-
-type StyleProps = {
-    withBackground?: boolean
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            backgroundColor: theme.palette.background.paper,
-            background: (props: StyleProps) =>
-                props.withBackground ? 'no-repeat url(/hex_bg.png) left bottom' : '',
-        },
-    }),
-)
+import HelpPageContent from './help-content'
+import ShortcutsContent from './shortcuts-content'
 
 type TabPanelProps = {
     children: React.ReactNode
@@ -91,24 +75,23 @@ const tabData = [
     },
 ]
 
-const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => {
+function HelpTabs({ initTab = 0, isModal = false }: HelpTabsProps) {
     const [value, setValue] = React.useState(initTab)
-    const router = useRouter()
-    const classes = useStyles({
-        withBackground: value === 2,
-    })
 
-    if (!isModal && router.route !== tabData[value].route) {
-        router.push(tabData[value].route)
-    }
+    const navigate = useNavigate()
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
+        if (!isModal) navigate(tabData[newValue].route)
     }
+
+    const background =
+        value === 2
+            ? `no-repeat url(${hexBg}) left bottom, ${theme.palette.background.paper}`
+            : `${theme.palette.background.paper}`
 
     return (
-        <div className={classes.root}>
+        <Stack flexGrow={1} sx={{ background }}>
             <AppBar position="static" color="transparent">
                 <Tabs
                     variant="fullWidth"
@@ -130,7 +113,7 @@ const HelpTabs: React.FC<HelpTabsProps> = ({ initTab = 0, isModal = false }) => 
             <TabPanel value={value} index={2}>
                 <Contacts />
             </TabPanel>
-        </div>
+        </Stack>
     )
 }
 

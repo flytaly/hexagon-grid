@@ -1,36 +1,22 @@
-import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Paper, Box } from '@material-ui/core'
-import RouterAppbar from '../router-appbar'
-import HelpTabs from './help-tabs'
+import RouterAppbar from '#/components/router-appbar'
+import { Box, Container, Paper } from '@mui/material'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        pageWrapper: {
-            width: '100%',
-            padding: theme.spacing(2, 3),
-        },
-        paper: {
-            width: '1000px',
-            maxWidth: '100%',
-            margin: '0 auto',
-        },
-    }),
-)
+import HelpTabs from './help-tabs'
 
 type ContainerProps = {
     initTab?: 0 | 1 | 2
 }
 
-const HelpPageContainer: React.FC<ContainerProps> = ({ initTab = 0 }) => {
-    const classes = useStyles()
+function HelpPageContainer({ initTab = 0 }: ContainerProps) {
     return (
         <>
             <RouterAppbar />
-            <Box className={classes.pageWrapper}>
-                <Paper className={classes.paper}>
-                    <HelpTabs initTab={initTab} />
-                </Paper>
+            <Box paddingX={2} paddingY={3} width="100%">
+                <Container maxWidth="lg">
+                    <Paper>
+                        <HelpTabs initTab={initTab} />
+                    </Paper>
+                </Container>
             </Box>
         </>
     )

@@ -1,51 +1,28 @@
-import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import GitHubIcon from '@material-ui/icons/GitHub'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import { Container, Link, Stack } from '@mui/material'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        footer: {
-            display: 'inline-block',
-            marginBottom: '5px',
-            textAlign: 'center',
-            fontSize: '13px',
-            '& svg': {
-                verticalAlign: 'middle',
-                fontSize: '1.4em',
-                color: 'inherit',
-            },
-            '& a:active, & a:visited, & a:link, & a': {
-                color: 'inherit',
-                textDecoration: 'none',
-            },
-            '& a:hover, & svg:hover': {
-                color: theme.palette.primary.main,
-            },
-            '& span': {
-                marginRight: '5px',
-                verticalAlign: 'middle',
-            },
-        },
-    }),
-)
-
-const Footer: React.FC = () => {
-    const classes = useStyles()
+function Footer() {
     const currentYear = new Date().getFullYear()
     return (
-        <footer className={classes.footer}>
-            <span>{currentYear}</span>
-            <span>
-                <a href="https://github.com/flytaly/hexagon-grid">
-                    <span>Vitaly Yerofeyevsky </span>
-                </a>
-            </span>
-            <span>
-                <a href="https://github.com/flytaly/hexagon-grid" title="source code on github">
-                    <GitHubIcon />
-                </a>
-            </span>
-        </footer>
+        <Container component="footer">
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" pb={0.5}>
+                <span>{currentYear}</span>
+                <Link
+                    href="https://github.com/flytaly/hexagon-grid"
+                    sx={{
+                        color: 'inherit',
+                        ':hover': { color: 'primary.main' },
+                    }}
+                    underline="none"
+                    variant="body2"
+                >
+                    <Stack direction="row" spacing={1} alignItems="center">
+                        <span>Vitaly Yerofeyevsky</span>
+                        <GitHubIcon fontSize="small" />
+                    </Stack>
+                </Link>
+            </Stack>
+        </Container>
     )
 }
 

@@ -1,4 +1,4 @@
-import { CanvasState } from '../state/canvas-state-types'
+import { CanvasState } from '#/state/canvas-state-types'
 
 export const testState: CanvasState = {
     canvasSize: {

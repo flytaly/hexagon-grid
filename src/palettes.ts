@@ -1,4 +1,3 @@
-import { RGBColor } from 'react-color'
 import nicePalettes from 'nice-color-palettes/1000'
 import { toRGBaObj, toRGBAStr } from './helpers'
 import paletteList from './palettes-list.json'

@@ -1,22 +1,10 @@
-import React from 'react'
-import { Button } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import EmailIcon from '@material-ui/icons/Email'
-import GitHubIcon from '@material-ui/icons/GitHub'
+import EmailIcon from '@mui/icons-material/Email'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import { Box, Button } from '@mui/material'
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            textAlign: 'center',
-            minHeight: '250px',
-        },
-    }),
-)
-
-const Contacts: React.FC = () => {
-    const classes = useStyles()
+function Contacts() {
     return (
-        <div className={classes.root}>
+        <Box minHeight="15rem" textAlign="center">
             <Button startIcon={<EmailIcon />} href="mailto:flytaly@gmail.com">
                 Email
             </Button>
@@ -24,7 +12,7 @@ const Contacts: React.FC = () => {
             <Button startIcon={<GitHubIcon />} href="https://github.com/flytaly/hexagon-grid">
                 GitHub
             </Button>
-        </div>
+        </Box>
     )
 }
 

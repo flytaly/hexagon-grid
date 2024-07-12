@@ -1,6 +1,8 @@
-import { stateObjectPropIds, mapStateToUrlParams, mapUrlParamsToState } from './url-state'
-import { testState, testParamsQuery, testParamsEntries } from '../mocks/canvas-test-state'
+import { describe, expect, mock, test } from 'bun:test'
+
+import { testParamsEntries, testParamsQuery, testState } from '#/mocks/canvas-test-state'
 import { initialState } from './canvas-state'
+import { mapStateToUrlParams, mapUrlParamsToState, stateObjectPropIds } from './url-state'
 
 describe('state to url', () => {
     test('all ids should be unique or null', () => {
@@ -55,7 +57,7 @@ describe('state to url', () => {
 describe('params to state', () => {
     test('should return state object from URL params', () => {
         const dateNowFn = Date.now
-        Date.now = jest.fn(() => 0)
+        Date.now = mock(() => 0)
         expect(
             mapUrlParamsToState(Object.fromEntries(testParamsEntries), initialState),
         ).toMatchObject(testState)

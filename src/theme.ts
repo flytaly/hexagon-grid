@@ -1,8 +1,10 @@
-import { createMuiTheme } from '@material-ui/core/styles'
-import { red, grey, lightBlue, amber } from '@material-ui/core/colors'
+import { amber, grey, lightBlue, red } from '@mui/material/colors'
+import { LinkProps } from '@mui/material/Link'
+import { createTheme } from '@mui/material/styles'
 
-// Create a theme instance.
-const theme = createMuiTheme({
+import LinkBehavior from './components/link-behavior'
+
+const theme = createTheme({
     palette: {
         primary: {
             // main: pink[800],
@@ -16,6 +18,18 @@ const theme = createMuiTheme({
         },
         background: {
             default: grey[300],
+        },
+    },
+    components: {
+        MuiLink: {
+            defaultProps: {
+                component: LinkBehavior,
+            } as LinkProps,
+        },
+        MuiButtonBase: {
+            defaultProps: {
+                LinkComponent: LinkBehavior,
+            },
         },
     },
 })

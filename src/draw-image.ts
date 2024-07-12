@@ -6,12 +6,18 @@
  *
  * If image and context are only arguments rectangle will equal canvas
  */
-export function drawImageProp(ctx, img, x, y, w, h, offsetX, offsetY) {
-    if (arguments.length === 2) {
-        x = y = 0
-        w = ctx.canvas.width
-        h = ctx.canvas.height
-    }
+export function drawImageProp(
+    ctx: CanvasRenderingContext2D,
+    img: HTMLImageElement,
+    x = 0,
+    y = 0,
+    w?: number,
+    h?: number,
+    offsetX?: number,
+    offsetY?: number,
+) {
+    w = w || ctx.canvas.width
+    h = h || ctx.canvas.height
 
     // default offset is center
     offsetX = typeof offsetX === 'number' ? offsetX : 0.5

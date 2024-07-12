@@ -1,38 +1,24 @@
-import React from 'react'
-import { NextPage } from 'next'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Paper, Box, Typography } from '@material-ui/core'
-import RouterAppbar from '../components/router-appbar'
-import Gallery from '../components/image-gallery'
+import { Box, Paper, Typography } from '@mui/material'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        pageWrapper: {
-            // height: '100%',
-            padding: theme.spacing(2, 3),
-        },
-        paper: {
-            padding: theme.spacing(1),
-        },
-    }),
-)
+import Gallery from '#/components/image-gallery'
+import Layout from '#/components/layout'
+import RouterAppbar from '#/components/router-appbar'
 
-const GalleryPage: NextPage = () => {
-    const classes = useStyles()
+const GalleryPage = () => {
     return (
-        <>
+        <Layout>
             <RouterAppbar />
-            <Box className={classes.pageWrapper}>
-                <Paper className={classes.paper}>
-                    <Box>
-                        <Typography variant="h4" align="center">
+            <Box padding={2}>
+                <Paper>
+                    <Box padding={2}>
+                        <Typography variant="h4" align="center" component="h2">
                             Gallery
                         </Typography>
                         <Gallery />
                     </Box>
                 </Paper>
             </Box>
-        </>
+        </Layout>
     )
 }
 

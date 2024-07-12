@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import set from 'lodash.set'
 import clone from 'lodash.clonedeep'
-import { RGBColor } from 'react-color'
-import { CanvasState, GridType } from './canvas-state-types'
-import { toRGBaObj } from '../helpers'
+import set from 'lodash.set'
+
+import { toRGBaObj } from '#/helpers'
+import { ColorPalette, fillGradient, PaletteColorsArray } from '#/palettes'
 import { initialState } from './canvas-state'
-import { fillGradient, ColorPalette, PaletteColorsArray } from '../palettes'
+import { CanvasState, GridType } from './canvas-state-types'
 
 type ParamFn = (p: string | RGBColor | PaletteColorsArray | GridType) => string
 
@@ -188,7 +187,7 @@ export function mapUrlParamsToState(
     state.canvasSize.aspect = state.canvasSize.width / state.canvasSize.height
     state.colors.palette.isCustom = true
 
-    const customPaletteId = `custom_${Date.now()}`
+    const customPaletteId = `custom_${Date.now()}_${Math.random()}`
     state.colors.palette.id = customPaletteId
 
     const colorState = state.colors

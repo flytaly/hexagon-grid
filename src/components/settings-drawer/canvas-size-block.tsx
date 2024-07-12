@@ -1,7 +1,8 @@
+import { Rotate90DegreesCcw } from '@mui/icons-material'
+import { Box, Grid, IconButton, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import { Box, Grid, IconButton, TextField } from '@material-ui/core'
-import { Rotate90DegreesCcw } from '@material-ui/icons'
-import { CanvasSize, CanvasStateAction, ActionTypes } from '../../state/canvas-state-types'
+
+import { ActionTypes, CanvasSize, CanvasStateAction } from '#/state/canvas-state-types'
 
 type CanvasProps = {
     canvasSize: CanvasSize
@@ -13,7 +14,7 @@ type ErrorMessages = {
     height?: 'string'
 }
 
-const CanvasSizeBlock: React.FC<CanvasProps> = ({ canvasSize, dispatch }) => {
+function CanvasSizeBlock({ canvasSize, dispatch }: CanvasProps) {
     const [width, setWidth] = useState(canvasSize.width)
     const [height, setHeight] = useState(canvasSize.height)
     const [errors, setErrors] = useState<ErrorMessages>({})
@@ -82,6 +83,7 @@ const CanvasSizeBlock: React.FC<CanvasProps> = ({ canvasSize, dispatch }) => {
                             setWidth(height)
                             setHeight(width)
                         }}
+                        size="large"
                     >
                         <Rotate90DegreesCcw />
                     </IconButton>

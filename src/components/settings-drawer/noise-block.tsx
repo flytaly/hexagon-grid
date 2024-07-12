@@ -1,46 +1,33 @@
-import React, { useState } from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import React from 'react'
+
+import { genSeed } from '#/helpers'
+import useProxyState from '#/hooks/use-proxy-state'
+import { Noises2D, Noises2DFns, Noises2DList } from '#/noises'
+import {
+    ActionTypes,
+    CanvasStateAction,
+    NoiseSettings,
+    RecursivePartial,
+} from '#/state/canvas-state-types'
 import {
     Box,
     Button,
+    FormControl,
     Grid,
     Input,
+    InputLabel,
+    MenuItem,
+    Select,
     Slider,
     Typography,
-    InputLabel,
-    Select,
-    FormControl,
-    MenuItem,
-} from '@material-ui/core'
-import {
-    RecursivePartial,
-    NoiseSettings,
-    CanvasStateAction,
-    ActionTypes,
-} from '../../state/canvas-state-types'
-import { Noises2D, Noises2DList, Noises2DFns } from '../../noises'
-import { genSeed } from '../../helpers'
-import useProxyState from '../../hooks/use-proxy-state'
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        formControl: {
-            margin: theme.spacing(2, 0),
-            minWidth: '150px',
-        },
-        selectEmpty: {
-            marginTop: theme.spacing(2),
-        },
-    }),
-)
+} from '@mui/material'
 
 type NoiseProps = {
     noiseState: NoiseSettings
     dispatch: React.Dispatch<CanvasStateAction>
 }
 
-const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
-    const classes = useStyles()
+function NoiseSettingBlock({ dispatch, noiseState }: NoiseProps) {
     const [n2Strength, setN2Strength] = useProxyState<number>(noiseState.noise2Strength)
     const [zoom, setZoom] = useProxyState<number>(noiseState.zoom)
     const [hue, setHue] = useProxyState<number>(noiseState.hue)
@@ -88,13 +75,14 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
 
     return (
         <Box component="form" m={2}>
-            <Typography component="div" gutterBottom>
-                <Box fontWeight="fontWeightBold">Noise settings</Box>
+            <Typography component="h3" fontWeight="fontWeightBold" sx={{ marginBottom: '1rem' }}>
+                Noise settings
             </Typography>
 
-            <FormControl className={classes.formControl}>
+            <FormControl fullWidth sx={{ marginBottom: '1em' }}>
                 <InputLabel id="base-noise-label">Base noise</InputLabel>
                 <Select
+                    label="Base noise"
                     labelId="base-noise-label"
                     value={noiseState.baseNoise.id}
                     onChange={(ev) => {
@@ -112,17 +100,18 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                     ))}
                 </Select>
             </FormControl>
-            {noiseState.baseNoise.id === 'custom' ? (
-                <Box display="flex" flexDirection="column" mb={2}>
+
+            {noiseState.baseNoise.id === 'custom' && (
+                <Box display="flex" flexDirection="column">
                     <Typography variant="caption">
                         Enter math expression. Allowed variables: x, y, w (width), h (height)
                     </Typography>
                     <Input value={noiseState.baseNoise.customFn} onChange={handleExpChange} />
                 </Box>
-            ) : null}
+            )}
 
-            {noiseState.baseNoise.id === 'image' ? (
-                <Box display="flex" flexDirection="column" mb={2}>
+            {noiseState.baseNoise.id === 'image' && (
+                <Box display="flex" flexDirection="column">
                     <Typography gutterBottom>Load image</Typography>
                     <input
                         type="file"
@@ -144,9 +133,9 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         }}
                     />
                 </Box>
-            ) : null}
+            )}
 
-            <Typography id="random-noise" gutterBottom>
+            <Typography id="random-noise" gutterBottom sx={{ marginTop: '1em' }}>
                 Second noise strength (0 = disable)
             </Typography>
             <Grid container spacing={2}>
@@ -157,8 +146,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         step={0.05}
                         min={0}
                         max={1}
-                        onChange={(e, val) => setN2Strength(Number(val))}
-                        onChangeCommitted={(e, val) =>
+                        onChange={(_, val) => setN2Strength(Number(val))}
+                        onChangeCommitted={(_, val) =>
                             dispatchOption({ noise2Strength: Number(val) })
                         }
                     />
@@ -190,8 +179,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                                 aria-labelledby="zoom-factor"
                                 min={1}
                                 max={100}
-                                onChange={(e, val) => setZoom(Number(val))}
-                                onChangeCommitted={(e, val) =>
+                                onChange={(_, val) => setZoom(Number(val))}
+                                onChangeCommitted={(_, val) =>
                                     dispatchOption({ zoom: Number(val) })
                                 }
                             />
@@ -223,8 +212,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         aria-labelledby="hue-factor"
                         min={0}
                         max={360}
-                        onChange={(e, val) => setHue(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ hue: Number(val) })}
+                        onChange={(_, val) => setHue(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ hue: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -253,8 +242,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         aria-labelledby="saturation-factor"
                         min={0}
                         max={100}
-                        onChange={(e, val) => setSaturation(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ saturation: Number(val) })}
+                        onChange={(_, val) => setSaturation(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ saturation: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -283,8 +272,8 @@ const NoiseSettingBlock: React.FC<NoiseProps> = ({ dispatch, noiseState }) => {
                         aria-labelledby="lightness-factor"
                         min={0}
                         max={100}
-                        onChange={(e, val) => setLightness(Number(val))}
-                        onChangeCommitted={(e, val) => dispatchOption({ lightness: Number(val) })}
+                        onChange={(_, val) => setLightness(Number(val))}
+                        onChangeCommitted={(_, val) => dispatchOption({ lightness: Number(val) })}
                     />
                 </Grid>
                 <Grid item xs={3}>

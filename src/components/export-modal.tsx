@@ -1,43 +1,22 @@
-import React, { RefObject, useState, useRef } from 'react'
-import { Modal, Button, IconButton, Popover, TextField, InputAdornment } from '@material-ui/core'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { Image, FileCopy } from '@material-ui/icons'
-import { CanvasState } from '../state/canvas-state-types'
-import { mapStateToUrlParams } from '../state/url-state'
-import renderSVG from '../grid-generators/render-svg'
-import { PolygonData } from '../grid-generators/draw-polygons'
+import { FileCopy, Image } from '@mui/icons-material'
+import {
+    Box,
+    Button,
+    IconButton,
+    InputAdornment,
+    Modal,
+    Popover,
+    Stack,
+    TextField,
+    Typography,
+    useTheme,
+} from '@mui/material'
+import { RefObject, useRef, useState } from 'react'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        modal: {
-            position: 'absolute',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: 300,
-            maxWidth: '90%',
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 3, 3),
-            top: `50%`,
-            left: `50%`,
-            transform: `translate(-50%, -50%)`,
-            '& > *': {
-                marginBottom: theme.spacing(2),
-            },
-        },
-        fullWidth: {
-            width: '100%',
-        },
-        popper: {
-            border: '1px solid',
-            padding: theme.spacing(1),
-            backgroundColor: theme.palette.background.paper,
-        },
-    }),
-)
+import { PolygonData } from '#/grid-generators/draw-polygons'
+import renderSVG from '#/grid-generators/render-svg'
+import { CanvasState } from '#/state/canvas-state-types'
+import { mapStateToUrlParams } from '#/state/url-state'
 
 type ExportModalProps = {
     canvas: RefObject<HTMLCanvasElement>
@@ -47,17 +26,11 @@ type ExportModalProps = {
     handleClose: () => void
 }
 
-const ExportModal: React.FC<ExportModalProps> = ({
-    canvas,
-    isOpen,
-    handleClose,
-    polygonData,
-    state,
-}) => {
-    const classes = useStyles()
+function ExportModal({ canvas, isOpen, handleClose, polygonData, state }: ExportModalProps) {
     const [copyLink, setCopyLink] = useState('')
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const popoverAnchor = useRef(null)
+    const theme = useTheme()
 
     const isCustomFn = state.noise.baseNoise.id === 'custom'
 
@@ -97,72 +70,88 @@ const ExportModal: React.FC<ExportModalProps> = ({
 
     return (
         <Modal aria-label="export modal" open={isOpen} onClose={closeModalHandler}>
-            <div className={classes.modal} ref={popoverAnchor}>
-                <h2>Export</h2>
-                <Button
-                    className={classes.fullWidth}
-                    variant="contained"
-                    startIcon={<Image />}
-                    onClick={pngClickHandler}
-                >
-                    PNG
-                </Button>
-                <Button
-                    className={classes.fullWidth}
-                    variant="contained"
-                    startIcon={<Image />}
-                    onClick={svgClickHandler}
-                >
-                    SVG
-                </Button>
-                {!copyLink || isCustomFn ? (
-                    <Button
-                        className={classes.fullWidth}
-                        variant="contained"
-                        startIcon={<FileCopy />}
-                        onClick={linkClickHandler}
-                        disabled={isCustomFn}
-                    >
-                        {isCustomFn ? "Copy Link (doesn't work with custom function)" : 'Copy Link'}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    width: 'max-content',
+                    height: 'max-content',
+                    maxWidth: '90%',
+                    backgroundColor: theme.palette.background.paper,
+                    border: '2px solid #000',
+                    boxShadow: theme.shadows[5],
+                    padding: theme.spacing(5),
+                    inset: 0,
+                    margin: 'auto',
+                }}
+                ref={popoverAnchor}
+            >
+                <Stack gap={2} minWidth={240} maxWidth="100%">
+                    <Typography variant="h5" component="h2">
+                        Export
+                    </Typography>
+                    <Button variant="contained" startIcon={<Image />} onClick={pngClickHandler}>
+                        PNG
                     </Button>
-                ) : (
-                    <TextField
-                        className={classes.fullWidth}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton
-                                        size="small"
-                                        title="Copy link"
-                                        onClick={() => copyToClipboard(copyLink)}
-                                    >
-                                        <FileCopy />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
+                    <Button variant="contained" startIcon={<Image />} onClick={svgClickHandler}>
+                        SVG
+                    </Button>
+                    {!copyLink || isCustomFn ? (
+                        <Button
+                            variant="contained"
+                            startIcon={<FileCopy />}
+                            onClick={linkClickHandler}
+                            disabled={isCustomFn}
+                        >
+                            {isCustomFn
+                                ? "Copy Link (doesn't work with custom function)"
+                                : 'Copy Link'}
+                        </Button>
+                    ) : (
+                        <TextField
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <IconButton
+                                            size="small"
+                                            title="Copy link"
+                                            onClick={() => copyToClipboard(copyLink)}
+                                        >
+                                            <FileCopy />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            size="small"
+                            value={copyLink}
+                        />
+                    )}
+                    <Popover
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
                         }}
-                        size="small"
-                        value={copyLink}
-                    />
-                )}
-                <Popover
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'center',
-                        horizontal: 'center',
-                    }}
-                    open={isPopoverOpen}
-                    onClose={() => {
-                        setIsPopoverOpen(false)
-                    }}
-                    anchorEl={popoverAnchor.current}
-                >
-                    <div className={classes.popper}>Link copied</div>
-                </Popover>
-            </div>
+                        transformOrigin={{
+                            vertical: 'center',
+                            horizontal: 'center',
+                        }}
+                        open={isPopoverOpen}
+                        onClose={() => {
+                            setIsPopoverOpen(false)
+                        }}
+                        anchorEl={popoverAnchor.current}
+                    >
+                        <Box
+                            sx={{
+                                border: '1px solid',
+                                padding: theme.spacing(1),
+                                backgroundColor: theme.palette.background.paper,
+                            }}
+                        >
+                            Link copied
+                        </Box>
+                    </Popover>
+                </Stack>
+            </Box>
         </Modal>
     )
 }

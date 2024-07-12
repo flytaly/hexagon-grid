@@ -1,9 +1,9 @@
-import { clamp, mod } from '../helpers'
-import { defaultPalettes, fillGradient, ColorPalette } from '../palettes'
-import { mapUrlParamsToState } from './url-state'
+import { clamp, mod } from '#/helpers'
+import { Noises2DFns, Noises2DList } from '#/noises'
+import { ColorPalette, defaultPalettes, fillGradient } from '#/palettes'
+import { initialState, makePaletteColors } from './canvas-state'
 import { ActionTypes, CanvasState, CanvasStateAction } from './canvas-state-types'
-import { Noises2DList } from '../noises'
-import { makePaletteColors, initialState } from './canvas-state'
+import { mapUrlParamsToState } from './url-state'
 
 export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasState => {
     switch (action.type) {
@@ -50,7 +50,7 @@ export const reducer = (state: CanvasState, action: CanvasStateAction): CanvasSt
         case ActionTypes.SELECT_NEXT_BASE_NOISE: {
             const { id } = state.noise.baseNoise
             const noises = Noises2DList.filter((n) => n !== 'image')
-            const index = noises.indexOf(id)
+            const index = noises.indexOf(id as keyof Noises2DFns)
             const nextId = noises[(noises.length + index + action.payload) % noises.length]
             return {
                 ...state,

@@ -1,6 +1,5 @@
-import { RGBColor } from 'react-color'
-import { Noises2DFns } from '../noises'
-import { ColorPalette, PaletteColorsArray } from '../palettes'
+import { Noises2DFns } from '#/noises'
+import { ColorPalette, PaletteColorsArray } from '#/palettes'
 
 export enum ActionTypes {
     RESET_SETTINGS = 'RESET_SETTINGS',
